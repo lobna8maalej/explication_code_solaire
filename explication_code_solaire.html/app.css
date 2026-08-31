@@ -1,0 +1,444 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 40px 20px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f4f6f8;
+    color: #222;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   DOCUMENTATION
+========================================================= */
+
+.chapter {
+    max-width: 1100px;
+
+    margin: 0 auto 40px auto;
+    padding: 35px 40px;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+    border-left: 5px solid #f4b400;
+}
+
+
+/* =========================================================
+   TITRES
+========================================================= */
+
+.chapter h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+
+    padding-bottom: 15px;
+
+    font-size: 30px;
+
+    color: #1f2937;
+
+    border-bottom: 2px solid #e5e7eb;
+}
+
+
+.chapter h3 {
+    margin-top: 35px;
+    margin-bottom: 15px;
+
+    font-size: 21px;
+
+    color: #374151;
+
+    border-left: 4px solid #f4b400;
+
+    padding-left: 12px;
+}
+
+
+/* =========================================================
+   PARAGRAPHES
+========================================================= */
+
+.chapter p {
+    margin: 12px 0;
+
+    font-size: 16px;
+
+    color: #4b5563;
+}
+
+
+/* =========================================================
+   CODE INLINE
+========================================================= */
+
+code {
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    background: #f1f3f5;
+
+    color: #c7254e;
+
+    padding: 3px 7px;
+
+    border-radius: 5px;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   BLOCS DE CODE
+========================================================= */
+
+pre {
+    margin: 20px 0;
+
+    padding: 22px;
+
+    background: #1e293b;
+
+    color: #e2e8f0;
+
+    border-radius: 10px;
+
+    overflow-x: auto;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+
+pre code {
+    display: block;
+
+    padding: 0;
+
+    background: transparent;
+
+    color: #e2e8f0;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    white-space: pre;
+}
+
+
+/* =========================================================
+   TABLEAUX
+========================================================= */
+
+table {
+    width: 100%;
+
+    margin: 25px 0;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+
+th {
+    padding: 14px 16px;
+
+    background: #1f2937;
+
+    color: #ffffff;
+
+    text-align: left;
+
+    font-size: 15px;
+}
+
+
+td {
+    padding: 13px 16px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    color: #374151;
+
+    font-size: 15px;
+}
+
+
+tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+
+tr:hover {
+    background: #fff8e1;
+}
+
+
+/* =========================================================
+   LISTES
+========================================================= */
+
+.chapter ul,
+.chapter ol {
+    margin: 20px 0;
+
+    padding-left: 30px;
+}
+
+
+.chapter li {
+    margin-bottom: 10px;
+
+    color: #4b5563;
+}
+
+
+.chapter li code {
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   BOX INFORMATION
+========================================================= */
+
+.info {
+    margin: 25px 0;
+
+    padding: 20px 25px;
+
+    background: #eef6ff;
+
+    border-left: 5px solid #2563eb;
+
+    border-radius: 8px;
+
+    color: #1e3a5f;
+}
+
+
+.info strong {
+    color: #1d4ed8;
+}
+
+
+/* =========================================================
+   BOX SUCCESS
+========================================================= */
+
+.success {
+    margin: 25px 0;
+
+    padding: 20px 25px;
+
+    background: #ecfdf5;
+
+    border-left: 5px solid #16a34a;
+
+    border-radius: 8px;
+
+    color: #166534;
+}
+
+
+.success strong {
+    color: #15803d;
+}
+
+
+/* =========================================================
+   BOX IMPORTANT
+========================================================= */
+
+.important {
+    margin: 25px 0;
+
+    padding: 20px 25px;
+
+    background: #fff7ed;
+
+    border-left: 5px solid #f97316;
+
+    border-radius: 8px;
+
+    color: #9a3412;
+}
+
+
+.important strong {
+    color: #ea580c;
+}
+
+
+/* =========================================================
+   CODE DANS LES BOX
+========================================================= */
+
+.info code,
+.success code,
+.important code {
+    background: rgba(255, 255, 255, 0.7);
+
+    color: #1f2937;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   LIENS
+========================================================= */
+
+a {
+    color: #2563eb;
+
+    text-decoration: none;
+}
+
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   STRONG
+========================================================= */
+
+strong {
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   RESPONSIVE TABLETTE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    body {
+        padding: 25px 15px;
+    }
+
+    .chapter {
+        padding: 28px 25px;
+    }
+
+    .chapter h2 {
+        font-size: 26px;
+    }
+
+    .chapter h3 {
+        font-size: 19px;
+    }
+
+    pre {
+        padding: 18px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 15px 10px;
+    }
+
+    .chapter {
+        padding: 22px 18px;
+
+        border-left-width: 4px;
+
+        border-radius: 10px;
+    }
+
+    .chapter h2 {
+        font-size: 22px;
+
+        line-height: 1.4;
+    }
+
+    .chapter h3 {
+        font-size: 18px;
+    }
+
+    .chapter p {
+        font-size: 14px;
+    }
+
+    pre {
+        padding: 15px;
+
+        border-radius: 8px;
+    }
+
+    pre code {
+        font-size: 12px;
+    }
+
+    table {
+        display: block;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        padding: 10px 12px;
+
+        font-size: 13px;
+    }
+
+    .info,
+    .success,
+    .important {
+        padding: 16px 18px;
+
+        font-size: 14px;
+    }
+
+}

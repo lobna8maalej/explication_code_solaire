@@ -1,0 +1,254 @@
+
+/* ================================
+   RESET
+================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ================================
+   BODY
+================================ */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f4f7f9;
+
+    color: #2d3748;
+
+    line-height: 1.7;
+
+    padding: 40px 20px;
+}
+
+
+/* ================================
+   MAIN CONTENT
+================================ */
+
+body {
+    max-width: 1200px;
+
+    margin: 0 auto;
+}
+
+
+/* ================================
+   TITRE PRINCIPAL
+================================ */
+
+h2 {
+    font-size: 34px;
+
+    color: #1f2937;
+
+    margin-bottom: 25px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 3px solid #f59e0b;
+}
+
+
+/* ================================
+   PARAGRAPHES
+================================ */
+
+p {
+    font-size: 16px;
+
+    color: #4b5563;
+
+    margin-bottom: 22px;
+
+    background: #ffffff;
+
+    padding: 20px 25px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+
+/* ================================
+   IMPORTANT
+================================ */
+
+p strong:first-child {
+    color: #dc2626;
+}
+
+
+/* ================================
+   TITRES H3
+================================ */
+
+h3 {
+    font-size: 25px;
+
+    color: #1f2937;
+
+    margin-top: 40px;
+
+    margin-bottom: 18px;
+
+    padding-left: 15px;
+
+    border-left: 5px solid #f59e0b;
+}
+
+
+/* ================================
+   TITRES H4
+================================ */
+
+h4 {
+    font-size: 20px;
+
+    color: #374151;
+
+    margin-top: 30px;
+
+    margin-bottom: 10px;
+}
+
+
+/* ================================
+   CODE
+================================ */
+
+pre {
+    background: #111827;
+
+    color: #e5e7eb;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    overflow-x: auto;
+
+    margin: 20px 0 30px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+
+    border: 1px solid #1f2937;
+}
+
+
+/* ================================
+   CODE TEXT
+================================ */
+
+pre code {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+
+    white-space: pre;
+}
+
+
+/* ================================
+   INLINE CODE
+================================ */
+
+strong {
+    color: #111827;
+}
+
+
+/* ================================
+   SECURITY SECTION
+================================ */
+
+h3:last-of-type {
+    color: #b91c1c;
+
+    border-left-color: #dc2626;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+
+    body {
+        padding: 25px 15px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    h3 {
+        font-size: 22px;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 15px;
+
+        padding: 17px 18px;
+    }
+
+    pre {
+        padding: 18px;
+
+        font-size: 13px;
+    }
+
+    pre code {
+        font-size: 13px;
+    }
+}
+
+
+/* ================================
+   SMALL MOBILE
+================================ */
+
+@media (max-width: 480px) {
+
+    body {
+        padding: 20px 10px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    p {
+        padding: 15px;
+
+        font-size: 14px;
+    }
+
+    pre {
+        padding: 15px;
+
+        border-radius: 8px;
+    }
+
+    pre code {
+        font-size: 12px;
+    }
+}
+

@@ -1,0 +1,423 @@
+
+
+/* ==================================================
+   RESET
+================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f4f6f8;
+    color: #222;
+
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   DOCUMENTATION
+================================================== */
+
+.documentation {
+    width: 90%;
+    max-width: 1200px;
+
+    margin: 40px auto;
+}
+
+
+/* ==================================================
+   CHAPTER
+================================================== */
+
+.chapter {
+    background: #ffffff;
+
+    margin-bottom: 35px;
+    padding: 35px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+    border-left: 5px solid #f59e0b;
+}
+
+
+/* ==================================================
+   TITRES
+================================================== */
+
+.chapter h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    color: #1f2937;
+
+    font-size: 28px;
+
+    border-bottom: 2px solid #f59e0b;
+
+    padding-bottom: 10px;
+}
+
+.chapter h3 {
+    margin-top: 30px;
+    margin-bottom: 12px;
+
+    color: #374151;
+
+    font-size: 21px;
+}
+
+.chapter p {
+    font-size: 16px;
+
+    color: #4b5563;
+
+    margin-bottom: 18px;
+}
+
+
+/* ==================================================
+   CODE INLINE
+================================================== */
+
+code {
+    background: #f1f5f9;
+
+    color: #dc2626;
+
+    padding: 3px 7px;
+
+    border-radius: 5px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 14px;
+}
+
+
+/* ==================================================
+   BLOCS DE CODE
+================================================== */
+
+pre {
+    background: #111827;
+
+    color: #e5e7eb;
+
+    padding: 22px;
+
+    border-radius: 10px;
+
+    overflow-x: auto;
+
+    margin: 20px 0;
+
+    border-left: 4px solid #f59e0b;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+pre code {
+    background: transparent;
+
+    color: #e5e7eb;
+
+    padding: 0;
+
+    border-radius: 0;
+
+    font-family:
+        "Courier New",
+        Consolas,
+        monospace;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* ==================================================
+   LISTES
+================================================== */
+
+.chapter ul {
+    padding-left: 25px;
+
+    margin-top: 15px;
+}
+
+.chapter li {
+    margin-bottom: 10px;
+
+    color: #374151;
+}
+
+.chapter li code {
+    font-size: 13px;
+}
+
+
+/* ==================================================
+   TABLEAUX
+================================================== */
+
+.chapter table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin: 25px 0;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+.chapter th {
+    background: #1f2937;
+
+    color: #ffffff;
+
+    text-align: left;
+
+    padding: 14px;
+
+    font-size: 15px;
+}
+
+.chapter td {
+    padding: 13px 14px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    color: #374151;
+
+    font-size: 14px;
+}
+
+.chapter tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+.chapter tr:hover {
+    background: #fff7ed;
+}
+
+
+/* ==================================================
+   BADGES DES MÉTHODES HTTP
+================================================== */
+
+.chapter td:first-child {
+    font-weight: bold;
+}
+
+.chapter td:first-child {
+    color: #1f2937;
+}
+
+
+/* ==================================================
+   BOX INFO
+================================================== */
+
+.info {
+    background: #eff6ff;
+
+    border-left: 5px solid #2563eb;
+
+    padding: 20px 22px;
+
+    margin: 25px 0;
+
+    border-radius: 8px;
+
+    color: #1e3a8a;
+
+    font-size: 15px;
+}
+
+.info strong {
+    color: #1d4ed8;
+}
+
+
+/* ==================================================
+   BOX SUCCESS
+================================================== */
+
+.success {
+    background: #ecfdf5;
+
+    border-left: 5px solid #10b981;
+
+    padding: 20px 22px;
+
+    margin: 25px 0;
+
+    border-radius: 8px;
+
+    color: #065f46;
+
+    font-size: 15px;
+}
+
+.success strong {
+    color: #047857;
+}
+
+
+/* ==================================================
+   BOX IMPORTANT
+================================================== */
+
+.important {
+    background: #fff7ed;
+
+    border-left: 5px solid #f97316;
+
+    padding: 20px 22px;
+
+    margin: 25px 0;
+
+    border-radius: 8px;
+
+    color: #9a3412;
+
+    font-size: 15px;
+}
+
+.important strong {
+    color: #ea580c;
+}
+
+
+/* ==================================================
+   FLUX ARCHITECTURE
+================================================== */
+
+.info strong {
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   CODE DANS LES TABLEAUX
+================================================== */
+
+table code {
+    background: #f3f4f6;
+
+    color: #b91c1c;
+
+    padding: 4px 6px;
+
+    border-radius: 4px;
+
+    font-size: 13px;
+}
+
+
+/* ==================================================
+   RESPONSIVE TABLE
+================================================== */
+
+@media (max-width: 768px) {
+
+    .documentation {
+        width: 95%;
+    }
+
+    .chapter {
+        padding: 22px;
+
+        margin-bottom: 25px;
+    }
+
+    .chapter h2 {
+        font-size: 23px;
+    }
+
+    .chapter h3 {
+        font-size: 19px;
+    }
+
+    .chapter p {
+        font-size: 15px;
+    }
+
+    pre {
+        padding: 15px;
+
+        font-size: 13px;
+    }
+
+    .chapter table {
+        display: block;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+    }
+
+}
+
+
+/* ==================================================
+   PETITS ÉCRANS
+================================================== */
+
+@media (max-width: 480px) {
+
+    .documentation {
+        width: 96%;
+        margin: 20px auto;
+    }
+
+    .chapter {
+        padding: 18px;
+
+        border-left-width: 4px;
+    }
+
+    .chapter h2 {
+        font-size: 20px;
+    }
+
+    .chapter h3 {
+        font-size: 17px;
+    }
+
+    pre {
+        font-size: 12px;
+
+        padding: 12px;
+    }
+
+    .info,
+    .success,
+    .important {
+        padding: 15px;
+    }
+
+}
+

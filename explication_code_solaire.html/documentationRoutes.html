@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<link rel="stylesheet" href="documentationRoutes.css">
+
+</head>
+<body>
+    <section class="chapter">
+
+    <h2>
+        # 17 — Routes de l'API Backend
+    </h2>
+
+    <p>
+        Les fichiers présents dans le dossier
+        <code>routes</code> définissent les différentes
+        URL de l'API Backend Solar Energy.
+    </p>
+
+    <p>
+        Chaque route reçoit une requête HTTP provenant du
+        frontend React et la transmet au controller
+        correspondant.
+    </p>
+
+    <h3>
+        Structure générale d'une route
+    </h3>
+
+    <pre><code>const express = require("express");
+
+const router = express.Router();
+
+router.get("/", controller);
+
+module.exports = router;</code></pre>
+
+    <ul>
+
+        <li>
+            <code>express</code> importe le framework Express.
+        </li>
+
+        <li>
+            <code>express.Router()</code> permet de créer
+            un routeur indépendant.
+        </li>
+
+        <li>
+            Les méthodes <code>GET</code>, <code>POST</code>,
+            <code>PUT</code> et <code>DELETE</code>
+            définissent les opérations de l'API.
+        </li>
+
+        <li>
+            Le controller contient la logique exécutée
+            lorsque la route est appelée.
+        </li>
+
+        <li>
+            <code>module.exports</code> permet d'utiliser
+            le routeur dans <code>app.js</code>.
+        </li>
+
+    </ul>
+
+</section>
+
+
+<!-- ==================================================
+     18. APPOINTMENT ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 18 — Routes des rendez-vous
+    </h2>
+
+    <p>
+        Le fichier <code>appointmentRoutes.js</code>
+        permet de gérer les rendez-vous clients.
+    </p>
+
+    <pre><code>const express = require("express");
+
+const router = express.Router();
+
+const {
+    createAppointment,
+    getAppointments,
+    getAppointmentById,
+    updateAppointment,
+    deleteAppointment,
+} = require("../controllers/appointmentController");</code></pre>
+
+    <p>
+        Les fonctions du controller sont importées afin
+        d'être utilisées par les différentes routes.
+    </p>
+
+    <h3>
+        Créer un rendez-vous
+    </h3>
+
+    <pre><code>router.post(
+    "/",
+    createAppointment
+);</code></pre>
+
+    <p>
+        Cette route utilise la méthode
+        <code>POST</code> pour créer un nouveau rendez-vous.
+    </p>
+
+    <h3>
+        Récupérer tous les rendez-vous
+    </h3>
+
+    <pre><code>router.get(
+    "/",
+    getAppointments
+);</code></pre>
+
+    <p>
+        Cette route retourne la liste des rendez-vous
+        enregistrés dans MongoDB.
+    </p>
+
+    <h3>
+        Récupérer un rendez-vous par ID
+    </h3>
+
+    <pre><code>router.get(
+    "/:id",
+    getAppointmentById
+);</code></pre>
+
+    <p>
+        <code>:id</code> représente l'identifiant du
+        rendez-vous présent dans l'URL.
+    </p>
+
+    <h3>
+        Modifier un rendez-vous
+    </h3>
+
+    <pre><code>router.put(
+    "/:id",
+    updateAppointment
+);</code></pre>
+
+    <p>
+        Cette route permet de modifier un rendez-vous
+        existant.
+    </p>
+
+    <h3>
+        Supprimer un rendez-vous
+    </h3>
+
+    <pre><code>router.delete(
+    "/:id",
+    deleteAppointment
+);</code></pre>
+
+    <p>
+        Cette route supprime le rendez-vous correspondant
+        à l'identifiant fourni.
+    </p>
+
+    <div class="info">
+
+        <strong>URL principale :</strong>
+
+        <code>/api/appointments</code>
+
+        <br><br>
+
+        Les opérations disponibles sont :
+
+        <br><br>
+
+        POST → créer
+
+        <br>
+
+        GET → récupérer
+
+        <br>
+
+        PUT → modifier
+
+        <br>
+
+        DELETE → supprimer
+
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     19. AUTH ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 19 — Routes d'authentification et utilisateurs
+    </h2>
+
+    <p>
+        Le fichier <code>authRoutes.js</code> permet de
+        gérer l'inscription, la connexion et les opérations
+        concernant les utilisateurs.
+    </p>
+
+    <pre><code>const {
+    register,
+    login,
+    updateUser,
+    changePassword,
+    getUsers,
+    deleteUser
+} = require("../controllers/authController");</code></pre>
+
+    <p>
+        Les fonctions du controller d'authentification
+        sont importées depuis
+        <code>authController.js</code>.
+    </p>
+
+    <h3>
+        Créer un compte
+    </h3>
+
+    <pre><code>router.post(
+    "/register",
+    register
+);</code></pre>
+
+    <p>
+        Cette route permet à un nouvel utilisateur
+        de créer un compte.
+    </p>
+
+    <h3>
+        Connexion
+    </h3>
+
+    <pre><code>router.post(
+    "/login",
+    login
+);</code></pre>
+
+    <p>
+        Cette route permet à l'utilisateur de se connecter.
+        Le controller vérifie les informations de connexion
+        et peut générer un token JWT.
+    </p>
+
+    <h3>
+        Récupérer les utilisateurs
+    </h3>
+
+    <pre><code>router.get(
+    "/users",
+    getUsers
+);</code></pre>
+
+    <p>
+        Cette route récupère la liste des utilisateurs.
+    </p>
+
+    <h3>
+        Modifier un utilisateur
+    </h3>
+
+    <pre><code>router.put(
+    "/:id",
+    updateUser
+);</code></pre>
+
+    <p>
+        Cette route permet de modifier les informations
+        d'un utilisateur identifié par son ID.
+    </p>
+
+    <h3>
+        Changer le mot de passe
+    </h3>
+
+    <pre><code>router.put(
+    "/:id/password",
+    changePassword
+);</code></pre>
+
+    <p>
+        Cette route permet de modifier le mot de passe
+        d'un utilisateur.
+    </p>
+
+    <h3>
+        Supprimer un utilisateur
+    </h3>
+
+    <pre><code>router.delete(
+    "/:id",
+    deleteUser
+);</code></pre>
+
+    <p>
+        Cette route supprime l'utilisateur correspondant
+        à l'ID.
+    </p>
+
+    <div class="info">
+
+        <strong>Exemples d'URL :</strong>
+
+        <br><br>
+
+        <code>/api/users/register</code>
+
+        <br>
+
+        <code>/api/users/login</code>
+
+        <br>
+
+        <code>/api/users/users</code>
+
+        <br>
+
+        <code>/api/users/:id</code>
+
+        <br>
+
+        <code>/api/users/:id/password</code>
+
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     20. BATTERY ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 20 — Routes des batteries
+    </h2>
+
+    <p>
+        Le fichier <code>batteryRoutes.js</code> permet
+        de gérer les batteries solaires.
+    </p>
+
+    <pre><code>const batteryController =
+    require("../controllers/batteryController");</code></pre>
+
+    <p>
+        Le controller contient les fonctions permettant
+        d'effectuer les opérations CRUD.
+    </p>
+
+    <h3>
+        Routes disponibles
+    </h3>
+
+    <pre><code>router.post(
+    "/",
+    batteryController.createBattery
+);
+
+router.get(
+    "/",
+    batteryController.getBatteries
+);
+
+router.get(
+    "/:id",
+    batteryController.getBatteryById
+);
+
+router.put(
+    "/:id",
+    batteryController.updateBattery
+);
+
+router.delete(
+    "/:id",
+    batteryController.deleteBattery
+);</code></pre>
+
+    <table>
+
+        <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td>/api/batteries</td>
+            <td>Créer une batterie</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/batteries</td>
+            <td>Récupérer les batteries</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/batteries/:id</td>
+            <td>Récupérer une batterie</td>
+        </tr>
+
+        <tr>
+            <td>PUT</td>
+            <td>/api/batteries/:id</td>
+            <td>Modifier une batterie</td>
+        </tr>
+
+        <tr>
+            <td>DELETE</td>
+            <td>/api/batteries/:id</td>
+            <td>Supprimer une batterie</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- ==================================================
+     21. CONTACT ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 21 — Routes des messages de contact
+    </h2>
+
+    <p>
+        Le fichier <code>contactRoutes.js</code> permet
+        de gérer les messages envoyés depuis le formulaire
+        de contact.
+    </p>
+
+    <h3>
+        Importation du middleware JWT
+    </h3>
+
+    <pre><code>const {
+    verifyToken
+} = require("../middleware/auth");</code></pre>
+
+    <p>
+        Le middleware <code>verifyToken</code> permet
+        de protéger certaines routes.
+    </p>
+
+    <h3>
+        Envoyer un message
+    </h3>
+
+    <pre><code>router.post(
+    "/",
+    createContact
+);</code></pre>
+
+    <div class="success">
+
+        <strong>Route publique :</strong>
+
+        <br><br>
+
+        Le client peut envoyer un message sans fournir
+        de token JWT.
+
+    </div>
+
+    <h3>
+        Récupérer les contacts
+    </h3>
+
+    <pre><code>router.get(
+    "/",
+    verifyToken,
+    getContacts
+);</code></pre>
+
+    <p>
+        Cette route est protégée par
+        <code>verifyToken</code>.
+    </p>
+
+    <h3>
+        Récupérer un contact
+    </h3>
+
+    <pre><code>router.get(
+    "/:id",
+    verifyToken,
+    getContactById
+);</code></pre>
+
+    <h3>
+        Modifier un contact
+    </h3>
+
+    <pre><code>router.put(
+    "/:id",
+    verifyToken,
+    updateContact
+);</code></pre>
+
+    <h3>
+        Supprimer un contact
+    </h3>
+
+    <pre><code>router.delete(
+    "/:id",
+    verifyToken,
+    deleteContact
+);</code></pre>
+
+    <table>
+
+        <tr>
+            <th>Route</th>
+            <th>Protection</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>POST /api/contacts</td>
+            <td>Public</td>
+            <td>Envoyer un message</td>
+        </tr>
+
+        <tr>
+            <td>GET /api/contacts</td>
+            <td>JWT</td>
+            <td>Récupérer les messages</td>
+        </tr>
+
+        <tr>
+            <td>GET /api/contacts/:id</td>
+            <td>JWT</td>
+            <td>Récupérer un message</td>
+        </tr>
+
+        <tr>
+            <td>PUT /api/contacts/:id</td>
+            <td>JWT</td>
+            <td>Modifier un message</td>
+        </tr>
+
+        <tr>
+            <td>DELETE /api/contacts/:id</td>
+            <td>JWT</td>
+            <td>Supprimer un message</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- ==================================================
+     22. DASHBOARD ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 22 — Route du Dashboard
+    </h2>
+
+    <p>
+        Le fichier <code>dashboardRoutes.js</code> permet
+        de récupérer les statistiques globales de
+        l'application.
+    </p>
+
+    <pre><code>const {
+    getDashboardStats
+} = require("../controllers/dashboardController");
+
+const {
+    verifyToken
+} = require("../middleware/auth");</code></pre>
+
+    <h3>
+        Route protégée
+    </h3>
+
+    <pre><code>router.get(
+    "/",
+    verifyToken,
+    getDashboardStats
+);</code></pre>
+
+    <p>
+        Avant d'exécuter
+        <code>getDashboardStats</code>,
+        le middleware <code>verifyToken</code>
+        vérifie le token JWT.
+    </p>
+
+    <div class="info">
+
+        <strong>Flux :</strong>
+
+        <br><br>
+
+        React
+
+        →
+
+        Axios
+
+        →
+
+        /api/dashboard
+
+        →
+
+        verifyToken
+
+        →
+
+        getDashboardStats
+
+        →
+
+        MongoDB
+
+        →
+
+        statistiques
+
+        →
+
+        React
+
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     23. INVERTER ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 23 — Routes des onduleurs
+    </h2>
+
+    <p>
+        Le fichier <code>inverterRoutes.js</code> permet
+        de gérer les onduleurs solaires.
+    </p>
+
+    <pre><code>const inverterController =
+    require("../controllers/inverterController");</code></pre>
+
+    <pre><code>router.post(
+    "/",
+    inverterController.createInverter
+);
+
+router.get(
+    "/",
+    inverterController.getInverters
+);
+
+router.get(
+    "/:id",
+    inverterController.getInverterById
+);
+
+router.put(
+    "/:id",
+    inverterController.updateInverter
+);
+
+router.delete(
+    "/:id",
+    inverterController.deleteInverter
+);</code></pre>
+
+    <table>
+
+        <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td>/api/inverters</td>
+            <td>Créer un onduleur</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/inverters</td>
+            <td>Récupérer les onduleurs</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/inverters/:id</td>
+            <td>Récupérer un onduleur</td>
+        </tr>
+
+        <tr>
+            <td>PUT</td>
+            <td>/api/inverters/:id</td>
+            <td>Modifier un onduleur</td>
+        </tr>
+
+        <tr>
+            <td>DELETE</td>
+            <td>/api/inverters/:id</td>
+            <td>Supprimer un onduleur</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- ==================================================
+     24. PANEL ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 24 — Routes des panneaux solaires
+    </h2>
+
+    <p>
+        Le fichier <code>panelRoutes.js</code> permet
+        de gérer les panneaux solaires.
+    </p>
+
+    <pre><code>const panelController =
+    require("../controllers/panelController");</code></pre>
+
+    <h3>
+        Routes CRUD
+    </h3>
+
+    <pre><code>router.post(
+    "/",
+    panelController.createPanel
+);
+
+router.get(
+    "/",
+    panelController.getPanels
+);
+
+router.get(
+    "/:id",
+    panelController.getPanelById
+);
+
+router.put(
+    "/:id",
+    panelController.updatePanel
+);
+
+router.delete(
+    "/:id",
+    panelController.deletePanel
+);</code></pre>
+
+    <table>
+
+        <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td>/api/panels</td>
+            <td>Créer un panneau</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/panels</td>
+            <td>Récupérer les panneaux</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/panels/:id</td>
+            <td>Récupérer un panneau</td>
+        </tr>
+
+        <tr>
+            <td>PUT</td>
+            <td>/api/panels/:id</td>
+            <td>Modifier un panneau</td>
+        </tr>
+
+        <tr>
+            <td>DELETE</td>
+            <td>/api/panels/:id</td>
+            <td>Supprimer un panneau</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- ==================================================
+     25. PAYMENT ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 25 — Routes des paiements et Stripe
+    </h2>
+
+    <p>
+        Le fichier <code>paymentRoutes.js</code> permet
+        de gérer les paiements classiques ainsi que
+        les paiements utilisant Stripe Checkout.
+    </p>
+
+    <pre><code>const {
+    createPayment,
+    createStripeCheckout,
+    getPayments,
+    getPaymentById,
+    updatePayment,
+    deletePayment,
+} = require("../controllers/paymentController");</code></pre>
+
+    <h3>
+        Créer un paiement normal
+    </h3>
+
+    <pre><code>router.post(
+    "/",
+    createPayment
+);</code></pre>
+
+    <p>
+        Cette route permet d'enregistrer un paiement
+        classique.
+    </p>
+
+    <h3>
+        Créer une session Stripe Checkout
+    </h3>
+
+    <pre><code>router.post(
+    "/stripe-checkout",
+    createStripeCheckout
+);</code></pre>
+
+    <p>
+        Cette route permet de demander au backend de créer
+        une session de paiement Stripe.
+    </p>
+
+    <div class="important">
+
+        <strong>Important :</strong>
+
+        <br><br>
+
+        La route
+        <code>/stripe-checkout</code>
+        est déclarée avant
+        <code>/:id</code>.
+
+        <br><br>
+
+        Cela permet à Express d'interpréter correctement
+        <code>stripe-checkout</code> comme une route
+        spécifique et non comme une valeur du paramètre
+        <code>:id</code>.
+
+    </div>
+
+    <h3>
+        Récupérer les paiements
+    </h3>
+
+    <pre><code>router.get(
+    "/",
+    getPayments
+);</code></pre>
+
+    <h3>
+        Récupérer un paiement
+    </h3>
+
+    <pre><code>router.get(
+    "/:id",
+    getPaymentById
+);</code></pre>
+
+    <h3>
+        Modifier un paiement
+    </h3>
+
+    <pre><code>router.put(
+    "/:id",
+    updatePayment
+);</code></pre>
+
+    <h3>
+        Supprimer un paiement
+    </h3>
+
+    <pre><code>router.delete(
+    "/:id",
+    deletePayment
+);</code></pre>
+
+    <table>
+
+        <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td>/api/payments</td>
+            <td>Créer un paiement</td>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td>/api/payments/stripe-checkout</td>
+            <td>Créer une session Stripe</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/payments</td>
+            <td>Récupérer les paiements</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/payments/:id</td>
+            <td>Récupérer un paiement</td>
+        </tr>
+
+        <tr>
+            <td>PUT</td>
+            <td>/api/payments/:id</td>
+            <td>Modifier un paiement</td>
+        </tr>
+
+        <tr>
+            <td>DELETE</td>
+            <td>/api/payments/:id</td>
+            <td>Supprimer un paiement</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- ==================================================
+     26. QUOTE ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 26 — Routes des demandes de devis
+    </h2>
+
+    <p>
+        Le fichier <code>quoteRoutes.js</code> permet
+        de gérer les demandes de devis pour les
+        installations solaires.
+    </p>
+
+    <pre><code>const {
+    createQuote,
+    getQuotes,
+    getQuoteById,
+    updateQuote,
+    deleteQuote,
+} = require("../controllers/quoteController");</code></pre>
+
+    <pre><code>router.post(
+    "/",
+    createQuote
+);
+
+router.get(
+    "/",
+    getQuotes
+);
+
+router.get(
+    "/:id",
+    getQuoteById
+);
+
+router.put(
+    "/:id",
+    updateQuote
+);
+
+router.delete(
+    "/:id",
+    deleteQuote
+);</code></pre>
+
+    <table>
+
+        <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td>/api/quotes</td>
+            <td>Créer une demande de devis</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/quotes</td>
+            <td>Récupérer les devis</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/quotes/:id</td>
+            <td>Récupérer un devis</td>
+        </tr>
+
+        <tr>
+            <td>PUT</td>
+            <td>/api/quotes/:id</td>
+            <td>Modifier un devis</td>
+        </tr>
+
+        <tr>
+            <td>DELETE</td>
+            <td>/api/quotes/:id</td>
+            <td>Supprimer un devis</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- ==================================================
+     27. REVIEW ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 27 — Routes des avis clients
+    </h2>
+
+    <p>
+        Le fichier <code>reviewRoutes.js</code> permet
+        de gérer les avis et évaluations laissés par
+        les clients.
+    </p>
+
+    <pre><code>const {
+    createReview,
+    getReviews,
+    getReviewById,
+    updateReview,
+    deleteReview,
+} = require("../controllers/reviewController");</code></pre>
+
+    <h3>
+        Routes disponibles
+    </h3>
+
+    <pre><code>router.post(
+    "/",
+    createReview
+);
+
+router.get(
+    "/",
+    getReviews
+);
+
+router.get(
+    "/:id",
+    getReviewById
+);
+
+router.put(
+    "/:id",
+    updateReview
+);
+
+router.delete(
+    "/:id",
+    deleteReview
+);</code></pre>
+
+    <table>
+
+        <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>POST</td>
+            <td>/api/reviews</td>
+            <td>Créer un avis</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/reviews</td>
+            <td>Récupérer les avis</td>
+        </tr>
+
+        <tr>
+            <td>GET</td>
+            <td>/api/reviews/:id</td>
+            <td>Récupérer un avis</td>
+        </tr>
+
+        <tr>
+            <td>PUT</td>
+            <td>/api/reviews/:id</td>
+            <td>Modifier un avis</td>
+        </tr>
+
+        <tr>
+            <td>DELETE</td>
+            <td>/api/reviews/:id</td>
+            <td>Supprimer un avis</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- ==================================================
+     28. RÉSUMÉ DES ROUTES
+================================================== -->
+
+<section class="chapter">
+
+    <h2>
+        # 28 — Résumé de l'API Backend
+    </h2>
+
+    <p>
+        L'ensemble des fichiers de routes permet de
+        structurer l'API Solar Energy en plusieurs
+        fonctionnalités indépendantes.
+    </p>
+
+    <table>
+
+        <tr>
+            <th>Fonctionnalité</th>
+            <th>URL principale</th>
+            <th>Opérations</th>
+        </tr>
+
+        <tr>
+            <td>Rendez-vous</td>
+            <td>/api/appointments</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+        <tr>
+            <td>Utilisateurs</td>
+            <td>/api/users</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+        <tr>
+            <td>Batteries</td>
+            <td>/api/batteries</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+        <tr>
+            <td>Contacts</td>
+            <td>/api/contacts</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+        <tr>
+            <td>Dashboard</td>
+            <td>/api/dashboard</td>
+            <td>GET</td>
+        </tr>
+
+        <tr>
+            <td>Onduleurs</td>
+            <td>/api/inverters</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+        <tr>
+            <td>Panneaux</td>
+            <td>/api/panels</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+        <tr>
+            <td>Paiements</td>
+            <td>/api/payments</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+        <tr>
+            <td>Devis</td>
+            <td>/api/quotes</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+        <tr>
+            <td>Avis</td>
+            <td>/api/reviews</td>
+            <td>POST, GET, PUT, DELETE</td>
+        </tr>
+
+    </table>
+
+    <h3>
+        Architecture des routes
+    </h3>
+
+    <div class="info">
+
+        <strong>Flux général :</strong>
+
+        <br><br>
+
+        React
+
+        →
+
+        Axios
+
+        →
+
+        Express
+
+        →
+
+        Route
+
+        →
+
+        Middleware
+
+        →
+
+        Controller
+
+        →
+
+        Model Mongoose
+
+        →
+
+        MongoDB
+
+        <br><br>
+
+        Puis la réponse revient vers le frontend :
+
+        <br><br>
+
+        MongoDB
+
+        →
+
+        Controller
+
+        →
+
+        JSON
+
+        →
+
+        Axios
+
+        →
+
+        React
+
+    </div>
+
+    <h3>
+        Rôle des différents éléments
+    </h3>
+
+    <ul>
+
+        <li>
+            <strong>Routes :</strong>
+            définissent les URL et les méthodes HTTP.
+        </li>
+
+        <li>
+            <strong>Middleware :</strong>
+            vérifie certaines conditions avant l'exécution
+            du controller.
+        </li>
+
+        <li>
+            <strong>Controllers :</strong>
+            contiennent la logique métier.
+        </li>
+
+        <li>
+            <strong>Models :</strong>
+            permettent de communiquer avec MongoDB
+            grâce à Mongoose.
+        </li>
+
+        <li>
+            <strong>MongoDB :</strong>
+            stocke les données de l'application.
+        </li>
+
+    </ul>
+
+    <div class="success">
+
+        <strong>Résultat :</strong>
+
+        <br><br>
+
+        L'utilisation de plusieurs fichiers de routes
+        permet de garder un backend organisé, modulaire
+        et plus facile à maintenir.
+
+    </div>
+
+</section>
+</body>
+</html>

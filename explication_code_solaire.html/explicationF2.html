@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Documentation Frontend — Solar Energy</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
+
+        background: #f4f6f8;
+        color: #222;
+
+        line-height: 1.7;
+    }
+
+    .documentation {
+        width: 90%;
+        max-width: 1100px;
+
+        margin: 40px auto;
+        padding: 40px;
+
+        background: #ffffff;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .documentation-header {
+        margin-bottom: 45px;
+        padding-bottom: 25px;
+
+        border-bottom: 3px solid #f5c542;
+    }
+
+    .documentation-header h1 {
+        margin: 0 0 10px;
+
+        color: #1f2937;
+
+        font-size: 32px;
+    }
+
+    .documentation-header p {
+        margin: 0;
+
+        color: #666;
+
+        font-size: 16px;
+    }
+
+    section {
+        margin-bottom: 45px;
+    }
+
+    h2 {
+        margin-top: 45px;
+        margin-bottom: 18px;
+
+        padding-bottom: 10px;
+
+        color: #1f2937;
+
+        font-size: 26px;
+
+        border-bottom: 2px solid #f5c542;
+    }
+
+    h3 {
+        margin-top: 28px;
+        margin-bottom: 10px;
+
+        color: #374151;
+
+        font-size: 19px;
+    }
+
+    p {
+        margin: 0 0 18px;
+
+        color: #4b5563;
+
+        font-size: 16px;
+
+        text-align: justify;
+    }
+
+    code {
+        padding: 3px 7px;
+
+        background: #f1f3f5;
+
+        border-radius: 5px;
+
+        color: #c2410c;
+
+        font-family:
+            Consolas,
+            "Courier New",
+            monospace;
+
+        font-size: 14px;
+    }
+
+    .architecture {
+        margin-top: 25px;
+        padding: 25px;
+
+        background: #f8fafc;
+
+        border-left: 5px solid #f5c542;
+
+        border-radius: 8px;
+    }
+
+    .important {
+        margin: 20px 0;
+        padding: 18px;
+
+        background: #fff8df;
+
+        border-left: 5px solid #f5c542;
+
+        border-radius: 6px;
+
+        color: #5f4b00;
+    }
+
+    .footer {
+        margin-top: 50px;
+        padding-top: 25px;
+
+        border-top: 1px solid #ddd;
+
+        text-align: center;
+
+        color: #777;
+
+        font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+
+        .documentation {
+            width: 95%;
+            padding: 25px;
+        }
+
+        .documentation-header h1 {
+            font-size: 26px;
+        }
+
+        h2 {
+            font-size: 23px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 15px;
+            text-align: left;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<main class="documentation">
+
+```
+<header class="documentation-header">
+
+    <h1>
+        ☀️ Documentation Frontend — Solar Energy
+    </h1>
+
+    <p>
+        Documentation technique des composants React, de la navigation,
+        de l'authentification, de la gestion des devis, des rendez-vous
+        et des paiements Stripe.
+    </p>
+
+</header>
+
+
+<!-- ===================================================== -->
+<!-- DASHBOARD RENDEZ-VOUS -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        📅 Dashboard des rendez-vous
+    </h2>
+
+    <p>
+        <code>DashboardAppointments.jsx</code> est le composant React utilisé
+        par l'administration pour consulter les rendez-vous pris par les
+        clients. Il récupère les rendez-vous depuis le backend à l'aide
+        d'Axios, les stocke dans un état local avec <code>useState</code>,
+        puis les affiche sous forme de cartes.
+    </p>
+
+    <p>
+        Le composant permet ainsi à l'administrateur de consulter les
+        principales informations associées à chaque rendez-vous, notamment
+        le nom du client, son adresse e-mail, son numéro de téléphone,
+        la date souhaitée, son adresse, son message et le statut du
+        rendez-vous.
+    </p>
+
+
+    <h3>
+        Gestion de l'état
+    </h3>
+
+    <p>
+        Le composant utilise <code>useState</code> pour créer deux états.
+        La variable <code>appointments</code> contient la liste des
+        rendez-vous récupérés depuis l'API et est initialisée avec un
+        tableau vide. La variable <code>loading</code> indique si les
+        données sont encore en cours de chargement.
+    </p>
+
+    <p>
+        Ces états permettent à React de mettre automatiquement à jour
+        l'interface lorsque les rendez-vous sont récupérés ou lorsqu'une
+        erreur survient pendant la communication avec le backend.
+    </p>
+
+
+    <h3>
+        Récupération des rendez-vous
+    </h3>
+
+    <p>
+        Le hook <code>useEffect</code> est exécuté automatiquement lorsque
+        le composant est chargé. Il appelle la fonction
+        <code>fetchAppointments()</code>, qui envoie une requête HTTP
+        <code>GET</code> vers l'endpoint
+        <code>/api/appointments</code>.
+    </p>
+
+    <p>
+        Cette requête permet de récupérer les rendez-vous enregistrés
+        dans la base de données et de les afficher dans le dashboard
+        d'administration.
+    </p>
+
+
+    <h3>
+        Authentification de l'administrateur
+    </h3>
+
+    <p>
+        Avant d'envoyer la requête, le composant récupère le token
+        d'authentification depuis <code>localStorage</code> grâce à
+        <code>localStorage.getItem("token")</code>.
+    </p>
+
+    <p>
+        Le token est ensuite envoyé au backend dans l'en-tête
+        <code>Authorization</code> avec le format
+        <code>Bearer token</code>. Cela permet au backend de vérifier
+        l'identité de l'utilisateur avant de retourner les données.
+    </p>
+
+
+    <h3>
+        Traitement de la réponse API
+    </h3>
+
+    <p>
+        Après réception de la réponse, le composant vérifie plusieurs
+        structures possibles de données. Il peut récupérer directement
+        un tableau depuis <code>response.data</code>, depuis
+        <code>response.data.data</code> ou depuis
+        <code>response.data.appointments</code>.
+    </p>
+
+    <p>
+        Cette vérification permet au composant de rester compatible avec
+        différentes structures de réponse du backend.
+    </p>
+
+
+    <h3>
+        Gestion des erreurs
+    </h3>
+
+    <p>
+        Les erreurs sont capturées avec un bloc <code>try...catch</code>.
+        Lorsqu'une erreur survient, elle est affichée dans la console
+        avec <code>console.error()</code> et la liste des rendez-vous
+        est réinitialisée avec un tableau vide.
+    </p>
+
+
+    <h3>
+        Affichage du statut
+    </h3>
+
+    <p>
+        La fonction <code>getAppointmentStatusLabel()</code> transforme
+        les statuts techniques provenant du backend en libellés plus
+        compréhensibles pour l'administrateur.
+    </p>
+
+    <p>
+        Par exemple, <code>Pending</code> devient « En attente »,
+        <code>Confirmed</code> devient « Confirmé »,
+        <code>Rejected</code> devient « Refusé » et
+        <code>Cancelled</code> devient « Annulé ».
+    </p>
+
+
+    <h3>
+        Affichage des rendez-vous
+    </h3>
+
+    <p>
+        Les rendez-vous sont parcourus avec la méthode
+        <code>.map()</code>. Pour chaque rendez-vous, le composant crée
+        une carte contenant les informations du client.
+    </p>
+
+    <p>
+        La propriété <code>appointment._id</code> est utilisée comme
+        clé unique pour permettre à React d'identifier chaque élément.
+        La date est convertie avec <code>new Date()</code>, puis affichée
+        au format français grâce à
+        <code>toLocaleDateString("fr-FR")</code>.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- DASHBOARD PAIEMENTS -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        💳 Dashboard des paiements
+    </h2>
+
+    <p>
+        <code>DashboardPayments.jsx</code> est le composant React
+        permettant à l'administration de consulter et de gérer les
+        paiements enregistrés dans le système.
+    </p>
+
+    <p>
+        Il récupère les paiements depuis le backend, affiche les
+        informations relatives au client et à la transaction et fournit
+        plusieurs actions permettant de modifier ou de supprimer un
+        paiement.
+    </p>
+
+
+    <h3>
+        Gestion de l'état
+    </h3>
+
+    <p>
+        Le composant utilise deux états principaux. La variable
+        <code>payments</code> contient la liste des paiements récupérés
+        depuis l'API tandis que <code>loading</code> indique si les
+        paiements sont encore en cours de récupération.
+    </p>
+
+
+    <h3>
+        Récupération des paiements
+    </h3>
+
+    <p>
+        Le hook <code>useEffect</code> appelle la fonction
+        <code>fetchPayments()</code> lors du chargement du composant.
+        Cette fonction envoie une requête HTTP <code>GET</code> vers
+        <code>/api/payments</code>.
+    </p>
+
+    <p>
+        Lorsque les données sont reçues, elles sont enregistrées dans
+        l'état <code>payments</code>. React actualise ensuite
+        automatiquement l'interface afin d'afficher les paiements.
+    </p>
+
+
+    <h3>
+        Compteur des paiements
+    </h3>
+
+    <p>
+        Le nombre de paiements est calculé avec
+        <code>payments.length</code>. Le composant affiche ainsi
+        dynamiquement le nombre total de paiements reçus.
+    </p>
+
+    <p>
+        Le texte est également adapté automatiquement entre
+        « paiement » et « paiements » selon le nombre enregistré.
+    </p>
+
+
+    <h3>
+        Modification du statut
+    </h3>
+
+    <p>
+        La fonction <code>updateStatus()</code> permet à l'administrateur
+        de modifier le statut d'un paiement. Elle envoie une requête
+        HTTP <code>PUT</code> vers
+        <code>/api/payments/:id</code> avec le nouveau statut.
+    </p>
+
+    <p>
+        Cette fonctionnalité permet notamment de confirmer un paiement
+        avec le statut <code>Paid</code> ou de le marquer comme échoué
+        avec le statut <code>Failed</code>.
+    </p>
+
+
+    <h3>
+        Suppression d'un paiement
+    </h3>
+
+    <p>
+        La fonction <code>deletePayment()</code> permet de supprimer
+        un paiement. Avant la suppression, <code>window.confirm()</code>
+        affiche une demande de confirmation afin d'éviter une suppression
+        accidentelle.
+    </p>
+
+    <p>
+        Si l'administrateur confirme la suppression, une requête HTTP
+        <code>DELETE</code> est envoyée vers
+        <code>/api/payments/:id</code>. Après la suppression,
+        la liste des paiements est actualisée avec
+        <code>fetchPayments()</code>.
+    </p>
+
+
+    <h3>
+        Affichage des statuts
+    </h3>
+
+    <p>
+        Le composant utilise plusieurs conditions pour afficher un
+        libellé différent selon le statut enregistré dans la base de
+        données. Le statut <code>Paid</code> représente un paiement
+        confirmé, <code>Pending</code> un paiement en attente,
+        <code>Failed</code> un paiement échoué et
+        <code>Refunded</code> un paiement remboursé.
+    </p>
+
+
+    <h3>
+        Actions administratives
+    </h3>
+
+    <p>
+        Les boutons d'action sont affichés dynamiquement. Le bouton
+        « Confirmer paiement » apparaît lorsque le paiement n'est pas
+        encore marqué comme <code>Paid</code>. Le bouton « Refuser »
+        apparaît lorsque le paiement n'est pas encore marqué comme
+        <code>Failed</code>.
+    </p>
+
+    <p>
+        Un bouton « Supprimer » reste disponible afin de permettre à
+        l'administrateur de supprimer le paiement après confirmation.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- HOME -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        🏠 Page d'accueil
+    </h2>
+
+    <p>
+        <code>Home.jsx</code> représente la page d'accueil principale
+        de l'application Solar Energy. Ce composant reste volontairement
+        simple puisqu'il assemble plusieurs composants React existants
+        afin de construire l'interface d'accueil.
+    </p>
+
+    <p>
+        Il affiche principalement le composant <code>Auth</code> ainsi
+        que le composant <code>Testimonials</code>.
+    </p>
+
+
+    <h3>
+        Composant Auth
+    </h3>
+
+    <p>
+        Le composant <code>Auth</code> est intégré directement dans la
+        page avec <code>&lt;Auth /&gt;</code>. Il permet de gérer
+        l'authentification des utilisateurs, notamment la connexion et
+        l'inscription selon l'implémentation du composant.
+    </p>
+
+
+    <h3>
+        Composant Testimonials
+    </h3>
+
+    <p>
+        Le composant <code>Testimonials</code> permet d'afficher les
+        témoignages ou avis des clients. Il est placé après le système
+        d'authentification afin de présenter aux visiteurs les retours
+        concernant les services proposés par Solar Energy.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- MY QUOTES -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        📋 Page « Mes demandes de devis »
+    </h2>
+
+    <p>
+        <code>MyQuotes.jsx</code> permet à un client connecté de
+        consulter ses demandes de devis. Le composant récupère les devis
+        depuis le backend grâce à Axios et utilise le token
+        d'authentification enregistré dans <code>localStorage</code>.
+    </p>
+
+    <p>
+        Chaque devis est ensuite affiché avec ses informations
+        principales ainsi que son statut actuel.
+    </p>
+
+
+    <h3>
+        Vérification de l'authentification
+    </h3>
+
+    <p>
+        Avant de récupérer les devis, le composant vérifie la présence
+        du token dans <code>localStorage</code>. Si aucun token n'est
+        trouvé, un message informe l'utilisateur qu'il doit se connecter
+        et celui-ci est redirigé vers <code>/auth</code>.
+    </p>
+
+    <p>
+        Cette vérification permet d'éviter qu'un utilisateur non connecté
+        tente d'accéder à ses données personnelles.
+    </p>
+
+
+    <h3>
+        Récupération des devis
+    </h3>
+
+    <p>
+        La fonction <code>fetchQuotes()</code> envoie une requête
+        HTTP <code>GET</code> vers <code>/api/quotes</code>.
+        Le token est transmis dans l'en-tête
+        <code>Authorization</code>.
+    </p>
+
+    <p>
+        Le backend peut ainsi identifier l'utilisateur authentifié
+        et retourner les informations correspondant à ses demandes
+        de devis.
+    </p>
+
+
+    <h3>
+        Affichage des informations du devis
+    </h3>
+
+    <p>
+        Chaque devis contient plusieurs informations : nom du client,
+        email, téléphone, adresse, type d'installation, consommation
+        estimée, budget, message et statut.
+    </p>
+
+    <p>
+        Ces informations permettent au client de suivre l'évolution
+        de sa demande depuis son envoi jusqu'à sa validation.
+    </p>
+
+
+    <h3>
+        Gestion du statut du devis
+    </h3>
+
+    <p>
+        Le composant adapte son affichage en fonction du statut du devis.
+        Lorsque le statut est <code>Pending</code>, le client est informé
+        que sa demande est encore en attente de validation.
+    </p>
+
+    <p>
+        Lorsque le statut est <code>Reviewed</code>, il est informé que
+        l'administration a consulté sa demande. Lorsque le statut est
+        <code>Rejected</code>, il est informé que la demande a été
+        refusée.
+    </p>
+
+    <p>
+        Enfin, lorsque le statut est <code>Approved</code>, le client
+        peut procéder au paiement du montant indiqué dans son devis.
+    </p>
+
+
+    <h3>
+        Paiement Stripe depuis un devis accepté
+    </h3>
+
+    <p>
+        Lorsque le devis possède le statut <code>Approved</code>,
+        le composant affiche un bouton permettant au client de payer
+        avec Stripe.
+    </p>
+
+    <p>
+        La fonction <code>handleStripePayment()</code> vérifie d'abord
+        l'identifiant du devis, le nom du client, son adresse e-mail
+        ainsi que le montant avant d'envoyer les informations au backend.
+    </p>
+
+
+    <h3>
+        Création de la session Stripe
+    </h3>
+
+    <p>
+        Les informations du devis sont envoyées au backend avec une
+        requête HTTP <code>POST</code>. Le backend est responsable de
+        créer la session de paiement Stripe et de retourner une URL
+        permettant d'accéder à la page de paiement.
+    </p>
+
+    <p>
+        Lorsque l'URL Stripe est reçue correctement,
+        <code>window.location.href</code> redirige automatiquement
+        le navigateur du client vers la page de paiement.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- PAYMENT -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        💳 Page de paiement
+    </h2>
+
+    <p>
+        <code>Payment.jsx</code> est une page dédiée au paiement d'un
+        devis spécifique. L'identifiant du devis est récupéré directement
+        depuis l'URL grâce à <code>useParams()</code>.
+    </p>
+
+    <p>
+        Le composant récupère ensuite les informations du devis depuis
+        le backend et affiche les informations nécessaires avant de
+        permettre au client de procéder au paiement.
+    </p>
+
+
+    <h3>
+        Récupération du quoteId
+    </h3>
+
+    <p>
+        La ligne <code>const &#123; quoteId &#125; = useParams()</code>
+        permet de récupérer l'identifiant présent dans la route
+        <code>/payment/:quoteId</code>.
+    </p>
+
+    <p>
+        Cet identifiant est ensuite utilisé pour demander au backend
+        les informations du devis correspondant.
+    </p>
+
+
+    <h3>
+        Récupération du devis
+    </h3>
+
+    <p>
+        La fonction <code>fetchQuote()</code> envoie une requête
+        HTTP <code>GET</code> vers
+        <code>/api/quotes/${quoteId}</code>.
+    </p>
+
+    <p>
+        Le token de l'utilisateur est transmis dans l'en-tête
+        <code>Authorization</code>. Le backend retourne ensuite les
+        informations du devis demandé.
+    </p>
+
+
+    <h3>
+        Vérification du statut
+    </h3>
+
+    <p>
+        Avant de lancer le paiement, le composant vérifie que le devis
+        possède le statut <code>Approved</code>.
+    </p>
+
+    <p>
+        Si le devis n'est pas encore accepté, le paiement est bloqué
+        et un message informe le client qu'il doit attendre la validation
+        de son devis.
+    </p>
+
+
+    <h3>
+        Préparation du paiement
+    </h3>
+
+    <p>
+        La fonction <code>handleStripePayment()</code> récupère le nom
+        du client, son email et le budget du devis.
+    </p>
+
+    <p>
+        Le montant est converti en nombre avec
+        <code>Number(quote.budget)</code> afin d'être transmis
+        correctement au backend.
+    </p>
+
+
+    <h3>
+        Redirection vers Stripe
+    </h3>
+
+    <p>
+        Après l'appel à l'API
+        <code>/api/payments/create-checkout-session</code>,
+        le composant vérifie si le backend a retourné une réponse
+        contenant <code>success</code> et une <code>url</code>.
+    </p>
+
+    <p>
+        Si ces deux informations sont présentes, le navigateur est
+        redirigé vers la page de paiement Stripe avec
+        <code>window.location.href</code>.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- PRODUCTS -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        ☀️ Page des produits solaires
+    </h2>
+
+    <p>
+        <code>Products.jsx</code> affiche les produits solaires
+        disponibles dans l'application. Il récupère trois catégories
+        de produits depuis le backend : les panneaux solaires,
+        les batteries et les onduleurs.
+    </p>
+
+    <p>
+        Les données des trois catégories sont ensuite regroupées dans
+        un seul tableau afin de pouvoir être affichées dans une interface
+        commune.
+    </p>
+
+
+    <h3>
+        Récupération des produits
+    </h3>
+
+    <p>
+        Le composant utilise <code>Promise.all()</code> pour envoyer
+        simultanément trois requêtes HTTP vers
+        <code>/api/panels</code>,
+        <code>/api/batteries</code> et
+        <code>/api/inverters</code>.
+    </p>
+
+    <p>
+        Cette méthode permet de récupérer les trois catégories
+        en parallèle au lieu d'attendre la fin de chaque requête
+        séparément.
+    </p>
+
+
+    <h3>
+        Regroupement des produits
+    </h3>
+
+    <p>
+        Après réception des trois réponses, les données sont regroupées
+        avec l'opérateur de décomposition <code>...</code>.
+    </p>
+
+    <p>
+        Chaque produit reçoit également une propriété
+        <code>category</code> permettant d'identifier son type.
+        Les panneaux reçoivent la catégorie « Panneau solaire »,
+        les batteries « Batterie solaire » et les onduleurs
+        « Onduleur solaire ».
+    </p>
+
+
+    <h3>
+        Recherche de produits
+    </h3>
+
+    <p>
+        La variable <code>search</code> contient le texte saisi par
+        l'utilisateur dans la barre de recherche.
+    </p>
+
+    <p>
+        La méthode <code>.filter()</code> permet ensuite de conserver
+        uniquement les produits correspondant à la recherche.
+        Le système recherche notamment dans le nom, la marque,
+        la catégorie, la technologie et le type.
+    </p>
+
+
+    <h3>
+        Affichage des produits
+    </h3>
+
+    <p>
+        Chaque produit est affiché sous forme de carte contenant son
+        image, son nom, sa catégorie, sa marque, ses caractéristiques
+        techniques, sa description et son prix.
+    </p>
+
+    <p>
+        Certaines informations sont affichées uniquement lorsqu'elles
+        existent grâce à des conditions comme
+        <code>product.power &amp;&amp;</code>.
+    </p>
+
+
+    <h3>
+        Gestion du stock
+    </h3>
+
+    <p>
+        La propriété <code>inStock</code> permet de déterminer si le
+        produit est disponible.
+    </p>
+
+    <p>
+        Lorsque le produit est disponible, l'interface affiche
+        « En stock ». Lorsqu'il n'est pas disponible, elle affiche
+        « Rupture » et le bouton de demande de devis est désactivé.
+    </p>
+
+
+    <h3>
+        Navigation vers le devis
+    </h3>
+
+    <p>
+        Lorsque le client clique sur « Demander un devis », la fonction
+        <code>navigate()</code> de React Router redirige l'utilisateur
+        vers <code>/quote</code>.
+    </p>
+
+    <p>
+        Le produit sélectionné est également transmis dans l'état de
+        navigation avec <code>state: &#123; product: product &#125;</code>,
+        ce qui permet à la page de devis de connaître le produit
+        sélectionné.
+    </p>
+
+
+    <h3>
+        Déconnexion
+    </h3>
+
+    <p>
+        La fonction <code>handleLogout()</code> supprime le token et
+        les informations de l'utilisateur enregistrés dans
+        <code>localStorage</code>.
+    </p>
+
+    <p>
+        Elle affiche ensuite un message de confirmation et redirige
+        l'utilisateur vers la page d'authentification.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- QUOTE -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        📄 Formulaire de demande de devis
+    </h2>
+
+    <p>
+        <code>Quote.jsx</code> permet au client de remplir un formulaire
+        afin de demander une estimation pour une installation solaire.
+        Le formulaire collecte les informations personnelles du client
+        ainsi que les informations relatives à son projet.
+    </p>
+
+
+    <h3>
+        Gestion du formulaire
+    </h3>
+
+    <p>
+        Les données du formulaire sont stockées dans l'état
+        <code>form</code> avec <code>useState</code>.
+    </p>
+
+    <p>
+        Chaque champ possède une propriété correspondant à une
+        information précise : <code>customerName</code>,
+        <code>email</code>, <code>phone</code>,
+        <code>address</code>, <code>serviceType</code>,
+        <code>estimatedConsumption</code>, <code>budget</code>
+        et <code>message</code>.
+    </p>
+
+
+    <h3>
+        Modification des champs
+    </h3>
+
+    <p>
+        La fonction <code>handleChange()</code> récupère le nom et la
+        valeur du champ modifié grâce à <code>e.target</code>.
+    </p>
+
+    <p>
+        Elle utilise ensuite la syntaxe
+        <code>...prev</code> afin de conserver les autres valeurs
+        du formulaire et de modifier uniquement le champ concerné.
+    </p>
+
+
+    <h3>
+        Validation des données
+    </h3>
+
+    <p>
+        Avant l'envoi, la fonction <code>handleSubmit()</code> vérifie
+        que les champs obligatoires sont renseignés.
+    </p>
+
+    <p>
+        Le nom, l'email, le téléphone, l'adresse, le type d'installation
+        et la consommation estimée sont nécessaires pour envoyer
+        correctement une demande de devis.
+    </p>
+
+
+    <h3>
+        Préparation des données
+    </h3>
+
+    <p>
+        Avant d'envoyer les données au backend, les valeurs numériques
+        sont converties avec <code>Number()</code>.
+    </p>
+
+    <p>
+        La consommation estimée est convertie en nombre et le budget
+        est également converti lorsqu'il a été renseigné. Cela permet
+        au backend de recevoir des données adaptées au modèle de données.
+    </p>
+
+
+    <h3>
+        Envoi vers le backend
+    </h3>
+
+    <p>
+        Le formulaire envoie une requête HTTP <code>POST</code> vers
+        <code>/api/quotes</code> avec Axios.
+    </p>
+
+    <p>
+        Dans le code présenté, cette requête est envoyée sans token.
+        Le backend reçoit alors les informations du formulaire et
+        crée la demande de devis dans la base de données.
+    </p>
+
+
+    <h3>
+        Actions supplémentaires
+    </h3>
+
+    <p>
+        La page contient également trois actions de navigation.
+        Le bouton « Contacter Solar Energy » redirige vers
+        <code>/contact</code>, le bouton « Prendre un rendez-vous »
+        redirige vers <code>/appointments</code> et le bouton
+        « Voir mes devis » redirige vers <code>/my-quotes</code>.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- REVIEWS -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        ⭐ Page des avis clients
+    </h2>
+
+    <p>
+        <code>Reviews.jsx</code> affiche une liste d'avis clients.
+        Dans la version actuelle, les avis sont directement stockés
+        dans un tableau JavaScript appelé <code>reviews</code>.
+    </p>
+
+    <p>
+        Chaque élément du tableau contient le nom du client, une note
+        sur cinq et un commentaire.
+    </p>
+
+
+    <h3>
+        Affichage des avis
+    </h3>
+
+    <p>
+        La méthode <code>.map()</code> parcourt le tableau
+        <code>reviews</code> et crée un élément HTML pour chaque avis.
+    </p>
+
+    <p>
+        Le composant affiche le nom du client, sa note et son commentaire.
+        Dans cette implémentation, l'index du tableau est utilisé comme
+        clé React.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- APP ROUTES -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        🧭 Gestion des routes de l'application
+    </h2>
+
+    <p>
+        <code>AppRoutes.jsx</code> constitue le système central de
+        navigation de l'application. Il utilise <code>Routes</code>,
+        <code>Route</code> et <code>Navigate</code> de React Router
+        afin de définir les différentes pages accessibles dans
+        l'application Solar Energy.
+    </p>
+
+
+    <h3>
+        Routes client
+    </h3>
+
+    <p>
+        Les routes <code>/products</code>, <code>/quote</code>,
+        <code>/contact</code>, <code>/appointments</code>,
+        <code>/my-quotes</code> et <code>/payment/:quoteId</code>
+        correspondent aux fonctionnalités destinées aux clients.
+    </p>
+
+    <p>
+        Elles sont placées à l'intérieur du composant
+        <code>Layout</code>, ce qui permet de partager une structure
+        commune entre les différentes pages.
+    </p>
+
+
+    <h3>
+        Routes protégées
+    </h3>
+
+    <p>
+        Les pages privées sont enveloppées dans le composant
+        <code>PrivateRoute</code>. Celui-ci vérifie la présence d'un
+        token dans <code>localStorage</code>.
+    </p>
+
+    <p>
+        Si le token existe, l'utilisateur peut accéder à la page.
+        Dans le cas contraire, il est redirigé vers la page d'accueil.
+    </p>
+
+
+    <h3>
+        Routes administrateur
+    </h3>
+
+    <p>
+        Les routes <code>/dashboard</code>,
+        <code>/dashboard-contacts</code>,
+        <code>/dashboard-appointments</code> et
+        <code>/dashboard-payments</code> correspondent à l'espace
+        d'administration.
+    </p>
+
+    <p>
+        Elles utilisent <code>AdminLayout</code> afin de partager
+        une structure commune à l'ensemble des pages administratives.
+    </p>
+
+
+    <h3>
+        Route inconnue
+    </h3>
+
+    <p>
+        La route <code>*</code> capture toutes les URL qui ne
+        correspondent à aucune route définie.
+    </p>
+
+    <p>
+        Dans ce cas, l'utilisateur est automatiquement redirigé vers
+        la page d'accueil avec <code>Navigate</code>.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- PRIVATE ROUTE -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        🔐 Protection des routes privées
+    </h2>
+
+    <p>
+        <code>PrivateRoute.jsx</code> est un composant utilisé pour
+        protéger les pages nécessitant une authentification.
+        Il vérifie si un token est présent dans
+        <code>localStorage</code>.
+    </p>
+
+
+    <h3>
+        Vérification du token
+    </h3>
+
+    <p>
+        La méthode <code>localStorage.getItem("token")</code>
+        permet de récupérer le token enregistré lors de la connexion.
+    </p>
+
+    <p>
+        Si aucun token n'est trouvé, le composant utilise
+        <code>Navigate</code> pour rediriger l'utilisateur vers
+        <code>/</code>.
+    </p>
+
+    <p>
+        Si un token existe, le composant retourne
+        <code>children</code> et autorise l'affichage de la page
+        demandée.
+    </p>
+
+
+    <h3>
+        Rôle de PrivateRoute
+    </h3>
+
+    <p>
+        Le rôle de <code>PrivateRoute</code> est principalement de
+        contrôler l'accès aux pages du côté frontend. Il empêche un
+        utilisateur non connecté d'afficher certaines pages directement
+        depuis le navigateur.
+    </p>
+
+    <div class="important">
+
+        <strong>Important :</strong>
+
+        <br>
+
+        La sécurité réelle des données doit également être assurée
+        par le backend. Le serveur doit vérifier la validité du token
+        avant d'autoriser l'accès aux données protégées.
+
+    </div>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- PUBLIC ROUTE -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        🌐 Protection des routes publiques
+    </h2>
+
+    <p>
+        <code>PublicRoute.jsx</code> est destiné aux pages accessibles
+        principalement aux utilisateurs qui ne sont pas encore connectés,
+        comme une page d'authentification.
+    </p>
+
+
+    <h3>
+        Redirection des utilisateurs connectés
+    </h3>
+
+    <p>
+        Le composant vérifie la présence d'un token dans
+        <code>localStorage</code>.
+    </p>
+
+    <p>
+        Si un token existe, l'utilisateur est automatiquement redirigé
+        vers <code>/dashboard</code>. Si aucun token n'existe,
+        le composant affiche le contenu fourni dans
+        <code>children</code>.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- LAYOUT -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        🧩 Layout principal de l'application
+    </h2>
+
+    <p>
+        <code>Layout.jsx</code> définit la structure commune des pages
+        client. Il utilise le composant <code>Outlet</code> de React
+        Router pour afficher dynamiquement la page correspondant
+        à la route actuelle.
+    </p>
+
+
+    <h3>
+        Utilisation de Outlet
+    </h3>
+
+    <p>
+        <code>Outlet</code> représente l'emplacement dans lequel
+        React Router insère le composant correspondant à la route active.
+    </p>
+
+    <p>
+        Cela permet de conserver une structure commune tout en changeant
+        uniquement le contenu principal de chaque page.
+    </p>
+
+
+    <h3>
+        Gestion du Footer
+    </h3>
+
+    <p>
+        Le composant utilise <code>useLocation()</code> pour connaître
+        l'URL actuelle.
+    </p>
+
+    <p>
+        La variable <code>hideFooter</code> devient vraie lorsque
+        l'utilisateur se trouve sur <code>/auth</code>. Dans ce cas,
+        le <code>Footer</code> n'est pas affiché.
+    </p>
+
+    <p>
+        Sur les autres pages, le Footer est rendu automatiquement.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- APP -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        ⚛️ Point d'entrée de l'application React
+    </h2>
+
+    <p>
+        <code>App.jsx</code> constitue le point d'entrée principal
+        de la navigation React. Il enveloppe l'application dans
+        <code>BrowserRouter</code> afin d'activer le système de
+        routage de React Router.
+    </p>
+
+
+    <h3>
+        BrowserRouter
+    </h3>
+
+    <p>
+        <code>BrowserRouter</code> permet à React Router de gérer
+        les différentes URL de l'application sans recharger
+        complètement la page.
+    </p>
+
+    <p>
+        Il fournit le contexte de navigation nécessaire à
+        <code>Routes</code>, <code>Route</code>, <code>Navigate</code>,
+        <code>useNavigate</code>, <code>useParams</code> et
+        <code>useLocation</code>.
+    </p>
+
+
+    <h3>
+        AppRoutes
+    </h3>
+
+    <p>
+        Le composant <code>&lt;AppRoutes /&gt;</code> contient
+        toutes les routes de l'application.
+    </p>
+
+    <p>
+        <code>App.jsx</code> reste donc très simple : il initialise
+        le système de routage et délègue la définition des différentes
+        pages à <code>AppRoutes</code>.
+    </p>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- ARCHITECTURE -->
+<!-- ===================================================== -->
+
+<section>
+
+    <h2>
+        🏗️ Architecture globale de l'application Solar Energy
+    </h2>
+
+    <div class="architecture">
+
+        <p>
+            L'application Solar Energy repose sur une architecture
+            frontend/backend séparée.
+        </p>
+
+        <p>
+            Le frontend est développé avec React. Il est responsable
+            de l'interface utilisateur, des formulaires, de la navigation,
+            de l'affichage des données et de la gestion des états locaux.
+        </p>
+
+        <p>
+            Axios assure la communication entre les composants React
+            et les différentes API du backend.
+        </p>
+
+        <p>
+            Le backend Node.js avec Express traite les requêtes,
+            applique la logique métier et communique avec MongoDB
+            pour enregistrer et récupérer les données.
+        </p>
+
+        <p>
+            Les principales données manipulées par l'application
+            concernent les utilisateurs, les produits solaires,
+            les devis, les rendez-vous, les contacts et les paiements.
+        </p>
+
+    </div>
+
+
+    <h2>
+        👤 Flux d'un client
+    </h2>
+
+    <p>
+        Un client commence par accéder à la page d'accueil et peut
+        s'authentifier. Une fois connecté, il peut consulter les
+        produits solaires, rechercher un panneau, une batterie ou
+        un onduleur, puis demander un devis.
+    </p>
+
+    <p>
+        Il peut également prendre un rendez-vous ou contacter
+        Solar Energy. Ses demandes de devis sont ensuite accessibles
+        depuis la page « Mes devis ».
+    </p>
+
+
+    <h2>
+        📄 Flux du devis
+    </h2>
+
+    <p>
+        Le client remplit le formulaire de demande de devis et les
+        informations sont envoyées au backend avec une requête
+        HTTP <code>POST</code>.
+    </p>
+
+    <p>
+        La demande est ensuite enregistrée avec un statut initial,
+        généralement <code>Pending</code>. L'administration peut
+        consulter la demande et modifier son statut.
+    </p>
+
+    <p>
+        Lorsque le devis est approuvé avec le statut
+        <code>Approved</code>, le client peut procéder au paiement.
+    </p>
+
+
+    <h2>
+        💳 Flux du paiement Stripe
+    </h2>
+
+    <p>
+        Après l'approbation du devis, le client peut cliquer sur le
+        bouton de paiement. React envoie les informations du devis
+        au backend.
+    </p>
+
+    <p>
+        Le backend crée ensuite une session de paiement Stripe et
+        retourne une URL de paiement au frontend.
+    </p>
+
+    <p>
+        React utilise alors <code>window.location.href</code> pour
+        rediriger automatiquement le navigateur du client vers
+        Stripe afin qu'il puisse effectuer son paiement.
+    </p>
+
+
+    <h2>
+        👨‍💼 Flux de l'administration
+    </h2>
+
+    <p>
+        L'administration dispose de plusieurs tableaux de bord
+        permettant de gérer les différentes informations de
+        l'application.
+    </p>
+
+    <p>
+        Le dashboard des contacts permet de consulter les messages
+        reçus. Le dashboard des rendez-vous permet de consulter
+        les rendez-vous clients. Le dashboard des paiements permet
+        de consulter, confirmer, refuser ou supprimer les paiements.
+    </p>
+
+
+    <h2>
+        🔐 Sécurité et authentification
+    </h2>
+
+    <p>
+        L'application utilise un token enregistré dans
+        <code>localStorage</code> afin de maintenir l'authentification
+        côté frontend.
+    </p>
+
+    <p>
+        Les composants nécessitant une authentification récupèrent
+        ce token et l'envoient au backend dans l'en-tête
+        <code>Authorization</code> avec le format
+        <code>Bearer</code>.
+    </p>
+
+    <p>
+        Le composant <code>PrivateRoute</code> contrôle également
+        la présence du token avant d'autoriser l'accès aux pages
+        privées.
+    </p>
+
+
+    <h2>
+        🔄 Communication Frontend / Backend
+    </h2>
+
+    <p>
+        La communication entre React et le backend est principalement
+        réalisée avec Axios.
+    </p>
+
+    <p>
+        Les requêtes HTTP <code>GET</code> permettent de récupérer
+        les données, les requêtes <code>POST</code> permettent de créer
+        des ressources, les requêtes <code>PUT</code> permettent de
+        modifier des informations et les requêtes
+        <code>DELETE</code> permettent de supprimer des données.
+    </p>
+
+    <p>
+        Cette architecture permet de séparer clairement l'interface
+        utilisateur, la logique métier et la gestion des données.
+        Le frontend se concentre sur l'expérience utilisateur tandis
+        que le backend assure le traitement des données et la
+        communication avec la base de données.
+    </p>
+
+</section>
+
+
+<footer class="footer">
+
+    Documentation technique — Solar Energy
+
+</footer>
+```
+
+</main>
+
+</body>
+
+</html>
