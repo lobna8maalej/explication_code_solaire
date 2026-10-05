@@ -1,5 +1,55 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const lang = document.documentElement.lang;
+
+    const translations = {
+        fr: {
+            accueil: "Accueil",
+            panneaux: "Panneaux solaires",
+            batteries: "Batteries",
+            onduleurs: "Onduleurs",
+            rendezvous: "Rendez-vous",
+            devis: "Devis",
+            paiements: "Paiements",
+            configuration: "Configuration"
+        },
+
+        es: {
+            accueil: "Inicio",
+            panneaux: "Paneles solares",
+            batteries: "Baterías",
+            onduleurs: "Inversores",
+            rendezvous: "Citas",
+            devis: "Presupuesto",
+            paiements: "Pagos",
+            configuration: "Configuración"
+        },
+
+        "pt-BR": {
+            accueil: "Início",
+            panneaux: "Painéis solares",
+            batteries: "Baterias",
+            onduleurs: "Inversores",
+            rendezvous: "Agendamentos",
+            devis: "Orçamento",
+            paiements: "Pagamentos",
+            configuration: "Configuração"
+        },
+
+        en: {
+            accueil: "Home",
+            panneaux: "Solar panels",
+            batteries: "Batteries",
+            onduleurs: "Inverters",
+            rendezvous: "Appointments",
+            devis: "Quote",
+            paiements: "Payments",
+            configuration: "Configuration"
+        }
+    };
+
+    const t = translations[lang] || translations.fr;
+
     const navbar = document.getElementById("navbar");
 
     navbar.innerHTML = `
@@ -14,51 +64,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <li>
                     <a href="documentationMrc.html">
-                        Accueil
+                        ${t.accueil}
                     </a>
                 </li>
 
                 <li>
                     <a href="documentation-backend.html">
-                        Panneaux solaires
+                        ${t.panneaux}
                     </a>
                 </li>
 
                 <li>
                     <a href="explicationModels.html">
-                        Batteries
+                        ${t.batteries}
                     </a>
                 </li>
 
                 <li>
                     <a href="documentationRoutes.html">
-                        Onduleurs
+                        ${t.onduleurs}
                     </a>
                 </li>
 
                 <li>
                     <a href="explicationF.html">
-                        Rendez-vous
+                        ${t.rendezvous}
                     </a>
                 </li>
 
                 <li>
                     <a href="explicationF2.html">
-                        Devis
+                        ${t.devis}
                     </a>
                 </li>
 
                 <li>
                     <a href="app.html">
-                        Paiements
+                        ${t.paiements}
                     </a>
                 </li>
 
- <li>
+                <li>
                     <a href="documentEnv.html">
-                        configuration
+                        ${t.configuration}
                     </a>
                 </li>
+
             </ul>
 
         </nav>

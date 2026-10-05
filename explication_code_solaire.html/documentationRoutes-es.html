@@ -1,0 +1,265 @@
+```html
+<!DOCTYPE html> 
+<html lang="es"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Document</title> 
+<link rel="stylesheet" href="documentationRoutes.css"> 
+ 
+</head> 
+<body> 
+    <section class="chapter"> 
+ 
+    <h2> 
+        # 17 — Rutas de la API Backend 
+    </h2> 
+ 
+    <p> 
+        Los archivos ubicados en la carpeta 
+        <code>routes</code> definen las diferentes 
+        URL de la API Backend de Solar Energy. 
+    </p> 
+ 
+    <p> 
+        Cada ruta recibe una solicitud HTTP procedente del 
+        frontend React y la envía al controller 
+        correspondiente. 
+    </p> 
+ 
+    <h3> 
+        Estructura general de una ruta 
+    </h3> 
+ 
+    <pre><code>const express = require("express"); 
+ 
+const router = express.Router(); 
+ 
+router.get("/", controller); 
+ 
+module.exports = router;</code></pre> 
+ 
+    <ul> 
+ 
+        <li> 
+            <code>express</code> importa el framework Express. 
+        </li> 
+ 
+        <li> 
+            <code>express.Router()</code> permite crear 
+            un router independiente. 
+        </li> 
+ 
+        <li> 
+            Los métodos <code>GET</code>, <code>POST</code>, 
+            <code>PUT</code> y <code>DELETE</code> 
+            definen las operaciones de la API. 
+        </li> 
+ 
+        <li> 
+            El controller contiene la lógica que se ejecuta 
+            cuando se llama a la ruta. 
+        </li> 
+ 
+        <li> 
+            <code>module.exports</code> permite utilizar 
+            el router en <code>app.js</code>. 
+        </li> 
+ 
+    </ul> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     18. APPOINTMENT ROUTES 
+================================================== --> 
+ 
+<section class="chapter"> 
+ 
+    <h2> 
+        # 18 — Rutas de citas 
+    </h2> 
+ 
+    <p> 
+        El archivo <code>appointmentRoutes.js</code> 
+        se utiliza para gestionar las citas de los clientes. 
+    </p> 
+ 
+    <pre><code>const express = require("express"); 
+ 
+const router = express.Router(); 
+ 
+const { 
+    createAppointment, 
+    getAppointments, 
+    getAppointmentById, 
+    updateAppointment, 
+    deleteAppointment, 
+} = require("../controllers/appointmentController");</code></pre> 
+ 
+    <p> 
+        Las funciones del controller se importan para 
+        ser utilizadas por las diferentes rutas. 
+    </p> 
+ 
+    <h3> 
+        Crear una cita 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/", 
+    createAppointment 
+);</code></pre> 
+ 
+    <p> 
+        Esta ruta utiliza el método 
+        <code>POST</code> para crear una nueva cita. 
+    </p> 
+ 
+    <h3> 
+        Obtener todas las citas 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/", 
+    getAppointments 
+);</code></pre> 
+ 
+    <p> 
+        Esta ruta devuelve la lista de citas 
+        almacenadas en MongoDB. 
+    </p> 
+ 
+    <h3> 
+        Obtener una cita por ID 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/:id", 
+    getAppointmentById 
+);</code></pre> 
+ 
+    <p> 
+        <code>:id</code> representa el identificador de la 
+        cita presente en la URL. 
+    </p> 
+ 
+    <h3> 
+        Modificar una cita 
+    </h3> 
+ 
+    <pre><code>router.put( 
+    "/:id", 
+    updateAppointment 
+);</code></pre> 
+ 
+    <p> 
+        Esta ruta permite modificar una cita 
+        existente. 
+    </p> 
+ 
+    <h3> 
+        Eliminar una cita 
+    </h3> 
+ 
+    <pre><code>router.delete( 
+    "/:id", 
+    deleteAppointment 
+);</code></pre> 
+ 
+    <p> 
+        Esta ruta elimina la cita correspondiente 
+        al identificador proporcionado. 
+    </p> 
+ 
+    <div class="info"> 
+ 
+        <strong>URL principal:</strong> 
+ 
+        <code>/api/appointments</code> 
+ 
+        <br><br> 
+ 
+        Las operaciones disponibles son: 
+ 
+        <br><br> 
+ 
+        POST → crear 
+ 
+        <br> 
+ 
+        GET → obtener 
+ 
+        <br> 
+ 
+        PUT → modificar 
+ 
+        <br> 
+ 
+        DELETE → eliminar 
+ 
+    </div> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     19. AUTH ROUTES 
+================================================== --> 
+ 
+<section class="chapter"> 
+ 
+    <h2> 
+        # 19 — Rutas de autenticación y usuarios 
+    </h2> 
+ 
+    <p> 
+        El archivo <code>authRoutes.js</code> se utiliza para 
+        gestionar el registro, el inicio de sesión y las operaciones 
+        relacionadas con los usuarios. 
+    </p> 
+ 
+    <pre><code>const { 
+    register, 
+    login, 
+    updateUser, 
+    changePassword, 
+    getUsers, 
+    deleteUser 
+} = require("../controllers/authController");</code></pre> 
+ 
+    <p> 
+        Las funciones del controller de autenticación 
+        se importan desde 
+        <code>authController.js</code>. 
+    </p> 
+ 
+    <h3> 
+        Crear una cuenta 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/register", 
+    register 
+);</code></pre> 
+ 
+    <p> 
+        Esta ruta permite a un nuevo usuario 
+        crear una cuenta. 
+    </p> 
+ 
+    <h3> 
+        Iniciar sesión 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/login", 
+    login 
+);</code></pre> 
+ 
+    <p> 
+        Esta ruta permite al usuario iniciar sesión. 
+        El controller verifica las credenciales de acceso 
+        y puede gene
+```

@@ -1,0 +1,59 @@
+```html
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Document</title> 
+<link rel="stylesheet" href="documentEnv.css"> 
+ 
+</head> 
+<body> 
+    <h2>Environment Variable Configuration</h2> 
+ 
+<p> 
+The <strong>.env</strong> file contains the environment variables required 
+for the backend of the <strong>Solar Energy</strong> platform to operate. 
+These variables are used to configure the server, database, 
+authentication, payments, image storage, and email delivery. 
+</p> 
+ 
+<p> 
+<strong>Important:</strong> API keys, secrets, passwords, and credentials 
+must never be published in documentation, on GitHub, or in publicly accessible 
+source code. 
+</p> 
+ 
+<h3>Example of a .env file</h3> 
+ 
+<pre><code> 
+PORT=3000 
+ 
+MONGO_URI=mongodb://127.0.0.1:27017/solar_db 
+ 
+JWT_SECRET=your_secret_key 
+ 
+STRIPE_SECRET_KEY=your_stripe_secret_key 
+ 
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name 
+CLOUDINARY_API_KEY=your_cloudinary_api_key 
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret 
+ 
+EMAIL_USER=your_email@example.com 
+EMAIL_PASS=your_email_app_password 
+</code></pre> 
+ 
+<h3>Explanation of the variables</h3> 
+ 
+<h4>PORT</h4> 
+ 
+<p> 
+<strong>PORT</strong> defines the port used by the Node.js/Express server. 
+In this example, the backend runs on port <strong>3000</strong>. 
+</p> 
+ 
+<h4>MONGO_URI</h4> 
+ 
+<p> 
+<strong>MONGO_URI</strong> contains the connection URL to_
+```

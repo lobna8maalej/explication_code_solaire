@@ -1,0 +1,2041 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Documentação Frontend — Solar Energy
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            background: #f4f6f8;
+            color: #222;
+            line-height: 1.7;
+        }
+
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 45px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 17px;
+            opacity: 0.9;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .chapter {
+            background: white;
+            margin-bottom: 35px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #0f766e;
+            border-bottom: 2px solid #0f766e;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #374151;
+            margin-top: 28px;
+        }
+
+        h4 {
+            color: #4b5563;
+            margin-bottom: 5px;
+        }
+
+        code {
+            background: #eef2f7;
+            padding: 3px 7px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+            color: #c2410c;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .success {
+            background: #ecfdf5;
+            border-left: 5px solid #059669;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .warning {
+            background: #fffbeb;
+            border-left: 5px solid #d97706;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .danger {
+            background: #fef2f2;
+            border-left: 5px solid #dc2626;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .flow {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #1f2937;
+            color: white;
+            margin-top: 50px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        ☀️ Documentação Frontend — Solar Energy
+    </h1>
+
+    <p>
+        Explicação dos componentes React,
+        Axios, React Router, autenticação,
+        agendamentos, contatos, avaliações e Dashboard Administrativo.
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- ===================================================== -->
+    <!-- INTRODUCTION -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            📚 1. Apresentação geral
+        </h2>
+
+        <p>
+            Esta parte do projeto corresponde ao
+            <strong>Frontend React</strong> da plataforma
+            <strong>Solar Energy</strong>.
+        </p>
+
+        <p>
+            Os componentes apresentados permitem que os usuários
+            criem uma conta, façam login, enviem uma mensagem,
+            solicitem um agendamento e consultem as avaliações.
+        </p>
+
+        <p>
+            O sistema também possui um
+            <strong>Dashboard Administrativo</strong> que permite consultar
+            as estatísticas e gerenciar as solicitações de orçamento.
+        </p>
+
+
+        <div class="info">
+
+            <strong>Tecnologias utilizadas:</strong>
+
+            <ul>
+
+                <li>
+                    React.js
+                </li>
+
+                <li>
+                    React Hooks
+                    (<code>useState</code>,
+                    <code>useEffect</code>)
+                </li>
+
+                <li>
+                    Axios para requisições HTTP
+                </li>
+
+                <li>
+                    React Router
+                </li>
+
+                <li>
+                    LocalStorage para o JWT
+                </li>
+
+                <li>
+                    API REST Node.js / Express
+                </li>
+
+                <li>
+                    MongoDB no Backend
+                </li>
+
+            </ul>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- TESTIMONIALS -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            ⭐ 2. Componente Testimonials.jsx
+        </h2>
+
+        <p>
+            O componente <code>Testimonials.jsx</code> permite
+            exibir as avaliações dos clientes armazenadas no
+            banco de dados.
+        </p>
+
+
+        <h3>
+            2.1 Importação das dependências
+        </h3>
+
+        <pre>
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "./Testimonials.css";
+        </pre>
+
+        <p>
+            <code>useState</code> permite criar e modificar
+            o estado local do componente.
+        </p>
+
+        <p>
+            <code>useEffect</code> permite executar código
+            automaticamente após o carregamento do componente.
+        </p>
+
+        <p>
+            <code>axios</code> permite se comunicar com
+            a API Backend.
+        </p>
+
+
+        <h3>
+            2.2 Armazenamento das avaliações
+        </h3>
+
+        <pre>
+const [reviews, setReviews] = useState([]);
+        </pre>
+
+        <p>
+            Inicialmente, a lista de avaliações está vazia.
+            A função <code>setReviews</code> permite posteriormente
+            atualizar essa lista.
+        </p>
+
+
+        <h3>
+            2.3 Recuperação das avaliações
+        </h3>
+
+        <pre>
+useEffect(() => {
+
+    axios
+        .get("http://localhost:3000/api/reviews")
+
+        .then((res) => {
+
+            console.log(
+                "API REVIEWS :",
+                res.data
+            );
+
+        })
+
+        .catch((error) => {
+
+            console.log(
+                "Erreur API :",
+                error
+            );
+
+        });
+
+}, []);
+        </pre>
+
+        <p>
+            Quando a página é carregada, uma requisição
+            <code>GET</code> é enviada para:
+        </p>
+
+        <pre>
+GET /api/reviews
+        </pre>
+
+        <p>
+            O Backend retorna as avaliações disponíveis.
+        </p>
+
+
+        <h3>
+            2.4 Filtragem das avaliações aprovadas
+        </h3>
+
+        <pre>
+res.data.data.filter(
+    review => review.status === "Approved"
+)
+        </pre>
+
+        <p>
+            O componente exibe apenas as avaliações cujo status
+            é <code>Approved</code>.
+        </p>
+
+        <div class="success">
+
+            <strong>Por quê?</strong>
+
+            <p>
+                As avaliações podem ser criadas pelos clientes,
+                mas precisam ser aprovadas pelo administrador
+                antes de serem exibidas publicamente.
+            </p>
+
+        </div>
+
+
+        <h3>
+            2.5 Exibição das estrelas
+        </h3>
+
+        <pre>
+{"⭐".repeat(review.rating)}
+        </pre>
+
+        <p>
+            Se a avaliação for <strong>5</strong>, o React gera:
+        </p>
+
+        <p>
+            ⭐⭐⭐⭐⭐
+        </p>
+
+
+        <h3>
+            2.6 Exibição da avaliação
+        </h3>
+
+        <pre>
+{reviews.map(review => (
+
+    &lt;div
+        className="review-card"
+        key={review._id}
+    &gt;
+
+        &lt;h3&gt;
+            {review.customerName}
+        &lt;/h3&gt;
+
+        &lt;p&gt;
+            {"⭐".repeat(review.rating)}
+        &lt;/p&gt;
+
+        &lt;p&gt;
+            {review.comment}
+        &lt;/p&gt;
+
+        &lt;strong&gt;
+            {review.productName}
+        &lt;/strong&gt;
+
+    &lt;/div&gt;
+
+))}
+        </pre>
+
+        <p>
+            <code>map()</code> percorre todas as avaliações
+            e cria um cartão HTML para cada avaliação.
+        </p>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- ADMIN LAYOUT -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            🛠️ 3. AdminLayout.jsx
+        </h2>
+
+        <p>
+            O componente <code>AdminLayout</code> representa
+            a estrutura geral da área administrativa.
+        </p>
+
+
+        <h3>
+            3.1 Código
+        </h3>
+
+        <pre>
+import { Outlet } from "react-router-dom";
+import AdminNavbar from "./AdminNavbar/AdminNavbar";
+
+export default function AdminLayout() {
+
+    return (
+
+        &lt;&gt;
+
+            &lt;AdminNavbar /&gt;
+
+            &lt;main&gt;
+
+                &lt;Outlet /&gt;
+
+            &lt;/main&gt;
+
+        &lt;/&gt;
+
+    );
+
+}
+        </pre>
+
+
+        <h3>
+            3.2 AdminNavbar
+        </h3>
+
+        <p>
+            <code>AdminNavbar</code> representa a barra
+            de navegação do administrador.
+        </p>
+
+
+        <h3>
+            3.3 Outlet
+        </h3>
+
+        <pre>
+&lt;Outlet /&gt;
+        </pre>
+
+        <p>
+            <code>Outlet</code> é fornecido pelo React Router.
+            Ele permite exibir automaticamente a página
+            correspondente à rota administrativa atual.
+        </p>
+
+        <div class="flow">
+
+            <strong>Exemplo:</strong>
+
+            <p>
+                AdminLayout
+                → AdminNavbar
+                → Outlet
+                → Dashboard
+            </p>
+
+            <p>
+                ou:
+            </p>
+
+            <p>
+                AdminLayout
+                → AdminNavbar
+                → Outlet
+                → DashboardContacts
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- APPOINTMENT -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            📅 4. Componente Appointment.jsx
+        </h2>
+
+        <p>
+            O componente <code>Appointment</code> permite ao cliente
+            solicitar um agendamento com a Solar Energy.
+        </p>
+
+
+        <h3>
+            4.1 Estado do formulário
+        </h3>
+
+        <pre>
+const [form, setForm] = useState({
+
+    customerName: "",
+    email: "",
+    phone: "",
+    appointmentDate: "",
+    address: "",
+    message: "",
+
+});
+        </pre>
+
+        <p>
+            O objeto <code>form</code> contém todas as
+            informações inseridas pelo cliente.
+        </p>
+
+
+        <h3>
+            4.2 Estado de carregamento
+        </h3>
+
+        <pre>
+const [loading, setLoading] = useState(false);
+        </pre>
+
+        <p>
+            Essa variável permite saber se a requisição
+            está em andamento.
+        </p>
+
+
+        <h3>
+            4.3 Alteração do formulário
+        </h3>
+
+        <pre>
+const handleChange = (e) => {
+
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+        ...prev,
+        [name]: value,
+    }));
+
+};
+        </pre>
+
+        <p>
+            Essa função recupera o nome do campo e seu valor.
+        </p>
+
+        <div class="info">
+
+            <p>
+                Por exemplo, se o usuário escrever
+                <strong>Ahmed</strong> no campo
+                <code>customerName</code>, o React atualiza:
+            </p>
+
+            <pre>
+form.customerName = "Ahmed"
+            </pre>
+
+        </div>
+
+
+        <h3>
+            4.4 Envio do agendamento
+        </h3>
+
+        <pre>
+const response = await axios.post(
+    "http://localhost:3000/api/appointments",
+    {
+        customerName: form.customerName,
+        email: form.email,
+        phone: form.phone,
+        appointmentDate: form.appointmentDate,
+        address: form.address,
+        message: form.message,
+    }
+);
+        </pre>
+
+        <p>
+            Ao enviar o formulário, o Axios realiza uma requisição
+            <code>POST</code> para:
+        </p>
+
+        <pre>
+POST /api/appointments
+        </pre>
+
+
+        <h3>
+            4.5 Redefinição do formulário
+        </h3>
+
+        <pre>
+setForm({
+    customerName: "",
+    email: "",
+    phone: "",
+    appointmentDate: "",
+    address: "",
+    message: "",
+});
+        </pre>
+
+        <p>
+            Após um envio bem-sucedido, todos os campos são limpos.
+        </p>
+
+
+        <h3>
+            4.6 Navegação
+        </h3>
+
+        <pre>
+navigate("/quote");
+        </pre>
+
+        <p>
+            Após a criação do agendamento, o usuário
+            é redirecionado para a página <code>/quote</code>.
+        </p>
+
+
+        <h3>
+            4.7 Data mínima
+        </h3>
+
+        <pre>
+min={
+    new Date()
+        .toISOString()
+        .split("T")[0]
+}
+        </pre>
+
+        <p>
+            Essa instrução impede o usuário de
+            selecionar uma data no passado.
+        </p>
+
+
+        <h3>
+            4.8 Botão dinâmico
+        </h3>
+
+        <pre>
+{loading
+    ? "⏳ Envoi en cours..."
+    : "📅 Demander un rendez-vous"}
+        </pre>
+
+        <p>
+            Durante o envio, o botão indica que a requisição
+            está em andamento e fica desativado.
+        </p>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- AUTH -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            🔐 5. Componente Auth.jsx
+        </h2>
+
+        <p>
+            O componente <code>Auth</code> gerencia tanto
+            o cadastro quanto o login dos usuários.
+        </p>
+
+
+        <h3>
+            5.1 Modo login / cadastro
+        </h3>
+
+        <pre>
+const [mode, setMode] = useState("login");
+        </pre>
+
+        <p>
+            O modo inicial é <code>login</code>.
+        </p>
+
+        <p>
+            Quando o modo é <code>register</code>,
+            o formulário também exibe o campo Nome.
+        </p>
+
+
+        <h3>
+            5.2 Dados do formulário
+        </h3>
+
+        <pre>
+const [form, setForm] = useState({
+
+    name: "",
+    email: "",
+    password: "",
+
+});
+        </pre>
+
+
+        <h3>
+            5.3 Login
+        </h3>
+
+        <pre>
+const response = await axios.post(
+    "http://localhost:3000/api/users/login",
+    {
+        email: form.email,
+        password: form.password,
+    }
+);
+        </pre>
+
+        <p>
+            Uma requisição <code>POST</code> é enviada ao Backend
+            para verificar o endereço de email e a senha.
+        </p>
+
+
+        <h3>
+            5.4 Recuperação do JWT
+        </h3>
+
+        <pre>
+if (response.data.token) {
+
+    localStorage.setItem(
+        "token",
+        response.data.token
+    );
+
+}
+        </pre>
+
+        <p>
+            Se o login for realizado com sucesso, o Backend retorna
+            um <strong>JWT</strong>.
+        </p>
+
+        <p>
+            O token é então armazenado no
+            <code>localStorage</code>.
+        </p>
+
+
+        <div class="success">
+
+            <strong>Fluxo de autenticação:</strong>
+
+            <div class="flow">
+
+                Usuário
+
+                →
+                Login
+
+                →
+                Backend
+
+                →
+                Verificação
+
+                →
+                JWT
+
+                →
+                localStorage
+
+            </div>
+
+        </div>
+
+
+        <h3>
+            5.5 Redirecionamento após o login
+        </h3>
+
+        <pre>
+navigate("/products");
+        </pre>
+
+        <p>
+            Após um login bem-sucedido, o usuário é
+            redirecionado para a página de produtos.
+        </p>
+
+
+        <h3>
+            5.6 Cadastro
+        </h3>
+
+        <pre>
+await axios.post(
+    "http://localhost:3000/api/users/register",
+    {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+    }
+);
+        </pre>
+
+        <p>
+            O formulário de cadastro envia o nome,
+            o email e a senha para o Backend.
+        </p>
+
+
+        <h3>
+            5.7 Retorno ao login
+        </h3>
+
+        <pre>
+setMode("login");
+        </pre>
+
+        <p>
+            Após a criação da conta, o formulário retorna
+            automaticamente ao modo de login.
+        </p>
+
+
+        <h3>
+            5.8 Alteração Login / Register
+        </h3>
+
+        <pre>
+setMode(
+    mode === "login"
+        ? "register"
+        : "login"
+);
+        </pre>
+
+        <p>
+            Essa lógica permite que o usuário alterne
+            entre login e cadastro.
+        </p>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- CONTACT -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            📩 6. Componente Contact.jsx
+        </h2>
+
+        <p>
+            O componente <code>Contact</code> permite ao cliente
+            enviar uma mensagem para a empresa.
+        </p>
+
+
+        <h3>
+            6.1 Dados do formulário
+        </h3>
+
+        <pre>
+const [form, setForm] = useState({
+
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+
+});
+        </pre>
+
+        <p>
+            O formulário contém:
+        </p>
+
+        <ul>
+
+            <li>Nome</li>
+
+            <li>Email</li>
+
+            <li>Telefone</li>
+
+            <li>Assunto</li>
+
+            <li>Mensagem</li>
+
+        </ul>
+
+
+        <h3>
+            6.2 Validação
+        </h3>
+
+        <pre>
+if (
+    !form.name ||
+    !form.email ||
+    !form.phone ||
+    !form.subject ||
+    !form.message
+) {
+
+    alert(
+        "⚠️ Veuillez remplir tous les champs."
+    );
+
+    return;
+}
+        </pre>
+
+        <p>
+            Antes do envio, o componente verifica se todos
+            os campos obrigatórios estão preenchidos.
+        </p>
+
+
+        <h3>
+            6.3 Envio para a API
+        </h3>
+
+        <pre>
+const response = await axios.post(
+    "http://localhost:3000/api/contacts",
+    {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: form.subject,
+        message: form.message,
+    }
+);
+        </pre>
+
+        <p>
+            A mensagem é enviada ao Backend por meio de uma
+            requisição <code>POST</code>.
+        </p>
+
+
+        <h3>
+            6.4 Assuntos disponíveis
+        </h3>
+
+        <p>
+            O usuário pode selecionar diferentes assuntos:
+        </p>
+
+        <ul>
+
+            <li>Solicitação de orçamento</li>
+
+            <li>Solicitação de informações</li>
+
+            <li>Suporte técnico</li>
+
+            <li>Reclamação</li>
+
+            <li>Proposta de parceria</li>
+
+            <li>Outro</li>
+
+        </ul>
+
+
+        <h3>
+            6.5 Redefinição
+        </h3>
+
+        <pre>
+setForm({
+
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+
+});
+        </pre>
+
+        <p>
+            Depois que a mensagem é enviada, o formulário é limpo.
+        </p>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- DASHBOARD -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            📊 7. Dashboard.jsx
+        </h2>
+
+        <p>
+            O componente <code>Dashboard</code> representa
+            o painel administrativo da Solar Energy.
+        </p>
+
+        <p>
+            Ele permite consultar as estatísticas gerais
+            e as solicitações de orçamento.
+        </p>
+
+
+        <h3>
+            7.1 Estado das estatísticas
+        </h3>
+
+        <pre>
+const [stats, setStats] = useState({
+
+    users: 0,
+    panels: 0,
+    batteries: 0,
+    inverters: 0,
+    appointments: 0,
+    quotes: 0,
+    payments: 0,
+    contacts: 0,
+    reviews: 0,
+
+});
+        </pre>
+
+        <p>
+            O Dashboard possui vários indicadores:
+        </p>
+
+        <ul>
+
+            <li>👥 Usuários</li>
+
+            <li>☀️ Painéis</li>
+
+            <li>🔋 Baterias</li>
+
+            <li>⚡ Inversores</li>
+
+            <li>📅 Agendamentos</li>
+
+            <li>📄 Solicitações de orçamento</li>
+
+            <li>💳 Pagamentos</li>
+
+            <li>📩 Contatos</li>
+
+            <li>⭐ Avaliações</li>
+
+        </ul>
+
+
+        <h3>
+            7.2 Carregamento inicial
+        </h3>
+
+        <pre>
+useEffect(() => {
+
+    fetchDashboard();
+
+    fetchQuotes();
+
+}, []);
+        </pre>
+
+        <p>
+            Ao carregar o Dashboard, duas funções são executadas:
+        </p>
+
+        <ul>
+
+            <li>
+                <code>fetchDashboard()</code>
+                para as estatísticas
+            </li>
+
+            <li>
+                <code>fetchQuotes()</code>
+                para os orçamentos
+            </li>
+
+        </ul>
+
+
+        <h3>
+            7.3 Recuperação do token
+        </h3>
+
+        <pre>
+const token =
+    localStorage.getItem("token");
+        </pre>
+
+        <p>
+            O token JWT armazenado durante o login
+            é recuperado do <code>localStorage</code>.
+        </p>
+
+
+        <h3>
+            7.4 Autenticação da requisição
+        </h3>
+
+        <pre>
+headers: {
+
+    Authorization:
+        `Bearer ${token}`,
+
+}
+        </pre>
+
+        <p>
+            O token é enviado no cabeçalho HTTP
+            <code>Authorization</code>.
+        </p>
+
+        <div class="warning">
+
+            <strong>Importante:</strong>
+
+            <p>
+                O Backend pode assim verificar se a requisição
+                vem de um usuário autenticado.
+            </p>
+
+        </div>
+
+
+        <h3>
+            7.5 API do Dashboard
+        </h3>
+
+        <pre>
+axios.get(
+    "http://localhost:3000/api/dashboard",
+    {
+        headers: {
+            Authorization:
+                `Bearer ${token}`,
+        },
+    }
+);
+        </pre>
+
+
+        <h3>
+            7.6 Processamento da resposta
+        </h3>
+
+        <pre>
+if (
+    response.data &&
+    response.data.success &&
+    response.data.data
+) {
+
+    const data =
+        response.data.data;
+
+    setStats({
+
+        users: data.users || 0,
+
+        panels: data.panels || 0,
+
+        batteries:
+            data.batteries || 0,
+
+        inverters:
+            data.inverters || 0,
+
+        appointments:
+            data.appointments || 0,
+
+        quotes:
+            data.quotes || 0,
+
+        payments:
+            data.payments || 0,
+
+        contacts:
+            data.contacts || 0,
+
+        reviews:
+            data.reviews || 0,
+
+    });
+
+}
+        </pre>
+
+
+        <h3>
+            7.7 Recuperação dos orçamentos
+        </h3>
+
+        <p>
+            A função <code>fetchQuotes()</code> recupera
+            as solicitações de orçamento.
+        </p>
+
+        <pre>
+const response = await axios.get(
+    "http://localhost:3000/api/quotes",
+    {
+        headers: {
+            Authorization:
+                `Bearer ${token}`,
+        },
+    }
+);
+        </pre>
+
+
+        <h3>
+            7.8 Gerenciamento de vários formatos de API
+        </h3>
+
+        <p>
+            O código aceita vários formatos de resposta:
+        </p>
+
+        <pre>
+// Formato 1
+[ {...}, {...} ]
+
+// Formato 2
+{ data: [...] }
+
+// Formato 3
+{ quotes: [...] }
+
+// Formato 4
+{ data: { quotes: [...] } }
+        </pre>
+
+        <p>
+            Essa lógica torna o componente mais flexível
+            quando a estrutura da resposta do Backend muda.
+        </p>
+
+
+        <h3>
+            7.9 Alteração do status de um orçamento
+        </h3>
+
+        <pre>
+const updateQuoteStatus =
+    async (id, status) => {
+
+    const response =
+        await axios.put(
+            `http://localhost:3000/api/quotes/${id}`,
+            {
+                status: status,
+            },
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`,
+                },
+            }
+        );
+
+};
+        </pre>
+
+        <p>
+            O administrador pode alterar o status de um orçamento.
+        </p>
+
+
+        <h3>
+            7.10 Status disponíveis
+        </h3>
+
+        <ul>
+
+            <li>
+                <span class="badge">
+                    Pending
+                </span>
+                — Pendente
+            </li>
+
+            <li>
+                <span class="badge">
+                    Reviewed
+                </span>
+                — Solicitação analisada
+            </li>
+
+            <li>
+                <span class="badge">
+                    Approved
+                </span>
+                — Aprovada
+            </li>
+
+            <li>
+                <span class="badge">
+                    Rejected
+                </span>
+                — Rejeitada
+            </li>
+
+        </ul>
+
+
+        <h3>
+            7.11 Lógica das ações
+        </h3>
+
+        <div class="flow">
+
+            <strong>Pending</strong>
+
+            <p>
+                👁️ Consultar
+                → Reviewed
+            </p>
+
+            <p>
+                ✅ Aceitar
+                → Approved
+            </p>
+
+            <p>
+                ❌ Recusar
+                → Rejected
+            </p>
+
+        </div>
+
+
+        <div class="flow">
+
+            <strong>Reviewed</strong>
+
+            <p>
+                ✅ Aceitar
+                → Approved
+            </p>
+
+            <p>
+                ❌ Recusar
+                → Rejected
+            </p>
+
+        </div>
+
+
+        <div class="success">
+
+            <strong>Approved:</strong>
+
+            <p>
+                O Dashboard indica que o orçamento foi aprovado
+                e que o cliente agora pode realizar
+                o pagamento.
+            </p>
+
+        </div>
+
+
+        <div class="danger">
+
+            <strong>Rejected:</strong>
+
+            <p>
+                O Dashboard informa que o orçamento foi rejeitado.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- DASHBOARD CONTACTS -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            📩 8. DashboardContacts.jsx
+        </h2>
+
+        <p>
+            O componente <code>DashboardContacts</code> permite
+            que o administrador consulte as mensagens enviadas
+            pelo formulário Contact.
+        </p>
+
+
+        <h3>
+            8.1 Estado dos contatos
+        </h3>
+
+        <pre>
+const [contacts, setContacts] =
+    useState([]);
+
+const [loading, setLoading] =
+    useState(true);
+        </pre>
+
+
+        <h3>
+            8.2 Carregamento automático
+        </h3>
+
+        <pre>
+useEffect(() => {
+
+    fetchContacts();
+
+}, []);
+        </pre>
+
+        <p>
+            Assim que a página é carregada,
+            <code>fetchContacts()</code> é executada.
+        </p>
+
+
+        <h3>
+            8.3 Verificação do token
+        </h3>
+
+        <pre>
+const token =
+    localStorage.getItem("token");
+
+if (!token) {
+
+    setContacts([]);
+
+    setLoading(false);
+
+    return;
+
+}
+        </pre>
+
+        <p>
+            O acesso às mensagens requer um token
+            de autenticação.
+        </p>
+
+
+        <h3>
+            8.4 Requisição à API
+        </h3>
+
+        <pre>
+const res = await axios.get(
+    "http://localhost:3000/api/contacts",
+    {
+        headers: {
+            Authorization:
+                `Bearer ${token}`,
+        },
+    }
+);
+        </pre>
+
+        <p>
+            O componente chama:
+        </p>
+
+        <pre>
+GET /api/contacts
+        </pre>
+
+
+        <h3>
+            8.5 Extração dos contatos
+        </h3>
+
+        <p>
+            Assim como nos orçamentos, vários formatos de resposta
+            são suportados.
+        </p>
+
+        <pre>
+// Formato 1
+[ {...}, {...} ]
+
+// Formato 2
+{ data: [...] }
+
+// Formato 3
+{ contacts: [...] }
+
+// Formato 4
+{ data: { contacts: [...] } }
+        </pre>
+
+
+        <h3>
+            8.6 Contador de mensagens
+        </h3>
+
+        <pre>
+{contacts.length}
+        </pre>
+
+        <p>
+            <code>contacts.length</code> indica o número total
+            de mensagens recuperadas.
+        </p>
+
+        <p>
+            Exemplo:
+        </p>
+
+        <pre>
+5 mensagens
+        </pre>
+
+
+        <h3>
+            8.7 Exibição das informações
+        </h3>
+
+        <p>
+            Cada mensagem é exibida em um cartão.
+        </p>
+
+        <pre>
+{contacts.map((contact) => (
+
+    &lt;div
+        className="contact-card"
+        key={contact._id}
+    &gt;
+
+        ...
+
+    &lt;/div&gt;
+
+))}
+        </pre>
+
+
+        <h3>
+            8.8 Informações exibidas
+        </h3>
+
+        <ul>
+
+            <li>👤 Nome do cliente</li>
+
+            <li>📧 Email</li>
+
+            <li>📱 Telefone</li>
+
+            <li>📌 Assunto</li>
+
+            <li>💬 Mensagem</li>
+
+            <li>📊 Status</li>
+
+            <li>📅 Data</li>
+
+        </ul>
+
+
+        <h3>
+            8.9 Gerenciamento do nome
+        </h3>
+
+        <pre>
+contact.fullName ||
+contact.name ||
+"Client"
+        </pre>
+
+        <p>
+            O componente tenta primeiro utilizar
+            <code>fullName</code>.
+            Se essa propriedade não existir, utiliza
+            <code>name</code>.
+            Caso contrário, exibe <strong>Client</strong>.
+        </p>
+
+
+        <h3>
+            8.10 Gerenciamento de um erro 401
+        </h3>
+
+        <pre>
+if (
+    error.response?.status === 401
+) {
+
+    alert(
+        "Session expirée. Veuillez vous reconnecter."
+    );
+
+    localStorage.removeItem(
+        "token"
+    );
+
+    window.location.href =
+        "/auth";
+}
+        </pre>
+
+        <p>
+            O código verifica se o Backend retorna
+            o status HTTP <code>401</code>.
+        </p>
+
+        <p>
+            Isso geralmente significa que o token está ausente,
+            inválido ou expirado.
+        </p>
+
+        <p>
+            Nesse caso:
+        </p>
+
+        <ol>
+
+            <li>
+                Uma mensagem é exibida.
+            </li>
+
+            <li>
+                O token é removido.
+            </li>
+
+            <li>
+                O usuário é redirecionado para
+                <code>/auth</code>.
+            </li>
+
+        </ol>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- ARCHITECTURE -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            🔄 9. Funcionamento geral do Frontend
+        </h2>
+
+        <p>
+            Os diferentes componentes se comunicam com o
+            Backend por meio de APIs REST.
+        </p>
+
+
+        <div class="flow">
+
+            <h3>
+                👤 Usuário
+            </h3>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                React
+            </p>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                Axios
+            </p>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                API Express
+            </p>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                MongoDB
+            </p>
+
+        </div>
+
+
+        <h3>
+            Principais APIs utilizadas
+        </h3>
+
+        <ul>
+
+            <li>
+                <code>POST /api/users/register</code>
+                — cadastro
+            </li>
+
+            <li>
+                <code>POST /api/users/login</code>
+                — login
+            </li>
+
+            <li>
+                <code>GET /api/reviews</code>
+                — recuperação das avaliações
+            </li>
+
+            <li>
+                <code>POST /api/appointments</code>
+                — criação de um agendamento
+            </li>
+
+            <li>
+                <code>POST /api/contacts</code>
+                — criação de uma mensagem
+            </li>
+
+            <li>
+                <code>GET /api/dashboard</code>
+                — estatísticas do administrador
+            </li>
+
+            <li>
+                <code>GET /api/quotes</code>
+                — recuperação dos orçamentos
+            </li>
+
+            <li>
+                <code>PUT /api/quotes/:id</code>
+                — alteração do status de um orçamento
+            </li>
+
+            <li>
+                <code>GET /api/contacts</code>
+                — recuperação das mensagens
+            </li>
+
+        </ul>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- JWT -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            🔑 10. Autenticação JWT
+        </h2>
+
+        <p>
+            O sistema utiliza um token JWT para proteger
+            determinadas rotas administrativas.
+        </p>
+
+
+        <div class="flow">
+
+            <p>
+                <strong>1.</strong>
+                O usuário faz login.
+            </p>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                <strong>2.</strong>
+                O Backend verifica suas credenciais.
+            </p>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                <strong>3.</strong>
+                O Backend gera um JWT.
+            </p>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                <strong>4.</strong>
+                O React armazena o JWT no localStorage.
+            </p>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                <strong>5.</strong>
+                O Axios envia o JWT com as requisições protegidas.
+            </p>
+
+            <p>
+                ↓
+            </p>
+
+            <p>
+                <strong>6.</strong>
+                O Middleware do Backend verifica o token.
+            </p>
+
+        </div>
+
+
+        <pre>
+Authorization: Bearer TOKEN
+        </pre>
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- CONCLUSION -->
+    <!-- ===================================================== -->
+
+    <section class="chapter">
+
+        <h2>
+            ✅ 11. Conclusão
+        </h2>
+
+        <p>
+            Esses componentes constituem uma parte importante
+            da aplicação Frontend da Solar Energy.
+        </p>
+
+        <ul>
+
+            <li>
+                <strong>Testimonials.jsx</strong>
+                exibe as avaliações aprovadas.
+            </li>
+
+            <li>
+                <strong>AdminLayout.jsx</strong>
+                estrutura a área administrativa.
+            </li>
+
+            <li>
+                <strong>Appointment.jsx</strong>
+                permite solicitar um agendamento.
+            </li>
+
+            <li>
+                <strong>Auth.jsx</strong>
+                gerencia o cadastro e o login.
+            </li>
+
+            <li>
+                <strong>Contact.jsx</strong>
+                permite enviar uma mensagem.
+            </li>
+
+            <li>
+                <strong>Dashboard.jsx</strong>
+                exibe as estatísticas e gerencia os orçamentos.
+            </li>
+
+            <li>
+                <strong>DashboardContacts.jsx</strong>
+                permite que o administrador consulte as mensagens.
+            </li>
+
+        </ul>
+
+
+        <div class="success">
+
+            <strong>
+                Arquitetura geral:
+            </strong>
+
+            <p>
+                React → Axios → API Express →
+                MongoDB
+            </p>
+
+            <p>
+                A autenticação JWT protege as
+                funcionalidades administrativas.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+<footer>
+
+    <p>
+        ☀️ Solar Energy — Documentação Técnica Frontend
+    </p>
+
+    <p>
+        React • Axios • React Router • JWT • REST API • MongoDB
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
+```

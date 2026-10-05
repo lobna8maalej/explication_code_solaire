@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+name="description"
+content="Technical documentation of the Solar Energy platform backend using Node.js, Express and MongoDB."
+
+>
+
+<title>Solar Energy — Backend Documentation</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f6f8;
+        color: #222;
+        line-height: 1.7;
+    }
+
+    header {
+        background: #1f2937;
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    header h1 {
+        margin: 0 0 10px;
+        font-size: 32px;
+        color: white;
+    }
+
+    header p {
+        margin: 0;
+        font-size: 17px;
+        color: #d1d5db;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 30px auto;
+    }
+
+    /* ================================
+       BLUE FRAME
+    ================================= */
+
+    .chapter {
+        background: #2563eb;
+        color: white;
+        margin-bottom: 30px;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ================================
+       WHITE TEXT INSIDE THE FRAME
+    ================================= */
+
+    .chapter h2 {
+        margin-top: 0;
+        color: white;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+        padding-bottom: 10px;
+    }
+
+    .chapter h3 {
+        color: white;
+        margin-top: 25px;
+    }
+
+    .chapter p {
+        color: white;
+        margin: 10px 0;
+    }
+
+    .chapter ul {
+        padding-left: 25px;
+    }
+
+    .chapter li {
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .chapter strong {
+        color: white;
+    }
+
+    /* ================================
+       CODE
+    ================================= */
+
+    code {
+        background: #eef2f7;
+        color: #111827;
+        padding: 3px 6px;
+        border-radius: 5px;
+        font-family: Consolas, monospace;
+    }
+
+    pre {
+        background: #111827;
+        color: #f9fafb;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    /* ================================
+       ROUTES
+    ================================= */
+
+    .route {
+        display: inline-block;
+        background: white;
+        color: #2563eb;
+        padding: 6px 10px;
+        margin: 5px 0;
+        border-radius: 6px;
+        font-family: Consolas, monospace;
+    }
+
+    .method {
+        font-weight: bold;
+        color: white;
+    }
+
+    /* ================================
+       IMPORTANT
+    ================================= */
+
+    .important {
+        background: #fff7ed;
+        color: #7c2d12;
+        border-left: 5px solid #f97316;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+    }
+
+    .important strong,
+    .important p {
+        color: #7c2d12;
+    }
+
+    /* ================================
+       SUCCESS
+    ================================= */
+
+    .success {
+        background: #ecfdf5;
+        color: #065f46;
+        border-left: 5px solid #10b981;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+    }
+
+    .success strong,
+    .success p {
+        color: #065f46;
+    }
+
+    /* ================================
+       FOOTER
+    ================================= */
+
+    footer {
+        text-align: center;
+        padding: 30px;
+        background: #1f2937;
+        color: white;
+        margin-top: 40px;
+    }
+
+    footer h2,
+    footer p {
+        color: white;
+    }
+
+</style>
+
+<header>
+
+<h1>☀️ Solar Energy</h1>
+
+<p>
+    Backend Technical Documentation
+</p>
+
+<p>
+    Node.js • Express • MongoDB • Mongoose
+</p>
+
+</header>
+
+<div class="container">
+
+<section class="chapter">
+
+<h2>1. Backend Overview</h2>
+
+<p>
+    The backend of the <strong>Solar Energy</strong> platform
+    is developed using <strong>Node.js</strong> and
+    <strong>Express.js</strong>.
+</p>
+
+<p>
+    It manages users, solar products, quote requests, appointments,
+    contacts, payments, and customer reviews.
+</p>
+
+<p>
+    Data is stored in a <strong>MongoDB</strong> database and
+    managed using <strong>Mongoose</strong>.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>2. Express Server Configuration</h2>
+
+<p>
+    The main backend file initializes Express,
+    configures CORS, middlewares, and the different API routes.
+</p>
+
+<h3>Application Creation</h3>
+
+<pre><code>const express = require("express");
+const cors = require("cors");
+
+const app = express();</code></pre>
+
+<p>
+    <code>express</code> is used to create the HTTP server, while
+    <code>cors</code> allows communication between the React frontend
+    and the backend.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>3. Route Import</h2>
+
+<p>
+    Each feature has its own route file.
+</p>
+
+<pre><code>const appointmentRoutes = require("./routes/appointmentRoutes");
+const batteryRoutes = require("./routes/batteryRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const inverterRoutes = require("./routes/inverterRoutes");
+const panelRoutes = require("./routes/panelRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const quoteRoutes = require("./routes/quoteRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
+const authRoutes = require("./routes/authRoutes");</code></pre>
+
+<p>
+    This organization makes it possible to separate the features
+    and make the backend easier to maintain.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>4. CORS Configuration</h2>
+
+<pre><code>app.use(
+    cors({
+        origin: "http://localhost:5173", 
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
+        credentials: true, 
+    }) 
+);</code></pre>
+
+<p>
+    The frontend runs here on port
+    <code>5173</code>.
+</p>
+
+<p>
+    The CORS middleware allows HTTP requests coming
+    from this origin.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>5. Stripe Webhook</h2>
+
+<p>
+    The Stripe webhook must be declared before
+    <code>express.json()</code>.
+</p>
+
+<pre><code>app.post( 
+    "/api/payments/webhook", 
+    express.raw({ 
+        type: "application/json", 
+    }), 
+    require("./controllers/paymentController").stripeWebhook 
+);</code></pre>
+
+<div class="important">
+
+```
+<strong>Important:</strong>
+
+<p>
+    Stripe uses the raw request body to correctly verify
+    the webhook signature.
+</p>
+```
+
+</div>
+
+</section>
+
+<section class="chapter">
+
+<h2>6. JSON Middleware</h2>
+
+<pre><code>app.use(express.json()); 
+ 
+app.use( 
+    express.urlencoded({ 
+        extended: true, 
+    }) 
+);</code></pre>
+
+<p>
+    <code>express.json()</code> allows the server to receive
+    data in JSON format.
+</p>
+
+<p>
+    <code>express.urlencoded()</code> allows the server to process
+    data submitted through forms.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>7. API Routes</h2>
+
+<p>
+    The main backend routes are organized by functionality.
+</p>
+
+<ul>
+
+```
+<li>
+    <span class="route">/api/appointments</span>
+    Appointment management.
+</li>
+
+<li>
+    <span class="route">/api/batteries</span>
+    Battery management.
+</li>
+
+<li>
+    <span class="route">/api/contacts</span>
+    Contact message management.
+</li>
+
+<li>
+    <span class="route">/api/dashboard</span>
+    Dashboard data management.
+</li>
+
+<li>
+    <span class="route">/api/inverters</span>
+    Inverter management.
+</li>
+
+<li>
+    <span class="route">/api/panels</span>
+    Solar panel management.
+</li>
+
+<li>
+    <span class="route">/api/payments</span>
+    Payment management.
+</li>
+
+<li>
+    <span class="route">/api/quotes</span>
+    Quote request management.
+</li>
+
+<li>
+    <span class="route">/api/reviews</span>
+    Customer review management.
+</li>
+
+<li>
+    <span class="route">/api/users</span>
+    Authentication and user management.
+</li>
+```
+
+</ul>
+
+</section>
+
+<section class="chapter">
+
+<h2>8. Appointment Model</h2>
+
+<p>
+    The <code>Appointment</code> model represents an
+    appointment requested by a customer.
+</p>
+
+<pre><code>const appointmentSchema = new mongoose.Schema( 
+    { 
+        customerName: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        email: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        phone: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        appointmentDate: { 
+            type: Date, 
+            required: true, 
+        }, 
+ 
+        address: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        message: { 
+            type: String, 
+        }, 
+ 
+        status: { 
+            type: String, 
+            enum: [ 
+                "Pending", 
+                "Confirmed", 
+                "Completed", 
+                "Cancelled" 
+            ], 
+            default: "Pending", 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "Appointment", 
+    appointmentSchema 
+);</code></pre>
+
+<p>
+    The status allows the progress of the appointment to be tracked:
+    pending, confirmed, completed, or cancelled.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>9. Battery Model</h2>
+
+<p>
+    The <code>Battery</code> model stores information
+    related to solar batteries.
+</p>
+
+<pre><code>const batterySchema = new mongoose.Schema( 
+    { 
+        name: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        brand: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        capacity: { 
+            type: Number, 
+            required: true, 
+        }, 
+ 
+        voltage: { 
+            type: Number, 
+            required: true, 
+        }, 
+ 
+        technology: { 
+            type: String, 
+            enum: [ 
+                "Lithium", 
+                "Gel", 
+                "AGM", 
+                "Lead Acid" 
+            ], 
+            required: true, 
+        }, 
+ 
+        price: { 
+            type: Number, 
+            required: true, 
+        }, 
+ 
+        warranty: { 
+            type: Number, 
+            default: 2, 
+        }, 
+ 
+        description: { 
+            type: String, 
+        }, 
+ 
+        image: { 
+            type: String, 
+        }, 
+ 
+        inStock: { 
+            type: Boolean, 
+            default: true, 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "Battery", 
+    batterySchema 
+);</code></pre>
+
+</section>
+
+<section class="chapter">
+
+<h2>10. Contact Model</h2>
+
+<p>
+    The <code>Contact</code> model is used to store
+    messages sent by visitors.
+</p>
+
+<pre><code>const contactSchema = new mongoose.Schema( 
+    { 
+        name: { 
+            type: String, 
+            required: true, 
+            trim: true, 
+        }, 
+ 
+        email: { 
+            type: String, 
+            required: true, 
+            trim: true, 
+        }, 
+ 
+        phone: { 
+            type: String, 
+            trim: true, 
+        }, 
+ 
+        subject: { 
+            type: String, 
+            required: true, 
+            trim: true, 
+        }, 
+ 
+        message: { 
+            type: String, 
+            required: true, 
+            trim: true, 
+        }, 
+ 
+        status: { 
+            type: String, 
+            enum: [ 
+                "New", 
+                "Read", 
+                "Replied" 
+            ], 
+            default: "New", 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "Contact", 
+    contactSchema 
+);</code></pre>
+
+</section>
+
+<section class="chapter">
+
+<h2>11. Inverter Model</h2>
+
+<p>
+    The <code>Inverter</code> model represents the inverters
+    available on the platform.
+</p>
+
+<pre><code>const inverterSchema = new mongoose.Schema( 
+    { 
+        name: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        brand: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        power: { 
+            type: Number, 
+            required: true, 
+        }, 
+ 
+        type: { 
+            type: String, 
+            enum: [ 
+                "String", 
+                "Micro", 
+                "Hybrid", 
+                "Off-Grid" 
+            ], 
+            required: true, 
+        }, 
+ 
+        efficiency: { 
+            type: Number, 
+        }, 
+ 
+        inputVoltage: { 
+            type: Number, 
+        }, 
+ 
+        outputVoltage: { 
+            type: Number, 
+        }, 
+ 
+        warranty: { 
+            type: Number, 
+            default: 5, 
+        }, 
+ 
+        price: { 
+            type: Number, 
+            required: true, 
+        }, 
+ 
+        description: { 
+            type: String, 
+        }, 
+ 
+        image: { 
+            type: String, 
+        }, 
+ 
+        inStock: { 
+            type: Boolean, 
+            default: true, 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "Inverter", 
+    inverterSchema 
+);</code></pre>
+
+</section>
+
+<section class="chapter">
+
+<h2>12. Panel Model</h2>
+
+<p>
+    The <code>Panel</code> model contains information
+    about solar panels.
+</p>
+
+<pre><code>const panelSchema = new mongoose.Schema( 
+    { 
+        name: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        brand: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        power: { 
+            type: Number, 
+            required: true, 
+        }, 
+ 
+        technology: { 
+            type: String, 
+            enum: [ 
+                "Monocrystalline", 
+                "Polycrystalline", 
+                "Thin Film" 
+            ], 
+            required: true, 
+        }, 
+ 
+        efficiency: { 
+            type: Number, 
+        }, 
+ 
+        dimensions: { 
+            type: String, 
+        }, 
+ 
+        weight: { 
+            type: Number, 
+        }, 
+ 
+        warranty: { 
+            type: Number, 
+            default: 25, 
+        }, 
+ 
+        price: { 
+            type: Number, 
+            required: true, 
+        }, 
+ 
+        description: { 
+            type: String, 
+        }, 
+ 
+        image: { 
+            type: String, 
+        }, 
+ 
+        inStock: { 
+            type: Boolean, 
+            default: true, 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "Panel", 
+    panelSchema 
+);</code></pre>
+
+</section>
+
+<section class="chapter">
+
+<h2>13. Payment Model</h2>
+
+<p>
+    The <code>Payment</code> model is used to store
+    information related to customer payments.
+</p>
+
+<pre><code>const paymentSchema = new mongoose.Schema( 
+    { 
+        customerName: { 
+            type: String, 
+            required: true, 
+            trim: true, 
+        }, 
+ 
+        email: { 
+            type: String, 
+            required: true, 
+            trim: true, 
+            lowercase: true, 
+        }, 
+ 
+        amount: { 
+            type: Number, 
+            required: true, 
+            min: 0, 
+        }, 
+ 
+        currency: { 
+            type: String, 
+            default: "TND", 
+            uppercase: true, 
+        }, 
+ 
+        paymentMethod: { 
+            type: String, 
+            enum: [ 
+                "Stripe", 
+                "Cash", 
+                "Bank Transfer" 
+            ], 
+            default: "Stripe", 
+        }, 
+ 
+        transactionId: { 
+            type: String, 
+            default: null, 
+        }, 
+ 
+        stripePaymentIntentId: { 
+            type: String, 
+            default: null, 
+        }, 
+ 
+        stripeSessionId: { 
+            type: String, 
+            default: null, 
+        }, 
+ 
+        quoteId: { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: "Quote", 
+            default: null, 
+        }, 
+ 
+        status: { 
+            type: String, 
+            enum: [ 
+                "Pending", 
+                "Paid", 
+                "Failed", 
+                "Refunded" 
+            ], 
+            default: "Pending", 
+        }, 
+ 
+        description: { 
+            type: String, 
+            default: "", 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "Payment", 
+    paymentSchema 
+);</code></pre>
+
+<p>
+    The <code>quoteId</code> field allows a payment
+    to be associated with a quote.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>14. Quote Model</h2>
+
+<p>
+    The <code>Quote</code> model represents a quote request
+    submitted by a customer.
+</p>
+
+<pre><code>const quoteSchema = new mongoose.Schema( 
+    { 
+        customerName: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        email: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        phone: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        address: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        serviceType: { 
+            type: String, 
+            enum: [ 
+                "Residential", 
+                "Commercial", 
+                "Industrial" 
+            ], 
+            required: true, 
+        }, 
+ 
+        estimatedConsumption: { 
+            type: Number, 
+            required: true, 
+        }, 
+ 
+        budget: { 
+            type: Number, 
+        }, 
+ 
+        message: { 
+            type: String, 
+        }, 
+ 
+        status: { 
+            type: String, 
+            enum: [ 
+                "Pending", 
+                "Reviewed", 
+                "Approved", 
+                "Rejected" 
+            ], 
+            default: "Pending", 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "Quote", 
+    quoteSchema 
+);</code></pre>
+
+</section>
+
+<section class="chapter">
+
+<h2>15. Review Model</h2>
+
+<p>
+    The <code>Review</code> model is used to manage reviews
+    left by customers regarding products or services.
+</p>
+
+<pre><code>const reviewSchema = new mongoose.Schema( 
+    { 
+        customerName: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        email: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        rating: { 
+            type: Number, 
+            required: true, 
+            min: 1, 
+            max: 5, 
+        }, 
+ 
+        comment: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        productType: { 
+            type: String, 
+            enum: [ 
+                "Panel", 
+                "Battery", 
+                "Inverter", 
+                "Service" 
+            ], 
+            required: true, 
+        }, 
+ 
+        productName: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        status: { 
+            type: String, 
+            enum: [ 
+                "Pending", 
+                "Approved", 
+                "Rejected" 
+            ], 
+            default: "Pending", 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "Review", 
+    reviewSchema 
+);</code></pre>
+
+<div class="success">
+
+```
+<strong>Example:</strong>
+
+<p>
+    A customer can give a rating from 1 to 5 and add
+    a comment about a solar panel, battery,
+    inverter, or service.
+</p>
+```
+
+</div>
+
+</section>
+
+<section class="chapter">
+
+<h2>16. User Model</h2>
+
+<p>
+    The <code>User</code> model manages the user accounts
+    of the platform.
+</p>
+
+<pre><code>const userSchema = new mongoose.Schema( 
+    { 
+        name: { 
+            type: String, 
+            required: true, 
+            trim: true, 
+        }, 
+ 
+        email: { 
+            type: String, 
+            required: true, 
+            unique: true, 
+            lowercase: true, 
+            trim: true, 
+        }, 
+ 
+        password: { 
+            type: String, 
+            required: true, 
+        }, 
+ 
+        phone: { 
+            type: String, 
+        }, 
+ 
+        role: { 
+            type: String, 
+            enum: [ 
+                "admin", 
+                "customer" 
+            ], 
+            default: "customer", 
+        }, 
+ 
+        isVerified: { 
+            type: Boolean, 
+            default: false, 
+        }, 
+    }, 
+    { 
+        timestamps: true, 
+    } 
+); 
+ 
+module.exports = mongoose.model( 
+    "User", 
+    userSchema 
+);</code></pre>
+
+<p>
+    The <code>role</code> field distinguishes the two types
+    of users:
+</p>
+
+<ul>
+    <li><strong>admin</strong>: access to administrative features.</li>
+    <li><strong>customer</strong>: access to customer features.</li>
+</ul>
+
+<p>
+    The <code>isVerified</code> field also makes it possible to determine
+    whether the user account has been verified.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>17. Handling Non-Existent Routes</h2>
+
+<pre><code>app.use((req, res) => { 
+    res.status(404).json({ 
+        success: false, 
+        message: `Route introuvable : ${req.method} ${req.originalUrl}`, 
+    }); 
+});</code></pre>
+
+<p>
+    When an API URL does not exist, the server returns
+    an HTTP <strong>404</strong> response.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>18. Global Error Handling</h2>
+
+<pre><code>app.use((err, req, res, next) => { 
+ 
+    console.error("❌ Erreur serveur :", err); 
+ 
+    res.status(err.status || 500).json({ 
+        success: false, 
+        message: err.message || "Erreur interne du serveur", 
+    }); 
+ 
+});</code></pre>
+
+<p>
+    This middleware captures errors generated
+    during request processing.
+</p>
+
+<p>
+    In the event of an internal error, the server generally
+    returns the HTTP <strong>500</strong> status code.
+</p>
+
+</section>
+
+<section class="chapter">
+
+<h2>19. Conclusion</h2>
+
+<p>
+    The Solar Energy backend is organized around a modular architecture
+    based on <strong>Node.js</strong>, <strong>Express</strong>
+    and <strong>MongoDB</strong>.
+</p>
+
+<p>
+    Mongoose models structure data related to users, products,
+    quotes, appointments, payments, contacts, and customer reviews.
+</p>
+
+<p>
+    The different API routes allow the React frontend
+    to communicate with the backend and perform the operations
+    necessary for the platform to function.
+</p>
+
+</section>
+
+</div>
+
+<footer>
+
+<h3>☀️ Solar Energy</h3>
+
+<p>
+    Backend Technical Documentation
+</p>
+
+<p>
+    Node.js • Express • MongoDB • Mongoose
+</p>
+
+</footer>
+
+</body>
+
+</html>

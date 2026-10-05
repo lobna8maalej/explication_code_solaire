@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Solar Energy Backend Documentation</title>
+
+</head>
+
+<body
+    style="
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #eef2f5;
+        color: #222;
+        line-height: 1.7;
+    "
+>
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header
+    style="
+        background: #1f2937;
+        color: white;
+        padding: 45px 20px;
+        text-align: center;
+    "
+>
+
+<h1
+    style="
+        margin: 0 0 10px;
+        font-size: 34px;
+    "
+>
+    ☀️ Solar Energy — Backend Documentation
+</h1>
+
+<p
+    style="
+        margin: 0;
+        font-size: 17px;
+        color: #d1d5db;
+    "
+>
+    Complete explanation of how the Node.js,
+    Express and MongoDB API works
+</p>
+
+</header>
+
+<!-- ==================================================
+     CONTAINER
+================================================== -->
+
+<div
+    style="
+        width: 90%;
+        max-width: 1200px;
+        margin: 30px auto;
+    "
+>
+
+<!-- ==================================================
+     1. INTRODUCTION
+================================================== -->
+
+<section
+    style="
+        background: #ffffff;
+        margin-bottom: 30px;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    "
+>
+
+<h2
+    style="
+        margin-top: 0;
+        color: #1f2937;
+        border-bottom: 2px solid #dbe2e8;
+        padding-bottom: 10px;
+    "
+>
+    # 1 — General Backend Architecture
+</h2>
+
+<p>
+    The backend is the server-side part of the
+    Solar Energy application.
+</p>
+
+<p>
+    It allows the React frontend to communicate with the
+    MongoDB database through a REST API developed with
+    Node.js and Express.
+</p>
+
+<h3
+    style="
+        color: #374151;
+        margin-top: 25px;
+    "
+>
+    Technologies used
+</h3>
+
+<ul
+    style="
+        padding-left: 25px;
+    "
+>
+
+<li style="margin-bottom: 8px;">
+    <strong>Node.js:</strong>
+    JavaScript runtime environment used on the server side.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>Express:</strong>
+    framework used to create the REST API.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>MongoDB:</strong>
+    NoSQL database.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>Mongoose:</strong>
+    library used to interact with MongoDB.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>JWT:</strong>
+    system used for authentication.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>bcryptjs:</strong>
+    library used to secure passwords.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>Multer:</strong>
+    middleware used to handle files.
+</li>
+
+</ul>
+
+<div
+    style="
+        background: #eff6ff;
+        border-left: 5px solid #3b82f6;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+    "
+>
+
+<strong>Architecture:</strong>
+
+<br><br>
+
+React Frontend
+→
+Axios
+→
+Express API
+→
+Controllers
+→
+Mongoose Models
+→
+MongoDB
+
+</div>
+
+</section>
+
+<!-- ==================================================
+     2. APP.JS
+================================================== -->
+
+<section
+    style="
+        background: #ffffff;
+        margin-bottom: 30px;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    "
+>
+
+<h2
+    style="
+        margin-top: 0;
+        color: #1f2937;
+        border-bottom: 2px solid #dbe2e8;
+        padding-bottom: 10px;
+    "
+>
+    # 2 — Main API Configuration
+</h2>
+
+<h3 style="color: #374151; margin-top: 25px;">
+    Importing Express and CORS
+</h3>
+
+<pre
+    style="
+        background: #111827;
+        color: #f9fafb;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.6;
+    "
+><code>const express = require("express");
+const cors = require("cors");
+
+const app = express();</code></pre>
+
+<p>
+    <code
+        style="
+            background: #e8edf2;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+        "
+    >express</code>
+    allows you to create the API server.
+</p>
+
+<p>
+    <code
+        style="
+            background: #e8edf2;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+        "
+    >cors</code>
+    allows the React frontend
+    to communicate with the backend.
+</p>
+
+<h3 style="color: #374151; margin-top: 25px;">
+    Importing the routes
+</h3>
+
+<pre
+    style="
+        background: #111827;
+        color: #f9fafb;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.6;
+    "
+><code>const appointmentRoutes =
+    require("./routes/appointmentRoutes");
+
+const batteryRoutes =
+    require("./routes/batteryRoutes");
+
+const contactRoutes =
+    require("./routes/contactRoutes");
+
+const dashboardRoutes =
+    require("./routes/dashboardRoutes");
+
+const inverterRoutes =
+    require("./routes/inverterRoutes");
+
+const panelRoutes =
+    require("./routes/panelRoutes");
+
+const paymentRoutes =
+    require("./routes/paymentRoutes");
+
+const quoteRoutes =
+    require("./routes/quoteRoutes");
+
+const reviewRoutes =
+    require("./routes/reviewRoutes");
+
+const authRoutes =
+    require("./routes/authRoutes");</code></pre>
+
+<p>
+    Each file contains the routes corresponding to
+    a specific application feature.
+</p>
+
+<h3 style="color: #374151; margin-top: 25px;">
+    CORS Configuration
+</h3>
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 
+    style=" 
+        margin-top: 0; 
+        color: #1f2937; 
+        border-bottom: 2px solid #dbe2e8; 
+        padding-bottom: 10px; 
+    " 
+> 
+    # 3 — JWT Authentication Middleware 
+</h2> 
+
+<p> 
+    The <code>verifyToken</code> middleware checks 
+    whether the user has a valid JWT token. 
+</p> 
+
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>const jwt = 
+    require("jsonwebtoken"); 
+ 
+const verifyToken = 
+    (req, res, next) => { 
+ 
+    try { 
+ 
+        console.log( 
+            "Authorization :", 
+            req.headers.authorization 
+        ); 
+ 
+        const token = 
+            req.headers.authorization 
+                ?.split(" ")[1]; 
+ 
+        if (!token) { 
+ 
+            return res.status(401).json({ 
+ 
+                success: false, 
+ 
+                message: 
+                    "Accès refusé, token manquant", 
+ 
+            }); 
+ 
+        } 
+ 
+        const decoded = 
+            jwt.verify( 
+                token, 
+                process.env.JWT_SECRET 
+            ); 
+ 
+        req.user = decoded; 
+ 
+        next(); 
+ 
+    } catch (error) { 
+ 
+        return res.status(401).json({ 
+ 
+            success: false, 
+ 
+            message: 
+                "Token invalide", 
+ 
+        }); 
+ 
+    } 
+ 
+}; 
+ 
+module.exports = { 
+    verifyToken 
+};</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    How it works 
+</h3> 
+
+<ol 
+    style=" 
+        padding-left: 25px; 
+    " 
+> 
+
+<li style="margin-bottom: 8px;"> 
+    The frontend sends the token in the 
+    <code>Authorization</code> header. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    The middleware retrieves the token. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    JWT verifies the token using 
+    <code>JWT_SECRET</code>. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    The decoded information is stored in 
+    <code>req.user</code>. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    <code>next()</code> allows access to the route. 
+</li> 
+
+</ol> 
+
+<div 
+    style=" 
+        background: #ecfdf5; 
+        border-left: 5px solid #10b981; 
+        padding: 15px; 
+        margin: 20px 0; 
+        border-radius: 6px; 
+    " 
+> 
+
+<strong>Result:</strong>
+
+<br><br>
+
+Protected routes can verify the user's
+identity using <code>req.user</code>.
+
+</div> 
+
+</section> 
+
+<!-- ================================================== 
+     4. MULTER 
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 
+    style=" 
+        margin-top: 0; 
+        color: #1f2937; 
+        border-bottom: 2px solid #dbe2e8; 
+        padding-bottom: 10px; 
+    " 
+> 
+    # 4 — File Management with Multer 
+</h2> 
+
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>const multer = 
+    require("multer"); 
+ 
+const storage = 
+    multer.memoryStorage(); 
+ 
+const upload = 
+    multer({ 
+ 
+        storage, 
+ 
+        limits: { 
+ 
+            fileSize: 
+                5 * 1024 * 1024, 
+ 
+        }, 
+ 
+    }); 
+ 
+module.exports = upload;</code></pre> 
+
+<p> 
+    Multer allows the application to receive files 
+    sent from the frontend. 
+</p> 
+
+<p> 
+    <code>memoryStorage()</code> temporarily stores 
+    the file in memory. 
+</p> 
+
+<p> 
+    The maximum allowed file size is 
+    <strong>5 MB</strong>. 
+</p> 
+
+</section> 
+
+<!-- ================================================== 
+     5. PANEL CONTROLLER 
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 
+    style=" 
+        margin-top: 0; 
+        color: #1f2937; 
+        border-bottom: 2px solid #dbe2e8; 
+        padding-bottom: 10px; 
+    " 
+> 
+    # 5 — Solar Panel Controller 
+</h2> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Model Import 
+</h3> 
+
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>const Panel = 
+    require("../models/Panel");</code></pre> 
+
+<p> 
+    The controller uses the <code>Panel</code> model 
+    to communicate with MongoDB. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Create a Panel 
+</h3> 
+
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>exports.createPanel = 
+async (req, res) => { 
+ 
+    try { 
+ 
+        const panel = 
+            await Panel.create(req.body); 
+ 
+        res.status(201).json({ 
+ 
+            success: true, 
+ 
+            data: panel, 
+ 
+        }); 
+ 
+    } catch (error) { 
+ 
+        res.status(400).json({ 
+ 
+            success: false, 
+ 
+            message: error.message, 
+ 
+        }); 
+ 
+    } 
+ <section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 8 — Contact Message Controller 
+</h2> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Creating a Message 
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contact = 
+    await Contact.create( 
+        req.body 
+    );</code></pre> 
+
+<p> 
+    The contact form information is 
+    stored in MongoDB. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Sending the Email 
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await sendEmail({ 
+ 
+    to: contact.email, 
+ 
+    subject: 
+        "Nous avons bien reçu votre message", 
+ 
+    html: `...` 
+ 
+});</code></pre> 
+
+<p> 
+    After the message is created, a confirmation 
+    email is sent to the customer. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Retrieve Contacts 
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contacts = 
+    await Contact.find() 
+        .sort({ 
+            createdAt: -1 
+        });</code></pre> 
+
+<p> 
+    The messages are sorted from the most recent 
+    to the oldest. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Update a Contact 
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contact = 
+    await Contact.findByIdAndUpdate( 
+ 
+        req.params.id, 
+ 
+        req.body, 
+ 
+        { 
+            new: true, 
+            runValidators: true 
+        } 
+ 
+    );</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Delete a Contact 
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contact = 
+    await Contact.findByIdAndDelete( 
+        req.params.id 
+    );</code></pre> 
+
+</section> 
+
+<!-- ================================================== 
+     9. QUOTE CONTROLLER 
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 9 — Quote Request Controller 
+</h2> 
+
+<p> 
+    The quote controller allows customers to request 
+    an estimate for a solar installation. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Creating a Quote 
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const quote = 
+    await Quote.create( 
+        req.body 
+    );</code></pre> 
+
+<p> 
+    The submitted data includes, in particular: 
+</p> 
+
+<ul style="padding-left: 25px;"> 
+
+<li style="margin-bottom: 8px;">Customer name</li> 
+<li style="margin-bottom: 8px;">Email</li> 
+<li style="margin-bottom: 8px;">Phone number</li> 
+<li style="margin-bottom: 8px;">Address</li> 
+<li style="margin-bottom: 8px;">Installation type</li> 
+<li style="margin-bottom: 8px;">Estimated consumption</li> 
+<li style="margin-bottom: 8px;">Budget</li> 
+<li style="margin-bottom: 8px;">Message</li> 
+
+</ul> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Email Confirmation 
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await sendEmail({ 
+ 
+    to: quote.email, 
+ 
+    subject: 
+        "Confirmation de votre demande de devis solaire", 
+ 
+    html: `...` 
+ 
+});</code></p
+

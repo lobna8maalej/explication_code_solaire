@@ -1,0 +1,976 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación</title>
+<link rel="stylesheet" href="app.css">
+
+</head>
+<body>
+    <section class="chapter">
+
+    <h2>
+        # 29 — Configuración principal del Backend con Express
+    </h2>
+
+    <p>
+        El archivo <code>app.js</code> constituye el punto central
+        de configuración del Backend Solar Energy.
+    </p>
+
+    <p>
+        Permite inicializar Express, configurar CORS,
+        gestionar las solicitudes JSON, registrar las diferentes
+        rutas de la API, gestionar el webhook de Stripe y tratar
+        los errores y las rutas inexistentes.
+    </p>
+
+
+    <!-- ==================================================
+         IMPORTACIONES
+    ================================================== -->
+
+    <h3>
+        Importación de Express y CORS
+    </h3>
+
+    <pre><code>const express = require("express");
+const cors = require("cors");
+
+const app = express();</code></pre>
+
+    <p>
+        <code>express</code> permite crear y configurar
+        el servidor Backend.
+    </p>
+
+    <p>
+        <code>cors</code> permite autorizar las solicitudes provenientes
+        del frontend React.
+    </p>
+
+    <p>
+        <code>express()</code> crea la aplicación Express que
+        posteriormente se utilizará para registrar los middlewares
+        y las rutas.
+    </p>
+
+
+    <!-- ==================================================
+         IMPORTACIÓN DE LAS RUTAS
+    ================================================== -->
+
+    <h3>
+        Importación de las rutas
+    </h3>
+
+    <pre><code>const appointmentRoutes =
+    require("./routes/appointmentRoutes");
+
+const batteryRoutes =
+    require("./routes/batteryRoutes");
+
+const contactRoutes =
+    require("./routes/contactRoutes");
+
+const dashboardRoutes =
+    require("./routes/dashboardRoutes");
+
+const inverterRoutes =
+    require("./routes/inverterRoutes");
+
+const panelRoutes =
+    require("./routes/panelRoutes");
+
+const paymentRoutes =
+    require("./routes/paymentRoutes");
+
+const quoteRoutes =
+    require("./routes/quoteRoutes");
+
+const reviewRoutes =
+    require("./routes/reviewRoutes");
+
+const authRoutes =
+    require("./routes/authRoutes");</code></pre>
+
+    <p>
+        Cada archivo de rutas tiene una responsabilidad
+        específica dentro de la aplicación.
+    </p>
+
+    <table>
+
+        <tr>
+            <th>Archivo</th>
+            <th>Funcionalidad</th>
+        </tr>
+
+        <tr>
+            <td>appointmentRoutes.js</td>
+            <td>Gestión de las citas</td>
+        </tr>
+
+        <tr>
+            <td>batteryRoutes.js</td>
+            <td>Gestión de las baterías</td>
+        </tr>
+
+        <tr>
+            <td>contactRoutes.js</td>
+            <td>Gestión de los mensajes de contacto</td>
+        </tr>
+
+        <tr>
+            <td>dashboardRoutes.js</td>
+            <td>Estadísticas del Dashboard</td>
+        </tr>
+
+        <tr>
+            <td>inverterRoutes.js</td>
+            <td>Gestión de los inversores</td>
+        </tr>
+
+        <tr>
+            <td>panelRoutes.js</td>
+            <td>Gestión de los paneles solares</td>
+        </tr>
+
+        <tr>
+            <td>paymentRoutes.js</td>
+            <td>Gestión de los pagos y Stripe</td>
+        </tr>
+
+        <tr>
+            <td>quoteRoutes.js</td>
+            <td>Gestión de las solicitudes de presupuesto</td>
+        </tr>
+
+        <tr>
+            <td>reviewRoutes.js</td>
+            <td>Gestión de las opiniones de los clientes</td>
+        </tr>
+
+        <tr>
+            <td>authRoutes.js</td>
+            <td>Autenticación y usuarios</td>
+        </tr>
+
+    </table>
+
+
+    <!-- ==================================================
+         CORS
+    ================================================== -->
+
+    <h3>
+        Configuración de CORS
+    </h3>
+
+    <pre><code>app.use(
+    cors({
+        origin: "http://localhost:5173",
+        methods: [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH"
+        ],
+        credentials: true,
+    })
+);</code></pre>
+
+    <p>
+        CORS permite al Backend aceptar las solicitudes enviadas
+        por el frontend React.
+    </p>
+
+    <p>
+        En este proyecto, el frontend funciona en:
+    </p>
+
+    <div class="info">
+
+        <strong>Frontend:</strong>
+
+        <br>
+
+        <code>http://localhost:5173</code>
+
+    </div>
+
+    <p>
+        La propiedad <code>origin</code> autoriza específicamente
+        este origen.
+    </p>
+
+    <p>
+        La propiedad <code>methods</code> indica los métodos HTTP
+        autorizados por el servidor.
+    </p>
+
+    <p>
+        <code>credentials: true</code> permite utilizar
+        información de autenticación en las solicitudes
+        cuando sea necesario.
+    </p>
+
+
+    <!-- ==================================================
+         STRIPE WEBHOOK
+    ================================================== -->
+
+    <h3>
+        Gestión del Webhook de Stripe
+    </h3>
+
+    <pre><code>app.post(
+    "/api/payments/webhook",
+
+    express.raw({
+        type: "application/json",
+    }),
+
+    require("./controllers/paymentController").stripeWebhook
+);</code></pre>
+
+    <p>
+        Esta ruta recibe las notificaciones enviadas por Stripe
+        relacionadas con los eventos de pago.
+    </p>
+
+    <p>
+        El webhook utiliza
+        <code>express.raw()</code> para recibir el cuerpo
+        original de la solicitud en forma de datos sin procesar.
+    </p>
+
+    <div class="important">
+
+        <strong>Importante:</strong>
+
+        <br><br>
+
+        El webhook de Stripe se coloca antes de
+        <code>express.json()</code>.
+        Esta organización es necesaria porque Stripe puede
+        necesitar el cuerpo original de la solicitud para verificar
+        correctamente la firma del webhook.
+
+    </div>
+
+
+    <!-- ==================================================
+         EXPRESS JSON
+    ================================================== -->
+
+    <h3>
+        Middleware JSON
+    </h3>
+
+    <pre><code>app.use(express.json());</code></pre>
+
+    <p>
+        Este middleware permite a Express leer las solicitudes
+        que contienen datos JSON.
+    </p>
+
+    <p>
+        Por ejemplo, cuando un formulario React envía:
+    </p>
+
+    <pre><code>{
+    "name": "Lobna",
+    "email": "client@example.com",
+    "phone": "58229886"
+}</code></pre>
+
+    <p>
+        Express transforma automáticamente los datos JSON
+        para que sean accesibles mediante:
+        <code>req.body</code>.
+    </p>
+
+
+    <!-- ==================================================
+         URLENCODED
+    ================================================== -->
+
+    <h3>
+        Gestión de datos URL-encoded
+    </h3>
+
+    <pre><code>app.use(
+    express.urlencoded({
+        extended: true,
+    })
+);</code></pre>
+
+    <p>
+        Este middleware permite al servidor procesar los datos
+        enviados mediante el formato
+        <code>application/x-www-form-urlencoded</code>.
+    </p>
+
+    <p>
+        La opción <code>extended: true</code> también permite
+        gestionar estructuras de datos más complejas.
+    </p>
+
+
+    <!-- ==================================================
+         TEST API
+    ================================================== -->
+
+    <h3>
+        Ruta principal de prueba
+    </h3>
+
+    <pre><code>app.get("/", (req, res) => {
+
+    res.status(200).json({
+        success: true,
+        message: "☀️ Solar API is running...",
+    });
+
+});</code></pre>
+
+    <p>
+        Esta ruta permite comprobar rápidamente que
+        la API Backend funciona correctamente.
+    </p>
+
+    <div class="success">
+
+        <strong>Resultado:</strong>
+
+        <br><br>
+
+        Cuando el usuario accede a la raíz del Backend,
+        el servidor devuelve una respuesta JSON indicando que
+        la API Solar Energy está funcionando.
+
+    </div>
+
+
+    <!-- ==================================================
+         REGISTRO DE LAS RUTAS
+    ================================================== -->
+
+    <h3>
+        Registro de las rutas de la API
+    </h3>
+
+    <pre><code>app.use(
+    "/api/appointments",
+    appointmentRoutes
+);
+
+app.use(
+    "/api/batteries",
+    batteryRoutes
+);
+
+app.use(
+    "/api/contacts",
+    contactRoutes
+);
+
+app.use(
+    "/api/dashboard",
+    dashboardRoutes
+);
+
+app.use(
+    "/api/inverters",
+    inverterRoutes
+);
+
+app.use(
+    "/api/panels",
+    panelRoutes
+);
+
+app.use(
+    "/api/payments",
+    paymentRoutes
+);
+
+app.use(
+    "/api/quotes",
+    quoteRoutes
+);
+
+app.use(
+    "/api/reviews",
+    reviewRoutes
+);
+
+app.use(
+    "/api/users",
+    authRoutes
+);</code></pre>
+
+    <p>
+        <code>app.use()</code> asocia una URL principal
+        a cada archivo de rutas.
+    </p>
+
+    <p>
+        Por ejemplo:
+    </p>
+
+    <pre><code>app.use(
+    "/api/panels",
+    panelRoutes
+);</code></pre>
+
+    <p>
+        significa que todas las rutas definidas en
+        <code>panelRoutes.js</code> comienzan con:
+    </p>
+
+    <div class="info">
+
+        <code>/api/panels</code>
+
+    </div>
+```
+```html
+    <p>
+        De esta manera, la ruta:
+    </p>
+
+    <pre><code>router.get("/", panelController.getPanels);</code></pre>
+
+    <p>
+        finalmente se convierte en:
+    </p>
+
+    <div class="success">
+
+        <strong>GET</strong>
+
+        <br><br>
+
+        <code>/api/panels</code>
+
+    </div>
+
+
+    <!-- ==================================================
+         RUTA 404
+    ================================================== -->
+
+    <h3>
+        Gestión de rutas inexistentes — 404
+    </h3>
+
+    <pre><code>app.use((req, res) => {
+
+    res.status(404).json({
+        success: false,
+        message:
+            `Route introuvable :
+            ${req.method}
+            ${req.originalUrl}`,
+    });
+
+});</code></pre>
+
+    <p>
+        Este middleware se ejecuta cuando ninguna ruta anterior
+        coincide con la solicitud recibida.
+    </p>
+
+    <p>
+        El servidor devuelve entonces el estado HTTP
+        <code>404</code>.
+    </p>
+
+    <div class="important">
+
+        <strong>Ejemplo:</strong>
+
+        <br><br>
+
+        Si el cliente solicita:
+
+        <br>
+
+        <code>GET /api/test123</code>
+
+        <br><br>
+
+        y esta ruta no existe, el servidor devuelve
+        un error indicando que la ruta no se encuentra.
+
+    </div>
+
+
+    <!-- ==================================================
+         GESTIÓN DE ERRORES
+    ================================================== -->
+
+    <h3>
+        Gestión global de errores
+    </h3>
+
+    <pre><code>app.use((err, req, res, next) => {
+
+    console.error(
+        "❌ Erreur serveur :",
+        err
+    );
+
+    res.status(err.status || 500).json({
+
+        success: false,
+
+        message:
+            err.message ||
+            "Erreur interne du serveur",
+
+    });
+
+});</code></pre>
+
+    <p>
+        Este middleware permite centralizar la gestión de los
+        errores del Backend.
+    </p>
+
+    <p>
+        Cuando se transmite un error a Express,
+        puede ser gestionado por este middleware.
+    </p>
+
+    <p>
+        El servidor devuelve un código HTTP correspondiente
+        al error o, por defecto, el código
+        <code>500</code>.
+    </p>
+
+    <div class="info">
+
+        <strong>Estructura de la respuesta:</strong>
+
+        <br><br>
+
+        <code>
+            success: false
+        </code>
+
+        <br>
+
+        <code>
+            message: "Erreur..."
+        </code>
+
+    </div>
+
+
+    <!-- ==================================================
+         EXPORTACIÓN
+    ================================================== -->
+
+    <h3>
+        Exportación de la aplicación
+    </h3>
+
+    <pre><code>module.exports = app;</code></pre>
+
+    <p>
+        Esta instrucción permite exportar la aplicación
+        Express para que pueda ser utilizada por el archivo
+        principal del servidor, generalmente
+        <code>server.js</code> o <code>index.js</code>.
+    </p>
+
+
+    <!-- ==================================================
+         FLUJO GLOBAL
+    ================================================== -->
+
+    <h3>
+        Flujo global del Backend
+    </h3>
+
+    <div class="info">
+
+        <strong>Arquitectura:</strong>
+
+        <br><br>
+
+        React
+
+        →
+
+        Axios
+
+        →
+
+        Express
+
+        →
+
+        CORS
+
+        →
+
+        Ruta API
+
+        →
+
+        Middleware
+
+        →
+
+        Controller
+
+        →
+
+        Model Mongoose
+
+        →
+
+        MongoDB
+
+        <br><br>
+
+        Luego, la respuesta vuelve al frontend:
+
+        <br><br>
+
+        MongoDB
+
+        →
+
+        Controller
+
+        →
+
+        JSON
+
+        →
+
+        Express
+
+        →
+
+        Axios
+
+        →
+
+        React
+
+    </div>
+
+
+    <!-- ==================================================
+         ORDEN DE EJECUCIÓN
+    ================================================== -->
+
+    <h3>
+        Orden de procesamiento de las solicitudes
+    </h3>
+
+    <ol>
+
+        <li>
+            El frontend React envía una solicitud HTTP.
+        </li>
+
+        <li>
+            CORS verifica si el origen del frontend está autorizado.
+        </li>
+
+        <li>
+            El webhook de Stripe se procesa por separado mediante
+            <code>express.raw()</code> cuando se trata de
+            <code>/api/payments/webhook</code>.
+        </li>
+
+        <li>
+            <code>express.json()</code> analiza los datos JSON.
+        </li>
+
+        <li>
+            Express busca la ruta correspondiente.
+        </li>
+
+        <li>
+            El middleware correspondiente, como
+            <code>verifyToken</code>, se ejecuta.
+        </li>
+
+        <li>
+            El controller procesa la solicitud.
+        </li>
+
+        <li>
+            El model Mongoose se comunica con MongoDB.
+        </li>
+
+        <li>
+            El controller devuelve una respuesta JSON.
+        </li>
+
+        <li>
+            Axios recibe la respuesta en el frontend React.
+        </li>
+
+    </ol>
+```
+
+```html
+    <h3>
+        Función de app.js
+    </h3>
+
+    <table>
+
+        <tr>
+            <th>Elemento</th>
+            <th>Función</th>
+        </tr>
+
+        <tr>
+            <td>Express</td>
+            <td>Creación del servidor Backend</td>
+        </tr>
+
+        <tr>
+            <td>CORS</td>
+            <td>Autorización de las solicitudes del frontend</td>
+        </tr>
+
+        <tr>
+            <td>express.json()</td>
+            <td>Lectura de los datos JSON</td>
+        </tr>
+
+        <tr>
+            <td>express.urlencoded()</td>
+            <td>Lectura de los datos URL-encoded</td>
+        </tr>
+
+        <tr>
+            <td>Routes</td>
+            <td>Organización de los endpoints de la API</td>
+        </tr>
+
+        <tr>
+            <td>Stripe Webhook</td>
+            <td>Recepción de eventos de pago</td>
+        </tr>
+
+        <tr>
+            <td>404</td>
+            <td>Gestión de las rutas inexistentes</td>
+        </tr>
+
+        <tr>
+            <td>Error Handler</td>
+            <td>Gestión global de los errores</td>
+        </tr>
+
+        <tr>
+            <td>module.exports</td>
+            <td>Exportación de la aplicación Express</td>
+        </tr>
+
+    </table>
+
+
+    <div class="success">
+
+        <strong>Resultado:</strong>
+
+        <br><br>
+
+        El archivo <code>app.js</code> centraliza la configuración
+        del Backend Solar Energy. Conecta las diferentes rutas,
+        los middlewares, la autenticación, Stripe y los
+        controllers para construir una API REST organizada
+        y fácil de mantener.
+
+    </div>
+
+<section class="chapter">
+
+<h2>
+    # 31 — Configuración del archivo .env
+</h2>
+
+<p>
+    El archivo <code>.env</code> contiene las variables
+    de entorno utilizadas por el Backend Solar Energy.
+</p>
+
+<p>
+    Permite centralizar la configuración del servidor
+    y la información sensible necesaria para los diferentes
+    servicios utilizados por la aplicación: MongoDB, JWT,
+    Stripe, Cloudinary y el envío de correos electrónicos.
+</p>
+
+<div class="important">
+
+    <strong>⚠️ Atención:</strong>
+
+    <br><br>
+
+    El archivo <code>.env</code> puede contener información
+    sensible. Nunca debe publicarse en GitHub ni
+    integrarse directamente en el frontend React.
+
+</div>
+
+
+<!-- ==================================================
+     EJEMPLO .ENV
+================================================== -->
+
+<h3>
+    Ejemplo de configuración del archivo .env
+</h3>
+
+<pre><code>PORT=3000
+
+MONGO_URI=mongodb://127.0.0.1:27017/solar_db
+
+JWT_SECRET=YOUR_JWT_SECRET
+
+STRIPE_SECRET_KEY=YOUR_STRIPE_SECRET_KEY
+
+CLOUDINARY_CLOUD_NAME=YOUR_CLOUDINARY_CLOUD_NAME
+
+CLOUDINARY_API_KEY=YOUR_CLOUDINARY_API_KEY
+
+CLOUDINARY_API_SECRET=YOUR_CLOUDINARY_API_SECRET
+
+EMAIL_USER=YOUR_EMAIL
+
+EMAIL_PASS=YOUR_EMAIL_APP_PASSWORD</code></pre>
+
+<p>
+    Estos valores se cargan automáticamente mediante
+    <code>dotenv</code> cuando se inicia el Backend.
+</p>
+
+
+<!-- ==================================================
+     DOTENV
+================================================== -->
+
+<h3>
+    Carga del archivo .env con dotenv
+</h3>
+
+<pre><code>require("dotenv").config();</code></pre>
+
+<p>
+    Esta instrucción carga las variables definidas en
+    el archivo <code>.env</code> y las hace accesibles
+    en Node.js mediante <code>process.env</code>.
+</p>
+
+<div class="info">
+
+    <strong>Funcionamiento:</strong>
+
+    <br><br>
+
+    <code>.env</code>
+
+    →
+
+    <code>dotenv.config()</code>
+
+    →
+
+    <code>process.env</code>
+
+</div>
+
+<p>
+    Por ejemplo, si el archivo <code>.env</code> contiene:
+</p>
+
+<pre><code>PORT=3000</code></pre>
+
+<p>
+    el código JavaScript puede recuperar este valor mediante:
+</p>
+
+<pre><code>process.env.PORT</code></pre>
+
+
+<!-- ==================================================
+     PORT
+================================================== -->
+
+<h3>
+    Variable PORT
+</h3>
+
+<pre><code>PORT=3000</code></pre>
+
+<p>
+    La variable <code>PORT</code> define el puerto en el que
+    el servidor Express escucha las solicitudes HTTP.
+</p>
+
+<p>
+    En el archivo <code>server.js</code>, esta variable
+    se obtiene mediante:
+</p>
+
+<pre><code>const PORT = process.env.PORT || 3000;</code></pre>
+
+<p>
+    Si <code>PORT</code> está definido en el archivo
+    <code>.env</code>, se utiliza su valor.
+    De lo contrario, el servidor utiliza el puerto
+    <code>3000</code> como valor predeterminado.
+</p>
+
+<div class="success">
+
+    <strong>Configuración actual:</strong>
+
+    <br><br>
+
+    <code>PORT=3000</code>
+
+    <br><br>
+
+    Por lo tanto, el Backend está disponible en:
+
+    <br><br>
+
+    <code>http://localhost:3000</code>
+
+</div>
+
+
+<!-- ==================================================
+     MONGODB
+================================================== -->
+
+<h3>
+    Variable MONGO_URI
+</h3>
+
+<pre><code>MONGO_URI=mongodb://127.0.0.1:27017/solar_db</code></pre>
+
+<p>
+    La variable <code>MONGO_URI</code> contiene la dirección
+    utiliza
+```
+
+

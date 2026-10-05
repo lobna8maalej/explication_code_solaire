@@ -1,0 +1,1192 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação</title>
+<link rel="stylesheet" href="app.css">
+
+</head>
+<body>
+    <section class="chapter">
+
+    <h2>
+        # 29 — Configuração principal do Backend com Express
+    </h2>
+
+    <p>
+        O arquivo <code>app.js</code> constitui o ponto central
+        de configuração do Backend Solar Energy.
+    </p>
+
+    <p>
+        Ele permite inicializar o Express, configurar o CORS,
+        gerenciar as requisições JSON, registrar as diferentes
+        rotas da API, gerenciar o webhook do Stripe e tratar
+        os erros e as rotas inexistentes.
+    </p>
+
+
+    <!-- ==================================================
+         IMPORTAÇÕES
+    ================================================== -->
+
+    <h3>
+        Importação do Express e do CORS
+    </h3>
+
+    <pre><code>const express = require("express");
+const cors = require("cors");
+
+const app = express();</code></pre>
+
+    <p>
+        <code>express</code> permite criar e configurar
+        o servidor Backend.
+    </p>
+
+    <p>
+        <code>cors</code> permite autorizar as requisições
+        provenientes do frontend React.
+    </p>
+
+    <p>
+        <code>express()</code> cria a aplicação Express que
+        será posteriormente utilizada para registrar os middlewares
+        e as rotas.
+    </p>
+
+
+    <!-- ==================================================
+         IMPORTAÇÃO DAS ROTAS
+    ================================================== -->
+
+    <h3>
+        Importação das rotas
+    </h3>
+
+    <pre><code>const appointmentRoutes =
+    require("./routes/appointmentRoutes");
+
+const batteryRoutes =
+    require("./routes/batteryRoutes");
+
+const contactRoutes =
+    require("./routes/contactRoutes");
+
+const dashboardRoutes =
+    require("./routes/dashboardRoutes");
+
+const inverterRoutes =
+    require("./routes/inverterRoutes");
+
+const panelRoutes =
+    require("./routes/panelRoutes");
+
+const paymentRoutes =
+    require("./routes/paymentRoutes");
+
+const quoteRoutes =
+    require("./routes/quoteRoutes");
+
+const reviewRoutes =
+    require("./routes/reviewRoutes");
+
+const authRoutes =
+    require("./routes/authRoutes");</code></pre>
+
+    <p>
+        Cada arquivo de rotas possui uma responsabilidade
+        específica dentro da aplicação.
+    </p>
+
+    <table>
+
+        <tr>
+            <th>Arquivo</th>
+            <th>Funcionalidade</th>
+        </tr>
+
+        <tr>
+            <td>appointmentRoutes.js</td>
+            <td>Gerenciamento de agendamentos</td>
+        </tr>
+
+        <tr>
+            <td>batteryRoutes.js</td>
+            <td>Gerenciamento de baterias</td>
+        </tr>
+
+        <tr>
+            <td>contactRoutes.js</td>
+            <td>Gerenciamento das mensagens de contato</td>
+        </tr>
+
+        <tr>
+            <td>dashboardRoutes.js</td>
+            <td>Estatísticas do Dashboard</td>
+        </tr>
+
+        <tr>
+            <td>inverterRoutes.js</td>
+            <td>Gerenciamento de inversores</td>
+        </tr>
+
+        <tr>
+            <td>panelRoutes.js</td>
+            <td>Gerenciamento de painéis solares</td>
+        </tr>
+
+        <tr>
+            <td>paymentRoutes.js</td>
+            <td>Gerenciamento de pagamentos e Stripe</td>
+        </tr>
+
+        <tr>
+            <td>quoteRoutes.js</td>
+            <td>Gerenciamento das solicitações de orçamento</td>
+        </tr>
+
+        <tr>
+            <td>reviewRoutes.js</td>
+            <td>Gerenciamento das avaliações dos clientes</td>
+        </tr>
+
+        <tr>
+            <td>authRoutes.js</td>
+            <td>Autenticação e usuários</td>
+        </tr>
+
+    </table>
+
+
+    <!-- ==================================================
+         CORS
+    ================================================== -->
+
+    <h3>
+        Configuração do CORS
+    </h3>
+
+    <pre><code>app.use(
+    cors({
+        origin: "http://localhost:5173",
+        methods: [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH"
+        ],
+        credentials: true,
+    })
+);</code></pre>
+
+    <p>
+        O CORS permite que o Backend aceite as requisições
+        enviadas pelo frontend React.
+    </p>
+
+    <p>
+        Neste projeto, o frontend funciona em:
+    </p>
+
+    <div class="info">
+
+        <strong>Frontend:</strong>
+
+        <br>
+
+        <code>http://localhost:5173</code>
+
+    </div>
+
+    <p>
+        A propriedade <code>origin</code> autoriza especificamente
+        esta origem.
+    </p>
+
+    <p>
+        A propriedade <code>methods</code> indica os métodos HTTP
+        autorizados pelo servidor.
+    </p>
+
+    <p>
+        <code>credentials: true</code> permite o uso de
+        informações de autenticação nas requisições
+        quando necessário.
+    </p>
+
+
+    <!-- ==================================================
+         STRIPE WEBHOOK
+    ================================================== -->
+
+    <h3>
+        Gerenciamento do Webhook do Stripe
+    </h3>
+
+    <pre><code>app.post(
+    "/api/payments/webhook",
+
+    express.raw({
+        type: "application/json",
+    }),
+
+    require("./controllers/paymentController").stripeWebhook
+);</code></pre>
+
+    <p>
+        Esta rota recebe as notificações enviadas pelo Stripe
+        relacionadas aos eventos de pagamento.
+    </p>
+
+    <p>
+        O webhook utiliza
+        <code>express.raw()</code> para receber o corpo
+        original da requisição na forma de dados brutos.
+    </p>
+
+    <div class="important">
+
+        <strong>Importante:</strong>
+
+        <br><br>
+
+        O webhook do Stripe é colocado antes do
+        <code>express.json()</code>.
+        Essa organização é necessária porque o Stripe pode
+        precisar do corpo bruto da requisição para verificar
+        corretamente a assinatura do webhook.
+
+    </div>
+
+
+    <!-- ==================================================
+         EXPRESS JSON
+    ================================================== -->
+
+    <h3>
+        Middleware JSON
+    </h3>
+
+    <pre><code>app.use(express.json());</code></pre>
+
+    <p>
+        Este middleware permite que o Express leia as requisições
+        que contêm dados JSON.
+    </p>
+
+    <p>
+        Por exemplo, quando um formulário React envia:
+    </p>
+
+    <pre><code>{
+    "name": "Lobna",
+    "email": "client@example.com",
+    "phone": "58229886"
+}</code></pre>
+
+    <p>
+        O Express transforma automaticamente os dados JSON
+        para que eles possam ser acessados em:
+        <code>req.body</code>.
+    </p>
+
+
+    <!-- ==================================================
+         URLENCODED
+    ================================================== -->
+
+    <h3>
+        Gerenciamento de dados URL-encoded
+    </h3>
+
+    <pre><code>app.use(
+    express.urlencoded({
+        extended: true,
+    })
+);</code></pre>
+
+    <p>
+        Este middleware permite que o servidor processe os dados
+        enviados no formato
+        <code>application/x-www-form-urlencoded</code>.
+    </p>
+
+    <p>
+        A opção <code>extended: true</code> também permite
+        gerenciar estruturas de dados mais complexas.
+    </p>
+
+
+    <!-- ==================================================
+         TESTE API
+    ================================================== -->
+
+    <h3>
+        Rota principal de teste
+    </h3>
+
+    <pre><code>app.get("/", (req, res) => {
+
+    res.status(200).json({
+        success: true,
+        message: "☀️ Solar API is running...",
+    });
+
+});</code></pre>
+
+    <p>
+        Esta rota permite verificar rapidamente se
+        a API Backend está funcionando corretamente.
+    </p>
+
+    <div class="success">
+
+        <strong>Resultado:</strong>
+
+        <br><br>
+
+        Quando o usuário acessa a raiz do Backend,
+        o servidor retorna uma resposta JSON indicando que
+        a API Solar Energy está funcionando.
+
+    </div>
+```
+<h3> 
+        Registro das rotas da API 
+    </h3> 
+
+```
+<pre><code>app.use( 
+"/api/appointments", 
+appointmentRoutes 
+```
+
+);
+
+app.use(
+"/api/batteries",
+batteryRoutes
+);
+
+app.use(
+"/api/contacts",
+contactRoutes
+);
+
+app.use(
+"/api/dashboard",
+dashboardRoutes
+);
+
+app.use(
+"/api/inverters",
+inverterRoutes
+);
+
+app.use(
+"/api/panels",
+panelRoutes
+);
+
+app.use(
+"/api/payments",
+paymentRoutes
+);
+
+app.use(
+"/api/quotes",
+quoteRoutes
+);
+
+app.use(
+"/api/reviews",
+reviewRoutes
+);
+
+app.use(
+"/api/users",
+authRoutes
+);</code></pre>
+
+```
+<p> 
+    <code>app.use()</code> associa uma URL principal 
+    a cada arquivo de rotas. 
+</p> 
+
+<p> 
+    Por exemplo: 
+</p> 
+
+<pre><code>app.use( 
+"/api/panels", 
+panelRoutes 
+```
+
+);</code></pre>
+
+```
+<p> 
+    significa que todas as rotas definidas em 
+    <code>panelRoutes.js</code> começam com: 
+</p> 
+
+<div class="info"> 
+
+    <code>/api/panels</code> 
+
+</div> 
+
+<p> 
+    Assim, a rota: 
+</p> 
+
+<pre><code>router.get("/", panelController.getPanels);</code></pre> 
+
+<p> 
+    torna-se finalmente: 
+</p> 
+
+<div class="success"> 
+
+    <strong>GET</strong> 
+
+    <br><br> 
+
+    <code>/api/panels</code> 
+
+</div> 
+
+
+<!-- ================================================== 
+     ROUTE 404 
+================================================== --> 
+
+<h3> 
+    Gerenciamento das rotas inexistentes — 404 
+</h3> 
+
+<pre><code>app.use((req, res) => { 
+
+res.status(404).json({ 
+    success: false, 
+    message: 
+        `Route introuvable : 
+        ${req.method} 
+        ${req.originalUrl}`, 
+}); 
+```
+
+});</code
+
+
+<h3>
+        Ordem de processamento das requisições
+    </h3>
+
+```
+<ol>
+
+    <li>
+        O frontend React envia uma requisição HTTP.
+    </li>
+
+    <li>
+        O CORS verifica se a origem do frontend é autorizada.
+    </li>
+
+    <li>
+        O webhook do Stripe é processado separadamente com
+        <code>express.raw()</code> quando se trata de
+        <code>/api/payments/webhook</code>.
+    </li>
+
+    <li>
+        O <code>express.json()</code> analisa os dados JSON.
+    </li>
+
+    <li>
+        O Express procura a rota correspondente.
+    </li>
+
+    <li>
+        O middleware necessário, como
+        <code>verifyToken</code>, é executado.
+    </li>
+
+    <li>
+        O controller processa a solicitação.
+    </li>
+
+    <li>
+        O model Mongoose se comunica com o MongoDB.
+    </li>
+
+    <li>
+        O controller retorna uma resposta JSON.
+    </li>
+
+    <li>
+        O Axios recebe a resposta no frontend React.
+    </li>
+
+</ol>
+
+
+<!-- ==================================================
+     RÉSUMÉ
+================================================== -->
+
+<h3>
+    Função do app.js
+</h3>
+
+<table>
+
+    <tr>
+        <th>Elemento</th>
+        <th>Função</th>
+    </tr>
+
+    <tr>
+        <td>Express</td>
+        <td>Criação do servidor Backend</td>
+    </tr>
+
+    <tr>
+        <td>CORS</td>
+        <td>Autorização das requisições do frontend</td>
+    </tr>
+
+    <tr>
+        <td>express.json()</td>
+        <td>Leitura dos dados JSON</td>
+    </tr>
+
+    <tr>
+        <td>express.urlencoded()</td>
+        <td>Leitura dos dados URL-encoded</td>
+    </tr>
+
+    <tr>
+        <td>Routes</td>
+        <td>Organização dos endpoints da API</td>
+    </tr>
+
+    <tr>
+        <td>Stripe Webhook</td>
+        <td>Recebimento dos eventos de pagamento</td>
+    </tr>
+
+    <tr>
+        <td>404</td>
+        <td>Gerenciamento das rotas inexistentes</td>
+    </tr>
+
+    <tr>
+        <td>Error Handler</td>
+        <td>Gerenciamento global dos erros</td>
+    </tr>
+
+    <tr>
+        <td>module.exports</td>
+        <td>Exportação da aplicação Express</td>
+    </tr>
+
+</table>
+
+
+<div class="success">
+
+    <strong>Resultado:</strong>
+
+    <br><br>
+
+    O arquivo <code>app.js</code> centraliza a configuração
+    do Backend Solar Energy. Ele conecta as diferentes rotas,
+    os middlewares, a autenticação, o Stripe e os
+    controllers para construir uma API REST organizada
+    e de fácil manutenção.
+
+</div>
+```
+
+<section class="chapter">
+
+<h2>
+    # 31 — Configuração do arquivo .env
+</h2>
+
+<p>
+    O arquivo <code>.env</code> contém as variáveis
+    de ambiente utilizadas pelo Backend Solar Energy.
+</p>
+
+<p>
+    Ele permite centralizar a configuração do servidor
+    e as informações sensíveis necessárias para os diferentes
+    serviços utilizados pela aplicação: MongoDB, JWT,
+    Stripe, Cloudinary e envio de e-mails.
+</p>
+
+<div class="important">
+
+```
+<strong>⚠️ Atenção:</strong>
+
+<br><br>
+
+O arquivo <code>.env</code> pode conter informações
+sensíveis. Ele nunca deve ser publicado no GitHub ou
+integrado diretamente ao frontend React.
+```
+
+</div>
+
+<!-- ==================================================
+     EXEMPLE .ENV
+================================================== -->
+
+<h3>
+    Exemplo de configuração do arquivo .env
+</h3>
+
+<pre><code>PORT=3000
+
+MONGO_URI=mongodb://127.0.0.1:27017/solar_db
+
+JWT_SECRET=YOUR_JWT_SECRET
+
+STRIPE_SECRET_KEY=YOUR_STRIPE_SECRET_KEY
+
+CLOUDINARY_CLOUD_NAME=YOUR_CLOUDINARY_CLOUD_NAME
+
+CLOUDINARY_API_KEY=YOUR_CLOUDINARY_API_KEY
+
+CLOUDINARY_API_SECRET=YOUR_CLOUDINARY_API_SECRET
+
+EMAIL_USER=YOUR_EMAIL
+
+EMAIL_PASS=YOUR_EMAIL_APP_PASSWORD</code></pre>
+
+<p>
+    Esses valores são carregados automaticamente pelo
+    <code>dotenv</code> quando o Backend é iniciado.
+</p>
+
+<!-- ==================================================
+     DOTENV
+================================================== -->
+
+<h3>
+    Carregamento do arquivo .env com dotenv
+</h3>
+
+<pre><code>require("dotenv").config();</code></pre>
+
+<p>
+    Esta instrução carrega as variáveis definidas no
+    arquivo <code>.env</code> e as torna acessíveis
+    no Node.js por meio de <code>process.env</code>.
+</p>
+
+<div class="info">
+
+```
+<strong>Funcionamento:</strong>
+
+<br><br>
+
+<code>.env</code>
+
+→
+
+<code>dotenv.config()</code>
+
+→
+
+<code>process.env</code>
+```
+
+</div>
+
+<p>
+    Por exemplo, se o arquivo <code>.env</code> contém:
+</p>
+
+<pre><code>PORT=3000</code></pre>
+
+<p>
+    o código JavaScript pode recuperar esse valor com:
+</p>
+
+<pre><code>process.env.PORT</code></pre>
+
+<!-- ==================================================
+     PORT
+================================================== -->
+
+<h3>
+    Variável PORT
+</h3>
+
+<pre><code>PORT=3000</code></pre>
+
+<p>
+    A variável <code>PORT</code> define a porta na qu
+
+
+    <h3>
+    Variáveis sensíveis e não sensíveis
+</h3>
+
+<table>
+
+```
+<tr>
+    <th>Variável</th>
+    <th>Utilização</th>
+    <th>Proteção</th>
+</tr>
+
+<tr>
+    <td>PORT</td>
+    <td>
+        Porta do servidor Express
+    </td>
+    <td>
+        Não sensível
+    </td>
+</tr>
+
+<tr>
+    <td>MONGO_URI</td>
+    <td>
+        Conexão com o MongoDB
+    </td>
+    <td>
+        Deve ser protegida se contiver credenciais
+    </td>
+</tr>
+
+<tr>
+    <td>JWT_SECRET</td>
+    <td>
+        Assinatura e verificação dos tokens JWT
+    </td>
+    <td>
+        Sensível
+    </td>
+</tr>
+
+<tr>
+    <td>STRIPE_SECRET_KEY</td>
+    <td>
+        Comunicação com o Stripe
+    </td>
+    <td>
+        Muito sensível
+    </td>
+</tr>
+
+<tr>
+    <td>CLOUDINARY_CLOUD_NAME</td>
+    <td>
+        Identificação da conta Cloudinary
+    </td>
+    <td>
+        Geralmente não é secreta
+    </td>
+</tr>
+
+<tr>
+    <td>CLOUDINARY_API_KEY</td>
+    <td>
+        Identificação da API Cloudinary
+    </td>
+    <td>
+        Deve ser protegida
+    </td>
+</tr>
+
+<tr>
+    <td>CLOUDINARY_API_SECRET</td>
+    <td>
+        Autenticação do Cloudinary
+    </td>
+    <td>
+        Sensível
+    </td>
+</tr>
+
+<tr>
+    <td>EMAIL_USER</td>
+    <td>
+        Endereço utilizado para o envio
+    </td>
+    <td>
+        Depende do contexto
+    </td>
+</tr>
+
+<tr>
+    <td>EMAIL_PASS</td>
+    <td>
+        Autenticação do serviço de e-mail
+    </td>
+    <td>
+        Muito sensível
+    </td>
+</tr>
+```
+
+</table>
+
+<!-- ==================================================
+     RELATION ENV SERVER APP
+================================================== -->
+
+<h3>
+    Relação entre .env, server.js e app.js
+</h3>
+
+<div class="info">
+
+```
+<strong>Configuração do Backend:</strong>
+
+<br><br>
+
+<code>.env</code>
+
+<br>
+
+↓
+
+<br>
+
+<code>dotenv.config()</code>
+
+<br>
+
+↓
+
+<br>
+
+<code>process.env</code>
+
+<br>
+
+↓
+
+<br>
+
+<code>server.js</code>
+
+<br>
+
+↓
+
+<br>
+
+<code>MONGO_URI</code>
+
+→
+
+<strong>MongoDB</strong>
+
+<br><br>
+
+e
+
+<br><br>
+
+<code>PORT</code>
+
+→
+
+<strong>Express</strong>
+
+<br><br>
+
+<code>server.js</code>
+
+→
+
+<code>app.js</code>
+
+→
+
+<strong>API REST</strong>
+```
+
+</div>
+
+<!-- ==================================================
+     ARCHITECTURE
+================================================== -->
+
+<h3>
+    Arquitetura completa da configuração
+</h3>
+
+<div class="success">
+
+```
+<strong>Fluxo geral:</strong>
+
+<br><br>
+
+<code>.env</code>
+
+→
+
+<code>dotenv</code>
+
+→
+
+<code>process.env</code>
+
+<br><br>
+
+↓
+
+<br><br>
+
+<code>server.js</code>
+
+<br><br>
+
+↓
+
+<br>
+
+<code>mongoose.connect(MONGO_URI)</code>
+
+→
+
+<strong>MongoDB</strong>
+
+<br><br>
+
+↓
+
+<br>
+
+Conexão bem-sucedida
+
+<br><br>
+
+↓
+
+<br>
+
+<code>app.listen(PORT)</code>
+
+<br><br>
+
+↓
+
+<br>
+
+<strong>Servidor Express iniciado</strong>
+
+<br><br>
+
+↓
+
+<br>
+
+<code>app.js</code>
+
+→
+
+Rotas
+
+→
+
+Controllers
+
+→
+
+Services
+
+→
+
+MongoDB / Stripe / Cloudinary / E-mail
+```
+
+</div>
+
+<!-- ==================================================
+     DÉMARRAGE
+================================================== -->
+
+<h3>
+    Exemplo de inicialização do Backend
+</h3>
+
+<pre><code>✅ MongoDB connecté
+
+🚀 Serveur lancé sur http://localhost:3000</code></pre>
+
+<p>
+    A primeira mensagem confirma que o Mongoose conseguiu
+    estabelecer a conexão com o MongoDB.
+</p>
+
+<p>
+    A segunda mensagem confirma que o servidor Express
+    está escutando na porta <code>3000</code>.
+</p>
+
+<!-- ==================================================
+     ERREUR
+================================================== -->
+
+<h3>
+    Exemplo em caso de erro no MongoDB
+</h3>
+
+<pre><code>❌ Erreur MongoDB : ...</code></pre>
+
+<p>
+    Se a variável <code>MONGO_URI</code> estiver incorreta,
+    se o MongoDB não estiver iniciado ou se o banco de dados
+    não estiver acessível, a conexão falhará.
+</p>
+
+<p>
+    Nesse caso, o <code>server.js</code> exibe o erro
+    e encerra o processo com:
+</p>
+
+<pre><code>process.exit(1);</code></pre>
+
+<!-- ==================================================
+     RÉSUMÉ
+================================================== -->
+
+<h3>
+    Resumo do arquivo .env
+</h3>
+
+<table>
+
+```
+<tr>
+    <th>Variável</th>
+    <th>Serviço</th>
+    <th>Função</th>
+</tr>
+
+<tr>
+    <td>PORT</td>
+    <td>Express</td>
+    <td>
+        Define a porta do servidor
+    </td>
+</tr>
+
+<tr>
+    <td>MONGO_URI</td>
+    <td>MongoDB</td>
+    <td>
+        Define a URL de conexão com o MongoDB
+    </td>
+</tr>
+
+<tr>
+    <td>JWT_SECRET</td>
+    <td>JWT</td>
+    <td>
+        Protege os tokens de autenticação
+    </td>
+</tr>
+
+<tr>
+    <td>STRIPE_SECRET_KEY</td>
+    <td>Stripe</td>
+    <td>
+        Permite operações de pagamento no lado do servidor
+    </td>
+</tr>
+
+<tr>
+    <td>CLOUDINARY_CLOUD_NAME</td>
+    <td>Cloudinary</td>
+    <td>
+        Identifica a conta Cloudinary
+    </td>
+</tr>
+
+<tr>
+    <td>CLOUDINARY_API_KEY</td>
+    <td>Cloudinary</td>
+    <td>
+        Identifica a API Cloudinary
+    </td>
+</tr>
+
+<tr>
+    <td>CLOUDINARY_API_SECRET</td>
+    <td>Cloudinary</td>
+    <td>
+        Autentica o Backend junto ao Cloudinary
+    </td>
+</tr>
+
+<tr>
+    <td>EMAIL_USER</td>
+    <td>E-mail</td>
+    <td>
+        Endereço utilizado para enviar os e-mails
+    </td>
+</tr>
+
+<tr>
+    <td>EMAIL_PASS</td>
+    <td>E-mail</td>
+    <td>
+        Autenticação da conta de e-mail
+    </td>
+</tr>
+```
+
+</table>
+
+<!-- ==================================================
+     RÉSULTAT FINAL
+================================================== -->
+
+<div class="success">
+
+```
+<strong>Resultado:</strong>
+
+<br><br>
+
+O arquivo <code>.env</code> centraliza a configuração
+do Backend Solar Energy. Ele permite que o
+<code>server.js</code> recupere a porta do servidor
+e a URL do MongoDB, enquanto as outras variáveis são
+utilizadas pelos diferentes serviços do Backend.
+
+<br><br>
+
+Essa organização permite separar a configuração
+e as informações sensíveis do código-fonte da
+aplicação.
+```
+
+</div>
+
+</section>
+
+</section>
+</body>
+</html>

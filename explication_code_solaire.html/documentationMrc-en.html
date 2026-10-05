@@ -1,0 +1,831 @@
+<!DOCTYPE html> 
+
+<html lang="en"> 
+
+<head> 
+
+<meta charset="UTF-8"> 
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+<title>Backend Documentation - Solar Energy</title> 
+
+<style> 
+ 
+* { 
+    box-sizing: border-box; 
+} 
+ 
+body { 
+    margin: 0; 
+    padding: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
+    background: #ffffff; 
+    color: #222222; 
+    line-height: 1.7; 
+} 
+ 
+header { 
+    background: #1f2937; 
+    color: white; 
+    padding: 45px 20px; 
+    text-align: center; 
+} 
+ 
+header h1 { 
+    margin: 0 0 10px; 
+    font-size: 32px; 
+} 
+ 
+header p { 
+    margin: 0; 
+    font-size: 17px; 
+    color: #e5e7eb; 
+} 
+ 
+.container { 
+    width: 90%; 
+    max-width: 1200px; 
+    margin: 30px auto; 
+} 
+ 
+.chapter { 
+    background: #ffffff; 
+    margin-bottom: 30px; 
+    padding: 30px; 
+    border-radius: 12px; 
+    border: 1px solid #e5e7eb; 
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+} 
+ 
+h2 { 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #e5e7eb; 
+    padding-bottom: 10px; 
+} 
+ 
+h3 { 
+    color: #374151; 
+    margin-top: 25px; 
+} 
+ 
+p { 
+    margin: 10px 0; 
+} 
+ 
+ul { 
+    padding-left: 25px; 
+} 
+ 
+li { 
+    margin-bottom: 8px; 
+} 
+ 
+pre { 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+} 
+ 
+code { 
+    background: #f3f4f6; 
+    padding: 3px 6px; 
+    border-radius: 5px; 
+    font-family: Consolas, monospace; 
+} 
+ 
+.route { 
+    display: inline-block; 
+    background: #f3f4f6; 
+    padding: 6px 10px; 
+    margin: 5px 0; 
+    border-radius: 6px; 
+    font-family: Consolas, monospace; 
+} 
+ 
+.important { 
+    background: #fff7ed; 
+    border-left: 5px solid #f97316; 
+    padding: 15px; 
+    margin: 20px 0; 
+    border-radius: 6px; 
+} 
+ 
+.success { 
+    background: #ecfdf5; 
+    border-left: 5px solid #10b981; 
+    padding: 15px; 
+    margin: 20px 0; 
+    border-radius: 6px; 
+} 
+ 
+.info { 
+    background: #eff6ff; 
+    border-left: 5px solid #3b82f6; 
+    padding: 15px; 
+    margin: 20px 0; 
+    border-radius: 6px; 
+} 
+ 
+.warning { 
+    background: #fefce8; 
+    border-left: 5px solid #eab308; 
+    padding: 15px; 
+    margin: 20px 0; 
+    border-radius: 6px; 
+} 
+ 
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin: 20px 0; 
+} 
+ 
+th, 
+td { 
+    border: 1px solid #d1d5db; 
+    padding: 12px; 
+    text-align: left; 
+} 
+ 
+th { 
+    background: #f3f4f6; 
+} 
+ 
+footer { 
+    text-align: center; 
+    padding: 30px; 
+    background: #1f2937; 
+    color: white; 
+    margin-top: 40px; 
+} 
+ 
+</style> 
+
+</head> 
+
+<body> 
+
+<header> 
+
+<h1>☀️ Solar Energy</h1> 
+
+<p> 
+Backend Technical Documentation 
+</p> 
+
+<p> 
+JWT • Multer • Reviews • Quotes • Express • MongoDB 
+</p> 
+
+</header> 
+
+<div class="container"> 
+
+<!-- ================================================= --> 
+
+<!-- INTRODUCTION --> 
+
+<!-- ================================================= --> 
+
+<section class="chapter"> 
+
+<h2>📚 1. General Overview</h2> 
+
+<p> 
+This part of the backend is a REST API developed with 
+<strong>Node.js</strong>, <strong>Express</strong> and 
+<strong>MongoDB/Mongoose</strong>. 
+</p> 
+
+<p> 
+It allows the management of several features of the 
+Solar Energy platform: 
+</p> 
+
+<ul> 
+
+<li>🔐 Authentication with JWT</li> 
+
+<li>📅 Appointment management</li> 
+
+<li>☀️ Solar panel management</li> 
+
+<li>🔋 Battery management</li> 
+
+<li>⚡ Inverter management</li> 
+
+<li>📄 Quote request management</li> 
+
+<li>💳 Payment management</li> 
+
+<li>⭐ Customer review management</li> 
+
+<li>📩 Contact management</li> 
+
+<li>📊 Dashboard management</li> 
+
+<li>📁 File management with Multer</li> 
+
+</ul> 
+
+</section> 
+
+<!-- ================================================= --> 
+
+<!-- JWT --> 
+
+<!-- ================================================= --> 
+
+<section class="chapter"> 
+
+<h2>🔐 2. verifyToken Middleware</h2> 
+
+<p> 
+The <code>verifyToken</code> middleware protects certain 
+API routes using a JWT token. 
+</p> 
+
+<h3>Importing jsonwebtoken</h3> 
+
+<pre> 
+const jwt = require("jsonwebtoken"); 
+</pre> 
+
+<p> 
+The <code>jsonwebtoken</code> library allows you to create and verify 
+JWT tokens. 
+</p> 
+
+<h3>Creating the middleware</h3> 
+
+<pre> 
+const verifyToken = (req, res, next) => { 
+</pre> 
+
+<p> 
+The middleware receives three parameters: 
+</p> 
+
+<ul> 
+
+<li><code>req</code>: the HTTP request</li> 
+
+<li><code>res</code>: the HTTP response</li> 
+
+<li><code>next</code>: allows the request to continue to the next function</li> 
+
+</ul> 
+
+<h3>Retrieving the Authorization header</h3> 
+
+<pre> 
+console.log( 
+    "Authorization :", 
+    req.headers.authorization 
+); 
+ 
+const token = 
+    req.headers.authorization?.split(" ")[1]; 
+</pre> 
+
+<p> 
+The frontend generally sends the token in the following format: 
+</p> 
+
+<pre> 
+Authorization: Bearer TOKEN 
+</pre> 
+
+<p> 
+The <code>split(" ")</code> method separates: 
+</p> 
+
+<pre> 
+Bearer 
+TOKEN 
+</pre> 
+
+<p> 
+The second element, with index <code>[1]</code>, corresponds to the token. 
+</p> 
+
+<h3>Checking whether the token exists</h3> 
+
+<pre> 
+if (!token) { 
+ 
+    return res.status(401).json({ 
+ 
+        success: false, 
+ 
+        message: "Accès refusé, token manquant", 
+ 
+    }); 
+ 
+} 
+</pre> 
+
+<p> 
+If no token is sent, the server returns a 
+<strong>401 Unauthorized</strong> error. 
+</p> 
+
+<div class="warning"> 
+
+<strong>⚠️ Important:</strong>
+
+Without a valid token, the user cannot access protected routes.
+
+</div> 
+
+<h3>Checking JWT_SECRET</h3> 
+
+<pre> 
+console.log( 
+    "JWT_SECRET disponible :", 
+    !!process.env.JWT_SECRET 
+); 
+</pre> 
+
+<p> 
+The server checks whether the environment variable 
+<code>JWT_SECRET</code> exists. 
+</p> 
+
+<p> 
+This secret key is used to verify the authenticity of the JWT. 
+</p> 
+
+<h3>Verifying the token</h3> 
+
+<pre> 
+const decoded = jwt.verify( 
+    token, 
+    process.env.JWT_SECRET 
+); 
+</pre> 
+
+<p> 
+If the token is valid, JWT returns the information contained 
+in the token. 
+</p> 
+
+<h3>Storing the user</h3> 
+
+<pre> 
+req.user = decoded; 
+ 
+next(); 
+</pre> 
+
+<p> 
+The decoded information is stored in 
+<code>req.user</code>. 
+</p> 
+
+<p> 
+The following controllers can therefore access the information 
+of the logged-in user. 
+</p> 
+
+<h3>Error handling</h3> 
+
+<pre> 
+catch (error) { 
+ 
+    console.log( 
+        "ERREUR JWT :", 
+        error.message 
+    ); 
+ 
+    return res.status(401).json({ 
+ 
+        success: false, 
+ 
+        message: "Token invalide", 
+ 
+    }); 
+ 
+} 
+</pre> 
+
+<p> 
+If the token is expired, incorrect, or forged, the server returns 
+a 401 error. 
+</p> 
+
+<div class="success"> 
+
+<strong>✅ Result:</strong>
+
+The middleware protects routes that require authentication.
+
+</div> 
+
+</section> 
+</div>
+
+<footer>
+☀️ Solar Energy<br>
+Backend Technical Documentation<br>
+Node.js • Express • MongoDB • Mongoose • JWT • Stripe
+</footer>
+
+</body>
+</html>
+<h2>📁 3. Multer Configuration</h2> 
+
+<p> 
+Multer is used to handle file uploads from the frontend 
+to the backend. 
+</p> 
+
+<h3>Import</h3> 
+
+<pre> 
+const multer = require("multer"); 
+</pre> 
+
+<h3>Memory Storage</h3> 
+
+<pre> 
+const storage = multer.memoryStorage(); 
+</pre> 
+
+<p> 
+Received files are temporarily stored in RAM 
+instead of being directly saved in a folder. 
+</p> 
+
+<h3>Upload Configuration</h3> 
+
+<pre> 
+const upload = multer({ 
+ 
+    storage, 
+ 
+    limits: { 
+ 
+        fileSize: 5 * 1024 * 1024, 
+ 
+    }, 
+ 
+}); 
+</pre> 
+
+<p> 
+The maximum file size is: 
+</p> 
+
+<pre> 
+5 * 1024 * 1024 = 5 MB 
+</pre> 
+
+<div class="info"> 
+
+<strong>💡 Why limit the file size?</strong>
+
+This helps prevent oversized files from consuming
+too much memory or slowing down the server.
+
+</div> 
+
+<h3>Export</h3> 
+
+<pre> 
+module.exports = upload; 
+</pre> 
+
+<p> 
+The middleware can then be used in the routes. 
+</p> 
+
+</section> 
+
+<!-- ================================================= --> 
+
+<!-- REVIEW CONTROLLER --> 
+
+<!-- ================================================= --> 
+
+<section class="chapter"> 
+
+<h2>⭐ 4. Review Controller</h2> 
+
+<p> 
+The review controller allows customer reviews to be managed. 
+</p> 
+
+<h3>Model Import</h3> 
+
+<pre> 
+const Review = require("../models/Review"); 
+</pre> 
+
+<p> 
+The <code>Review</code> model allows interaction with the 
+MongoDB collection containing the reviews. 
+</p> 
+
+<h3>Email Sending Import</h3> 
+
+<pre> 
+const sendEmail = 
+    require("../utils/sendEmail"); 
+</pre> 
+
+<p> 
+This function allows an email to be sent to the customer after 
+their review has been created. 
+</p> 
+
+<h3>4.1 Create a Review</h3> 
+
+<pre> 
+exports.createReview = async (req, res) => { 
+ 
+    try { 
+ 
+        const review = 
+            await Review.create(req.body); 
+ 
+        ... 
+ 
+    } 
+ 
+    catch (error) { 
+ 
+        ... 
+ 
+    } 
+ 
+}; 
+</pre> 
+
+<p> 
+<code>req.body</code> contains the information sent by the frontend. 
+</p> 
+
+<p>For example:</p> 
+
+<pre> 
+{ 
+    "customerName": "Ahmed Ben Ali", 
+    "email": "ahmed@gmail.com", 
+    "rating": 5, 
+    "comment": "Excellent produit", 
+    "productType": "Panel", 
+    "productName": "Jinko Solar" 
+} 
+</pre> 
+
+<h3>Saving to MongoDB</h3> 
+
+<pre> 
+const review = 
+    await Review.create(req.body); 
+</pre> 
+
+<p> 
+Mongoose creates a new document in the 
+<strong>reviews</strong> collection. 
+</p> 
+
+<h3>Sending an Email</h3> 
+
+<pre> 
+if (review.email) { 
+ 
+    await sendEmail({ 
+ 
+        to: review.email, 
+ 
+        subject: "Merci pour votre avis", 
+ 
+        html: `...` 
+ 
+    }); 
+ 
+} 
+</pre> 
+
+<p> 
+If the customer has an email address, the server sends them 
+a confirmation message. 
+</p> 
+
+<h3>HTTP Response</h3> 
+
+<pre> 
+res.status(201).json({ 
+ 
+    success: true, 
+ 
+    data: review, 
+ 
+}); 
+</pre
+<p> 
+The customer automatically receives an email confirming the receipt 
+of their request. 
+</p> 
+
+<h3>Information Sent in the Email</h3> 
+
+<ul> 
+
+<li>Customer name</li> 
+
+<li>Email address</li> 
+
+<li>Phone number</li> 
+
+<li>Address</li> 
+
+<li>Installation type</li> 
+
+<li>Estimated consumption</li> 
+
+<li>Budget</li> 
+
+<li>Message</li> 
+
+</ul> 
+
+<h3>Server Response</h3> 
+
+<pre> 
+res.status(201).json({ 
+ 
+    success: true, 
+ 
+    data: quote 
+ 
+}); 
+</pre> 
+
+<p> 
+The server returns the created quote request. 
+</p> 
+
+<h3>5.2 Retrieve All Quotes</h3> 
+
+<pre> 
+const quotes = 
+    await Quote.find() 
+    .sort({ createdAt: -1 }); 
+</pre> 
+
+<p> 
+All quotes are retrieved and sorted from newest to oldest. 
+</p> 
+
+<h3>5.3 Retrieve a Quote by ID</h3> 
+
+<pre> 
+const quote = 
+    await Quote.findById( 
+        req.params.id 
+    ); 
+</pre> 
+
+<p> 
+This function allows a specific quote to be retrieved. 
+</p> 
+
+<h3>5.4 Update a Quote</h3> 
+
+<pre> 
+const quote = 
+    await Quote.findByIdAndUpdate( 
+ 
+        req.params.id, 
+ 
+        req.body, 
+ 
+        { 
+            new: true, 
+            runValidators: true 
+        } 
+ 
+    ); 
+</pre> 
+
+<p> 
+This feature can be used by the administration team, for example, 
+to update the status of a quote. 
+</p> 
+
+<p>For example:</p> 
+
+<pre> 
+{ 
+    "status": "Approved" 
+} 
+</pre> 
+
+<p> 
+The quote status can be: 
+</p> 
+
+<ul> 
+
+<li>Pending</li> 
+
+<li>Reviewed</li> 
+
+<li>Approved</li> 
+
+<li>Rejected</li> 
+
+</ul> 
+
+<h3>5.5 Delete a Quote</h3> 
+
+<pre> 
+const quote = 
+    await Quote.findByIdAndDelete( 
+        req.params.id 
+    ); 
+</pre> 
+
+<p> 
+This function permanently deletes the quote corresponding to its ID. 
+</p> 
+
+</section> 
+
+<!-- ================================================= --> 
+
+<!-- ROUTES --> 
+
+<!-- ================================================= --> 
+
+<section class="chapter"> 
+
+<h2>🌐 6. API Routes</h2> 
+
+<p> 
+The controllers are accessible through Express routes. 
+</p> 
+
+<table> 
+
+<tr> 
+<th>Method</th> 
+<th>Route</th> 
+<th>Function</th> 
+</tr> 
+
+<tr> 
+<td>POST</td> 
+<td>/api/reviews</td> 
+<td>Create a review</td> 
+</tr> 
+
+<tr> 
+<td>GET</td> 
+<td>/api/reviews</td> 
+<td>Retrieve all reviews</td> 
+</tr> 
+
+<tr> 
+<td>GET</td> 
+<td>/api/reviews/:id</td> 
+<td>Retrieve a review</td> 
+</tr> 
+
+<tr> 
+<td>PUT</td> 
+<td>/api/reviews/:id</td> 
+<td>Update a review</td> 
+</tr> 
+
+<tr> 
+<td>DELETE</td> 
+<td>/api/reviews/:id</td> 
+<td>Delete a review</td> 
+</tr> 
+
+<tr> 
+<td>POST</td> 
+<td>/api/quotes</td> 
+<td>Create a quote</td> 
+</tr> 
+
+<tr> 
+<td>GET</td> 
+<td>/api/quotes</td> 
+<td>Retrieve all quotes</td> 
+</tr> 
+
+<tr> 
+<td>GET</td> 
+<td>/api/quotes/:id</td> 
+<td>Retrie

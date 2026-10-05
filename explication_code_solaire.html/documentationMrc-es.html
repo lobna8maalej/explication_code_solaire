@@ -1,0 +1,337 @@
+<!DOCTYPE html> 
+
+<html lang="es"> 
+
+<head> 
+
+<meta charset="UTF-8"> 
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+<title>Documentación Backend - Solar Energy</title> 
+
+<style> 
+ 
+* { 
+    box-sizing: border-box; 
+} 
+ 
+body { 
+    margin: 0; 
+    padding: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
+    background: #ffffff; 
+    color: #222222; 
+    line-height: 1.7; 
+} 
+ 
+header { 
+    background: #1f2937; 
+    color: white; 
+    padding: 45px 20px; 
+    text-align: center; 
+} 
+ 
+header h1 { 
+    margin: 0 0 10px; 
+    font-size: 32px; 
+} 
+ 
+header p { 
+    margin: 0; 
+    font-size: 17px; 
+    color: #e5e7eb; 
+} 
+ 
+.container { 
+    width: 90%; 
+    max-width: 1200px; 
+    margin: 30px auto; 
+} 
+ 
+.chapter { 
+    background: #ffffff; 
+    margin-bottom: 30px; 
+    padding: 30px; 
+    border-radius: 12px; 
+    border: 1px solid #e5e7eb; 
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+} 
+ 
+h2 { 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #e5e7eb; 
+    padding-bottom: 10px; 
+} 
+ 
+h3 { 
+    color: #374151; 
+    margin-top: 25px; 
+} 
+ 
+p { 
+    margin: 10px 0; 
+} 
+ 
+ul { 
+    padding-left: 25px; 
+} 
+ 
+li { 
+    margin-bottom: 8px; 
+} 
+ 
+pre { 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+} 
+ 
+code { 
+    background: #f3f4f6; 
+    padding: 3px 6px; 
+    border-radius: 5px; 
+    font-family: Consolas, monospace; 
+} 
+ 
+.route { 
+    display: inline-block; 
+    background: #f3f4f6; 
+    padding: 6px 10px; 
+    margin: 5px 0; 
+    border-radius: 6px; 
+    font-family: Consolas, monospace; 
+} 
+ 
+.important { 
+    background: #fff7ed; 
+    border-left: 5px solid #f97316; 
+    padding: 15px; 
+    margin: 20px 0; 
+    border-radius: 6px; 
+} 
+ 
+.success { 
+    background: #ecfdf5; 
+    border-left: 5px solid #10b981; 
+    padding: 15px; 
+    margin: 20px 0; 
+    border-radius: 6px; 
+} 
+ 
+.info { 
+    background: #eff6ff; 
+    border-left: 5px solid #3b82f6; 
+    padding: 15px; 
+    margin: 20px 0; 
+    border-radius: 6px; 
+} 
+ 
+.warning { 
+    background: #fefce8; 
+    border-left: 5px solid #eab308; 
+    padding: 15px; 
+    margin: 20px 0; 
+    border-radius: 6px; 
+} 
+ 
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin: 20px 0; 
+} 
+ 
+th, 
+td { 
+    border: 1px solid #d1d5db; 
+    padding: 12px; 
+    text-align: left; 
+} 
+ 
+th { 
+    background: #f3f4f6; 
+} 
+ 
+footer { 
+    text-align: center; 
+    padding: 30px; 
+    background: #1f2937; 
+    color: white; 
+    margin-top: 40px; 
+} 
+ 
+</style> 
+
+</head> 
+
+<body> 
+
+<header> 
+
+<h1>☀️ Solar Energy</h1> 
+
+<p> 
+Documentación técnica del Backend 
+</p> 
+
+<p> 
+JWT • Multer • Reviews • Quotes • Express • MongoDB 
+</p> 
+
+</header> 
+
+<div class="container"> 
+
+<!-- ================================================= --> 
+
+<!-- INTRODUCTION --> 
+
+<!-- ================================================= --> 
+
+<section class="chapter"> 
+
+<h2>📚 1. Presentación general</h2> 
+
+<p> 
+Esta parte del backend constituye una API REST desarrollada con 
+<strong>Node.js</strong>, <strong>Express</strong> y 
+<strong>MongoDB/Mongoose</strong>. 
+</p> 
+
+<p> 
+Permite gestionar varias funcionalidades de la plataforma 
+Solar Energy: 
+</p> 
+
+<ul> 
+
+<li>🔐 Autenticación con JWT</li> 
+
+<li>📅 Gestión de citas</li> 
+
+<li>☀️ Gestión de paneles solares</li> 
+
+<li>🔋 Gestión de baterías</li> 
+
+<li>⚡ Gestión de inversores</li> 
+
+<li>📄 Gestión de solicitudes de presupuestos</li> 
+
+<li>💳 Gestión de pagos</li> 
+
+<li>⭐ Gestión de opiniones de clientes</li> 
+
+<li>📩 Gestión de contactos</li> 
+
+<li>📊 Gestión del dashboard</li> 
+
+<li>📁 Gestión de archivos con Multer</li> 
+
+</ul> 
+
+</section> 
+
+<!-- ================================================= --> 
+
+<!-- JWT --> 
+
+<!-- ================================================= --> 
+
+<section class="chapter"> 
+
+<h2>🔐 2. Middleware verifyToken</h2> 
+
+<p> 
+El middleware <code>verifyToken</code> permite proteger determinadas 
+rutas de la API mediante un token JWT. 
+</p> 
+
+<h3>Importación de jsonwebtoken</h3> 
+
+<pre> 
+const jwt = require("jsonwebtoken"); 
+</pre> 
+
+<p> 
+La biblioteca <code>jsonwebtoken</code> permite crear y verificar 
+tokens JWT. 
+</p> 
+
+<h3>Creación del middleware</h3> 
+
+<pre> 
+const verifyToken = (req, res, next) => { 
+</pre> 
+
+<p> 
+El middleware recibe tres parámetros: 
+</p> 
+
+<ul> 
+
+<li><code>req</code>: la solicitud HTTP</li> 
+
+<li><code>res</code>: la respuesta HTTP</li> 
+
+<li><code>next</code>: permite continuar hacia la siguiente función</li> 
+
+</ul> 
+
+<h3>Obtención del header Authorization</h3> 
+
+<pre> 
+console.log( 
+    "Authorization :", 
+    req.headers.authorization 
+); 
+ 
+const token = 
+    req.headers.authorization?.split(" ")[1]; 
+</pre> 
+
+<p> 
+El frontend normalmente envía el token con el siguiente formato: 
+</p> 
+
+<pre> 
+Authorization: Bearer TOKEN 
+</pre> 
+
+<p> 
+El método <code>split(" ")</code> separa: 
+</p> 
+
+<pre> 
+Bearer 
+TOKEN 
+</pre> 
+
+<p> 
+El segundo elemento, con el índice <code>[1]</code>, corresponde al token. 
+</p> 
+
+<h3>Verificación de la existencia del token</h3> 
+
+<pre> 
+if (!token) { 
+ 
+    return res.status(401).json({ 
+ 
+        success: false, 
+ 
+        message: "Accès refusé, token manquant", 
+ 
+    }); 
+ 
+} 
+</pre> 
+
+<p> 
+Si no se envía ningún token, el servidor devuelve un error 
+<strong>401 Unauthorized</strong>. 
+</p>

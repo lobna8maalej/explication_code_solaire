@@ -1,0 +1,627 @@
+```html
+<!DOCTYPE html> 
+<html lang="pt-BR"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Document</title> 
+<link rel="stylesheet" href="documentationRoutes.css"> 
+ 
+</head> 
+<body> 
+    <section class="chapter"> 
+ 
+    <h2> 
+        # 17 — Rotas da API Backend 
+    </h2> 
+ 
+    <p> 
+        Os arquivos presentes na pasta 
+        <code>routes</code> definem as diferentes 
+        URLs da API Backend do Solar Energy. 
+    </p> 
+ 
+    <p> 
+        Cada rota recebe uma requisição HTTP proveniente do 
+        frontend React e a encaminha para o controller 
+        correspondente. 
+    </p> 
+ 
+    <h3> 
+        Estrutura geral de uma rota 
+    </h3> 
+ 
+    <pre><code>const express = require("express"); 
+ 
+const router = express.Router(); 
+ 
+router.get("/", controller); 
+ 
+module.exports = router;</code></pre> 
+ 
+    <ul> 
+ 
+        <li> 
+            <code>express</code> importa o framework Express. 
+        </li> 
+ 
+        <li> 
+            <code>express.Router()</code> permite criar 
+            um router independente. 
+        </li> 
+ 
+        <li> 
+            Os métodos <code>GET</code>, <code>POST</code>, 
+            <code>PUT</code> e <code>DELETE</code> 
+            definem as operações da API. 
+        </li> 
+ 
+        <li> 
+            O controller contém a lógica executada 
+            quando a rota é chamada. 
+        </li> 
+ 
+        <li> 
+            <code>module.exports</code> permite utilizar 
+            o router no <code>app.js</code>. 
+        </li> 
+ 
+    </ul> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     18. APPOINTMENT ROUTES 
+================================================== --> 
+ 
+<section class="chapter"> 
+ 
+    <h2> 
+        # 18 — Rotas de agendamentos 
+    </h2> 
+ 
+    <p> 
+        O arquivo <code>appointmentRoutes.js</code> 
+        é utilizado para gerenciar os agendamentos dos clientes. 
+    </p> 
+ 
+    <pre><code>const express = require("express"); 
+ 
+const router = express.Router(); 
+ 
+const { 
+    createAppointment, 
+    getAppointments, 
+    getAppointmentById, 
+    updateAppointment, 
+    deleteAppointment, 
+} = require("../controllers/appointmentController");</code></pre> 
+ 
+    <p> 
+        As funções do controller são importadas para 
+        serem utilizadas pelas diferentes rotas. 
+    </p> 
+ 
+    <h3> 
+        Criar um agendamento 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/", 
+    createAppointment 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota utiliza o método 
+        <code>POST</code> para criar um novo agendamento. 
+    </p> 
+ 
+    <h3> 
+        Obter todos os agendamentos 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/", 
+    getAppointments 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota retorna a lista de agendamentos 
+        armazenados no MongoDB. 
+    </p> 
+ 
+    <h3> 
+        Obter um agendamento por ID 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/:id", 
+    getAppointmentById 
+);</code></pre> 
+ 
+    <p> 
+        <code>:id</code> representa o identificador do 
+        agendamento presente na URL. 
+    </p> 
+ 
+    <h3> 
+        Atualizar um agendamento 
+    </h3> 
+ 
+    <pre><code>router.put( 
+    "/:id", 
+    updateAppointment 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota permite atualizar um agendamento 
+        existente. 
+    </p> 
+ 
+    <h3> 
+        Excluir um agendamento 
+    </h3> 
+ 
+    <pre><code>router.delete( 
+    "/:id", 
+    deleteAppointment 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota exclui o agendamento correspondente 
+        ao identificador fornecido. 
+    </p> 
+ 
+    <div class="info"> 
+ 
+        <strong>URL principal:</strong> 
+ 
+        <code>/api/appointments</code> 
+ 
+        <br><br> 
+ 
+        As operações disponíveis são: 
+ 
+        <br><br> 
+ 
+        POST → criar 
+ 
+        <br> 
+ 
+        GET → obter 
+ 
+        <br> 
+ 
+        PUT → atualizar 
+ 
+        <br> 
+ 
+        DELETE → excluir 
+ 
+    </div> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     19. AUTH ROUTES 
+================================================== --> 
+ 
+<section class="chapter"> 
+ 
+    <h2> 
+        # 19 — Rotas de autenticação e usuários 
+    </h2> 
+ 
+    <p> 
+        O arquivo <code>authRoutes.js</code> é utilizado para 
+        gerenciar o cadastro, o login e as operações 
+        relacionadas aos usuários. 
+    </p> 
+ 
+    <pre><code>const { 
+    register, 
+    login, 
+    updateUser, 
+    changePassword, 
+    getUsers, 
+    deleteUser 
+} = require("../controllers/authController");</code></pre> 
+ 
+    <p> 
+        As funções do controller de autenticação 
+        são importadas de 
+        <code>authController.js</code>. 
+    </p> 
+ 
+    <h3> 
+        Criar uma conta 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/register", 
+    register 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota permite que um novo usuário 
+        crie uma conta. 
+    </p> 
+ 
+    <h3> 
+        Login 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/login", 
+    login 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota permite que o usuário faça login. 
+        O controller verifica as credenciais de acesso 
+        e pode gerar um token JWT. 
+    </p> 
+ 
+    <h3> 
+        Obter usuários 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/users", 
+    getUsers 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota obtém a lista de usuários. 
+    </p> 
+ 
+    <h3> 
+        Atualizar um usuário 
+    </h3> 
+ 
+    <pre><code>router.put( 
+    "/:id", 
+    updateUser 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota permite atualizar as informações 
+        de um usuário identificado pelo seu ID. 
+    </p> 
+ 
+    <h3> 
+        Alterar a senha 
+    </h3> 
+ 
+    <pre><code>router.put( 
+    "/:id/password", 
+    changePassword 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota permite alterar a senha 
+        de um usuário. 
+    </p> 
+ 
+    <h3> 
+        Excluir um usuário 
+    </h3> 
+ 
+    <pre><code>router.delete( 
+    "/:id", 
+    deleteUser 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota exclui o usuário correspondente 
+        ao ID. 
+    </p> 
+ 
+    <div class="info"> 
+ 
+        <strong>Exemplos de URL:</strong> 
+ 
+        <br><br> 
+ 
+        <code>/api/users/register</code> 
+ 
+        <br> 
+ 
+        <code>/api/users/login</code> 
+ 
+        <br> 
+ 
+        <code>/api/users/users</code> 
+ 
+        <br> 
+ 
+        <code>/api/users/:id</code> 
+ 
+        <br> 
+ 
+        <code>/api/users/:id/password</code> 
+ 
+    </div> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     20. BATTERY ROUTES 
+================================================== --> 
+ 
+<section class="chapter"> 
+ 
+    <h2> 
+        # 20 — Rotas de baterias 
+    </h2> 
+ 
+    <p> 
+        O arquivo <code>batteryRoutes.js</code> é utilizado 
+        para gerenciar as baterias solares. 
+    </p> 
+ 
+    <pre><code>const batteryController = 
+    require("../controllers/batteryController");</code></pre> 
+ 
+    <p> 
+        O controller contém as funções necessárias 
+        para realizar as operações CRUD. 
+    </p> 
+ 
+    <h3> 
+        Rotas disponíveis 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/", 
+    batteryController.createBattery 
+); 
+ 
+router.get( 
+    "/", 
+    batteryController.getBatteries 
+); 
+ 
+router.get( 
+    "/:id", 
+    batteryController.getBatteryById 
+); 
+ 
+router.put( 
+    "/:id", 
+    batteryController.updateBattery 
+); 
+ 
+router.delete( 
+    "/:id", 
+    batteryController.deleteBattery 
+);</code></pre> 
+ 
+    <table> 
+ 
+        <tr> 
+            <th>Método</th> 
+            <th>URL</th> 
+            <th>Ação</th> 
+        </tr> 
+ 
+        <tr> 
+            <td>POST</td> 
+            <td>/api/batteries</td> 
+            <td>Criar uma bateria</td> 
+        </tr> 
+ 
+        <tr> 
+            <td>GET</td> 
+            <td>/api/batteries</td> 
+            <td>Obter as baterias</td> 
+        </tr> 
+ 
+        <tr> 
+            <td>GET</td> 
+            <td>/api/batteries/:id</td> 
+            <td>Obter uma bateria</td> 
+        </tr> 
+ 
+        <tr> 
+            <td>PUT</td> 
+            <td>/api/batteries/:id</td> 
+            <td>Atualizar uma bateria</td> 
+        </tr> 
+ 
+        <tr> 
+            <td>DELETE</td> 
+            <td>/api/batteries/:id</td> 
+            <td>Excluir uma bateria</td> 
+        </tr> 
+ 
+    </table> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     21. CONTACT ROUTES 
+================================================== --> 
+ 
+<section class="chapter"> 
+ 
+    <h2> 
+        # 21 — Rotas de mensagens de contato 
+    </h2> 
+ 
+    <p> 
+        O arquivo <code>contactRoutes.js</code> é utilizado 
+        para gerenciar as mensagens enviadas pelo formulário 
+        de contato. 
+    </p> 
+ 
+    <h3> 
+        Importação do middleware JWT 
+    </h3> 
+ 
+    <pre><code>const { 
+    verifyToken 
+} = require("../middleware/auth");</code></pre> 
+ 
+    <p> 
+        O middleware <code>verifyToken</code> permite 
+        proteger determinadas rotas. 
+    </p> 
+ 
+    <h3> 
+        Enviar uma mensagem 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/", 
+    createContact 
+);</code></pre> 
+ 
+    <div class="success"> 
+ 
+        <strong>Rota pública:</strong> 
+ 
+        <br><br> 
+ 
+        O cliente pode enviar uma mensagem sem fornecer 
+        um token JWT. 
+ 
+    </div> 
+ 
+    <h3> 
+        Obter os contatos 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/", 
+    verifyToken, 
+    getContacts 
+);</code></pre> 
+ 
+    <p> 
+        Esta rota é protegida pelo 
+        <code>verifyToken</code>. 
+    </p> 
+ 
+    <h3> 
+        Obter um contato 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/:id", 
+    verifyToken, 
+    getContactById 
+);</code></pre> 
+ 
+    <h3> 
+        Atualizar um contato 
+    </h3> 
+ 
+    <pre><code>router.put( 
+    "/:id", 
+    verifyToken, 
+    updateContact 
+);</code></pre> 
+ 
+    <h3> 
+        Excluir um contato 
+    </h3> 
+ 
+    <pre><code>router.delete( 
+    "/:id", 
+    verifyToken, 
+    deleteContact 
+);</code></pre> 
+ 
+    <table> 
+ 
+        <tr> 
+            <th>Rota</th> 
+            <th>Proteção</th> 
+            <th>Ação</th> 
+        </tr> 
+ 
+        <tr> 
+            <td>POST /api/contacts</td> 
+            <td>Pública</td> 
+            <td>Enviar uma mensagem</td> 
+        </tr> 
+ 
+        <tr> 
+            <td>GET /api/contacts</td> 
+            <td>JWT</td> 
+            <td>Obter as mensagens</td> 
+        </tr> 
+ 
+        <tr> 
+            <td>GET /api/contacts/:id</td> 
+            <td>JWT</td> 
+            <td>Obter uma mensagem</td> 
+        </tr> 
+ 
+        <tr> 
+            <td>PUT /api/contacts/:id</td> 
+            <td>JWT</td> 
+            <td>Atualizar uma mensagem</td> 
+        </tr> 
+ 
+        <tr> 
+            <td>DELETE /api/contacts/:id</td> 
+            <td>JWT</td> 
+            <td>Excluir uma mensagem</td> 
+        </tr> 
+ 
+    </table> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     22. DASHBOARD ROUTES 
+================================================== --> 
+ 
+<section class="chapter"> 
+ 
+    <h2> 
+        # 22 — Rota do Dashboard 
+    </h2> 
+ 
+    <p> 
+        O arquivo <code>dashboardRoutes.js</code> é utilizado 
+        para obter as estatísticas gerais da aplicação. 
+    </p> 
+ 
+    <pre><code>const { 
+    getDashboardStats 
+} = require("../controllers/dashboardController"); 
+ 
+const { 
+    verifyToken 
+} = require("../middleware/auth");</code></pre> 
+ 
+    <h3> 
+        Rota protegida 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/", 
+    verifyToken, 
+    getDashboardStats 
+);</code></pre> 
+ 
+    <p> 
+        Antes de executar 
+        <code>getDashboardStats</code>, 
+        o middleware <code>verifyToken</code> 
+        verifica o token JWT. 
+    </p> 
+ 
+    <div class="info"> 
+ 
+        <strong>Fluxo:</strong> 
+ 
+```

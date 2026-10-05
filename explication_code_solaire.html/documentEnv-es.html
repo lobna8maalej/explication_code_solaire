@@ -1,0 +1,141 @@
+```html
+<!DOCTYPE html> 
+<html lang="es"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Document</title> 
+<link rel="stylesheet" href="documentEnv.css"> 
+ 
+</head> 
+<body> 
+    <h2>Configuración de las variables de entorno</h2> 
+ 
+<p> 
+El archivo <strong>.env</strong> contiene las variables de entorno necesarias 
+para el funcionamiento del backend de la plataforma <strong>Solar Energy</strong>. 
+Estas variables permiten configurar el servidor, la base de datos, 
+la autenticación, los pagos, el almacenamiento de imágenes y el envío de correos electrónicos. 
+</p> 
+ 
+<p> 
+<strong>Importante:</strong> las claves API, secretos, contraseñas y credenciales 
+nunca deben publicarse en la documentación, en GitHub ni en el código 
+fuente accesible públicamente. 
+</p> 
+ 
+<h3>Ejemplo de archivo .env</h3> 
+ 
+<pre><code> 
+PORT=3000 
+ 
+MONGO_URI=mongodb://127.0.0.1:27017/solar_db 
+ 
+JWT_SECRET=your_secret_key 
+ 
+STRIPE_SECRET_KEY=your_stripe_secret_key 
+ 
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name 
+CLOUDINARY_API_KEY=your_cloudinary_api_key 
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret 
+ 
+EMAIL_USER=your_email@example.com 
+EMAIL_PASS=your_email_app_password 
+</code></pre> 
+ 
+<h3>Explicación de las variables</h3> 
+ 
+<h4>PORT</h4> 
+ 
+<p> 
+<strong>PORT</strong> define el puerto utilizado por el servidor Node.js/Express. 
+En este ejemplo, el backend funciona en el puerto <strong>3000</strong>. 
+</p> 
+ 
+<h4>MONGO_URI</h4> 
+ 
+<p> 
+<strong>MONGO_URI</strong> contiene la URL de conexión a MongoDB. 
+La base de datos utilizada por la plataforma se llama 
+<strong>solar_db</strong> en este ejemplo. 
+</p> 
+ 
+<h4>JWT_SECRET</h4> 
+ 
+<p> 
+<strong>JWT_SECRET</strong> es una clave secreta utilizada para generar y verificar 
+los JSON Web Tokens (JWT). Estos tokens permiten principalmente proteger 
+la autenticación y el acceso a las funcionalidades protegidas. 
+</p> 
+ 
+<h4>STRIPE_SECRET_KEY</h4> 
+ 
+<p> 
+<strong>STRIPE_SECRET_KEY</strong> corresponde a la clave secreta utilizada para 
+comunicarse con la API de Stripe desde el backend. 
+Permite principalmente crear y gestionar las operaciones de pago. 
+</p> 
+ 
+<p> 
+La clave de Stripe debe mantenerse estrictamente confidencial y nunca debe 
+colocarse en el frontend ni publicarse en un repositorio de GitHub. 
+Durante el despliegue para un cliente, esta variable debe configurarse con 
+la clave de Stripe de la propia cuenta del cliente. 
+</p> 
+ 
+<h4>CLOUDINARY_CLOUD_NAME</h4> 
+ 
+<p> 
+<strong>CLOUDINARY_CLOUD_NAME</strong> identifica la cuenta de Cloudinary utilizada 
+para almacenar y gestionar las imágenes de la plataforma. 
+</p> 
+ 
+<h4>CLOUDINARY_API_KEY</h4> 
+ 
+<p> 
+<strong>CLOUDINARY_API_KEY</strong> corresponde a la clave API utilizada por el 
+backend para comunicarse con Cloudinary. 
+</p> 
+ 
+<h4>CLOUDINARY_API_SECRET</h4> 
+ 
+<p> 
+<strong>CLOUDINARY_API_SECRET</strong> es el secreto asociado a la cuenta 
+de Cloudinary. Debe mantenerse confidencial. 
+</p> 
+ 
+<h4>EMAIL_USER</h4> 
+ 
+<p> 
+<strong>EMAIL_USER</strong> contiene la dirección de correo electrónico utilizada por el backend 
+para enviar correos electrónicos, por ejemplo, notificaciones o confirmaciones. 
+</p> 
+ 
+<h4>EMAIL_PASS</h4> 
+ 
+<p> 
+<strong>EMAIL_PASS</strong> corresponde a la contraseña o contraseña de aplicación 
+utilizada para autenticar el servicio de envío de correos electrónicos. 
+Nunca debe exponerse públicamente. 
+</p> 
+ 
+<h3>Seguridad</h3> 
+ 
+<p> 
+El archivo <strong>.env</strong> debe añadirse al archivo 
+<strong>.gitignore</strong> para evitar que se envíe accidentalmente a GitHub. 
+</p> 
+ 
+<pre><code> 
+.env 
+node_modules/ 
+</code></pre> 
+ 
+<p> 
+Cuando se despliega un proyecto, las variables de entorno deben configurarse 
+directamente en el entorno seguro del servidor o de la plataforma de alojamiento. 
+</p> 
+ 
+</body> 
+</html>
+```

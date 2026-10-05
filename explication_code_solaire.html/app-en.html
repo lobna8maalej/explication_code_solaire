@@ -1,0 +1,1828 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<link rel="stylesheet" href="app.css">
+
+</head>
+<body>
+    <section class="chapter">
+
+    <h2>
+        # 29 — Main Backend Configuration with Express
+    </h2>
+
+    <p>
+        The <code>app.js</code> file is the central configuration
+        point of the Solar Energy Backend.
+    </p>
+
+    <p>
+        It allows Express to be initialized, CORS to be configured,
+        JSON requests to be handled, the different API routes to be
+        registered, the Stripe webhook to be handled, and errors
+        and non-existent routes to be processed.
+    </p>
+
+
+    <!-- ==================================================
+         IMPORTATIONS
+    ================================================== -->
+
+    <h3>
+        Importing Express and CORS
+    </h3>
+
+    <pre><code>const express = require("express");
+const cors = require("cors");
+
+const app = express();</code></pre>
+
+    <p>
+        <code>express</code> is used to create and configure
+        the Backend server.
+    </p>
+
+    <p>
+        <code>cors</code> allows requests coming
+        from the React frontend.
+    </p>
+
+    <p>
+        <code>express()</code> creates the Express application
+        that will then be used to register middlewares
+        and routes.
+    </p>
+
+
+    <!-- ==================================================
+         IMPORTATION DES ROUTES
+    ================================================== -->
+
+    <h3>
+        Importing the Routes
+    </h3>
+
+    <pre><code>const appointmentRoutes =
+    require("./routes/appointmentRoutes");
+
+const batteryRoutes =
+    require("./routes/batteryRoutes");
+
+const contactRoutes =
+    require("./routes/contactRoutes");
+
+const dashboardRoutes =
+    require("./routes/dashboardRoutes");
+
+const inverterRoutes =
+    require("./routes/inverterRoutes");
+
+const panelRoutes =
+    require("./routes/panelRoutes");
+
+const paymentRoutes =
+    require("./routes/paymentRoutes");
+
+const quoteRoutes =
+    require("./routes/quoteRoutes");
+
+const reviewRoutes =
+    require("./routes/reviewRoutes");
+
+const authRoutes =
+    require("./routes/authRoutes");</code></pre>
+
+    <p>
+        Each route file has a specific responsibility
+        within the application.
+    </p>
+
+    <table>
+
+        <tr>
+            <th>File</th>
+            <th>Functionality</th>
+        </tr>
+
+        <tr>
+            <td>appointmentRoutes.js</td>
+            <td>Appointment management</td>
+        </tr>
+
+        <tr>
+            <td>batteryRoutes.js</td>
+            <td>Battery management</td>
+        </tr>
+
+        <tr>
+            <td>contactRoutes.js</td>
+            <td>Contact message management</td>
+        </tr>
+
+        <tr>
+            <td>dashboardRoutes.js</td>
+            <td>Dashboard statistics</td>
+        </tr>
+
+        <tr>
+            <td>inverterRoutes.js</td>
+            <td>Inverter management</td>
+        </tr>
+
+        <tr>
+            <td>panelRoutes.js</td>
+            <td>Solar panel management</td>
+        </tr>
+
+        <tr>
+            <td>paymentRoutes.js</td>
+            <td>Payment and Stripe management</td>
+        </tr>
+
+        <tr>
+            <td>quoteRoutes.js</td>
+            <td>Quote request management</td>
+        </tr>
+
+        <tr>
+            <td>reviewRoutes.js</td>
+            <td>Customer review management</td>
+        </tr>
+
+        <tr>
+            <td>authRoutes.js</td>
+            <td>Authentication and users</td>
+        </tr>
+
+    </table>
+
+
+    <!-- ==================================================
+         CORS
+    ================================================== -->
+
+    <h3>
+        CORS Configuration
+    </h3>
+
+    <pre><code>app.use(
+    cors({
+        origin: "http://localhost:5173",
+        methods: [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH"
+        ],
+        credentials: true,
+    })
+);</code></pre>
+
+    <p>
+        CORS allows the Backend to accept requests sent
+        by the React frontend.
+    </p>
+
+    <p>
+        In this project, the frontend runs on:
+    </p>
+
+    <div class="info">
+
+        <strong>Frontend:</strong>
+
+        <br>
+
+        <code>http://localhost:5173</code>
+
+    </div>
+
+    <p>
+        The <code>origin</code> property therefore specifically
+        authorizes this origin.
+    </p>
+
+    <p>
+        The <code>methods</code> property specifies the HTTP methods
+        allowed by the server.
+    </p>
+
+    <p>
+        <code>credentials: true</code> allows credentials
+        to be used in requests when necessary.
+    </p>
+
+
+    <!-- ==================================================
+         STRIPE WEBHOOK
+    ================================================== -->
+
+    <h3>
+        Stripe Webhook Management
+    </h3>
+
+    <pre><code>app.post(
+    "/api/payments/webhook",
+
+    express.raw({
+        type: "application/json",
+    }),
+
+    require("./controllers/paymentController").stripeWebhook
+);</code></pre>
+
+    <p>
+        This route receives notifications sent by Stripe
+        regarding payment events.
+    </p>
+
+    <p>
+        The webhook uses
+        <code>express.raw()</code> to receive the original
+        request body as raw data.
+    </p>
+
+    <div class="important">
+
+        <strong>Important:</strong>
+
+        <br><br>
+
+        The Stripe webhook is placed before
+        <code>express.json()</code>.
+        This organization is necessary because Stripe may
+        need the raw request body to correctly verify
+        the webhook signature.
+
+    </div>
+
+</section>
+</body>
+</html>
+``````html
+<h3>
+    JSON Middleware
+</h3>
+
+<pre><code>app.use(express.json());</code></pre>
+
+<p>
+    This middleware allows Express to read requests
+    containing JSON data.
+</p>
+
+<p>
+    For example, when a React form sends:
+</p>
+
+<pre><code>{
+    "name": "Lobna",
+    "email": "client@example.com",
+    "phone": "58229886"
+}</code></pre>
+
+<p>
+    Express automatically parses the JSON data
+    so that it can be accessed through:
+    <code>req.body</code>.
+</p>
+
+
+<!-- ==================================================
+     URLENCODED
+================================================== -->
+
+<h3>
+    Handling URL-encoded Data
+</h3>
+
+<pre><code>app.use(
+    express.urlencoded({
+        extended: true,
+    })
+);</code></pre>
+
+<p>
+    This middleware allows the server to process data
+    sent using the
+    <code>application/x-www-form-urlencoded</code> format.
+</p>
+
+<p>
+    The <code>extended: true</code> option also allows
+    more complex data structures to be handled.
+</p>
+
+
+<!-- ==================================================
+     TEST API
+================================================== -->
+
+<h3>
+    Main Test Route
+</h3>
+
+<pre><code>app.get("/", (req, res) => {
+
+    res.status(200).json({
+        success: true,
+        message: "☀️ Solar API is running...",
+    });
+
+});</code></pre>
+
+<p>
+    This route allows you to quickly verify that
+    the Backend API is working correctly.
+</p>
+
+<div class="success">
+
+    <strong>Result:</strong>
+
+    <br><br>
+
+    When the user accesses the root of the Backend,
+    the server returns a JSON response indicating that
+    the Solar Energy API is running.
+
+</div>
+
+
+<!-- ==================================================
+     ENREGISTREMENT DES ROUTES
+================================================== -->
+
+<h3>
+    Registering the API Routes
+</h3>
+
+<pre><code>app.use(
+    "/api/appointments",
+    appointmentRoutes
+);
+
+app.use(
+    "/api/batteries",
+    batteryRoutes
+);
+
+app.use(
+    "/api/contacts",
+    contactRoutes
+);
+
+app.use(
+    "/api/dashboard",
+    dashboardRoutes
+);
+
+app.use(
+    "/api/inverters",
+    inverterRoutes
+);
+
+app.use(
+    "/api/panels",
+    panelRoutes
+);
+
+app.use(
+    "/api/payments",
+    paymentRoutes
+);
+
+app.use(
+    "/api/quotes",
+    quoteRoutes
+);
+
+app.use(
+    "/api/reviews",
+    reviewRoutes
+);
+
+app.use(
+    "/api/users",
+    authRoutes
+);</code></pre>
+
+<p>
+    <code>app.use()</code> associates a base URL
+    with each route file.
+</p>
+
+<p>
+    For example:
+</p>
+
+<pre><code>app.use(
+    "/api/panels",
+    panelRoutes
+);</code></pre>
+
+<p>
+    means that all routes defined in
+    <code>panelRoutes.js</code> start with:
+</p>
+
+<div class="info">
+
+    <code>/api/panels</code>
+
+</div>
+
+<p>
+    Therefore, the route:
+</p>
+
+<pre><code>router.get("/", panelController.getPanels);</code></pre>
+
+<p>
+    finally becomes:
+</p>
+
+<div class="success">
+
+    <strong>GET</strong>
+
+    <br><br>
+
+    <code>/api/panels</code>
+
+</div>
+
+
+<!-- ==================================================
+     ROUTE 404
+================================================== -->
+
+<h3>
+    Handling Non-existent Routes — 404
+</h3>
+
+<pre><code>app.use((req, res) => {
+
+    res.status(404).json({
+        success: false,
+        message:
+            `Route introuvable :
+            ${req.method}
+            ${req.originalUrl}`,
+    });
+
+});</code></pre>
+
+<p>
+    This middleware is executed when none of the previous
+    routes match the received request.
+</p>
+
+<p>
+    The server then returns the HTTP status
+    <code>404</code>.
+</p>
+
+<div class="important">
+
+    <strong>Example:</strong>
+
+    <br><br>
+
+    If the client requests:
+
+    <br>
+
+    <code>GET /api/test123</code>
+
+    <br><br>
+
+    and this route does not exist, the server returns
+    an error indicating that the route cannot be found.
+
+</div>
+```
+```html
+<h3>
+    Global Error Handling
+</h3>
+
+<pre><code>app.use((err, req, res, next) => {
+
+    console.error(
+        "❌ Erreur serveur :",
+        err
+    );
+
+    res.status(err.status || 500).json({
+
+        success: false,
+
+        message:
+            err.message ||
+            "Erreur interne du serveur",
+
+    });
+
+});</code></pre>
+
+<p>
+    This middleware allows Backend errors to be handled
+    centrally.
+</p>
+
+<p>
+    When an error is passed to Express,
+    it can be handled by this middleware.
+</p>
+
+<p>
+    The server returns an HTTP status code corresponding
+    to the error or, by default, status code
+    <code>500</code>.
+</p>
+
+<div class="info">
+
+    <strong>Response structure:</strong>
+
+    <br><br>
+
+    <code>
+        success: false
+    </code>
+
+    <br>
+
+    <code>
+        message: "Erreur..."
+    </code>
+
+</div>
+
+
+<!-- ==================================================
+     EXPORT
+================================================== -->
+
+<h3>
+    Exporting the Application
+</h3>
+
+<pre><code>module.exports = app;</code></pre>
+
+<p>
+    This statement exports the Express application
+    so that it can be used by the main server file,
+    usually <code>server.js</code> or <code>index.js</code>.
+</p>
+
+
+<!-- ==================================================
+     FLUX GLOBAL
+================================================== -->
+
+<h3>
+    Overall Backend Flow
+</h3>
+
+<div class="info">
+
+    <strong>Architecture:</strong>
+
+    <br><br>
+
+    React
+
+    →
+
+    Axios
+
+    →
+
+    Express
+
+    →
+
+    CORS
+
+    →
+
+    API Route
+
+    →
+
+    Middleware
+
+    →
+
+    Controller
+
+    →
+
+    Mongoose Model
+
+    →
+
+    MongoDB
+
+    <br><br>
+
+    Then the response returns to the frontend:
+
+    <br><br>
+
+    MongoDB
+
+    →
+
+    Controller
+
+    →
+
+    JSON
+
+    →
+
+    Express
+
+    →
+
+    Axios
+
+    →
+
+    React
+
+</div>
+
+
+<!-- ==================================================
+     ORDRE D'EXECUTION
+================================================== -->
+
+<h3>
+    Request Processing Order
+</h3>
+
+<ol>
+
+    <li>
+        The React frontend sends an HTTP request.
+    </li>
+
+    <li>
+        CORS checks whether the frontend origin is authorized.
+    </li>
+
+    <li>
+        The Stripe webhook is handled separately using
+        <code>express.raw()</code> when the request is made to
+        <code>/api/payments/webhook</code>.
+    </li>
+
+    <li>
+        <code>express.json()</code> parses the JSON data.
+    </li>
+
+    <li>
+        Express searches for the corresponding route.
+    </li>
+
+    <li>
+        Any required middleware, such as
+        <code>verifyToken</code>, is executed.
+    </li>
+
+    <li>
+        The controller processes the request.
+    </li>
+
+    <li>
+        The Mongoose model communicates with MongoDB.
+    </li>
+
+    <li>
+        The controller returns a JSON response.
+    </li>
+
+    <li>
+        Axios receives the response in the React frontend.
+    </li>
+
+</ol>
+
+
+<!-- ==================================================
+     RÉSUMÉ
+================================================== -->
+
+<h3>
+    Role of app.js
+</h3>
+
+<table>
+
+    <tr>
+        <th>Element</th>
+        <th>Role</th>
+    </tr>
+
+    <tr>
+        <td>Express</td>
+        <td>Backend server creation</td>
+    </tr>
+
+    <tr>
+        <td>CORS</td>
+        <td>Authorization of frontend requests</td>
+    </tr>
+
+    <tr>
+        <td>express.json()</td>
+        <td>Reading JSON data</td>
+    </tr>
+
+    <tr>
+        <td>express.urlencoded()</td>
+        <td>Reading URL-encoded data</td>
+    </tr>
+
+    <tr>
+        <td>Routes</td>
+        <td>Organization of API endpoints</td>
+    </tr>
+
+    <tr>
+        <td>Stripe Webhook</td>
+        <td>Receiving payment events</td>
+    </tr>
+
+    <tr>
+        <td>404</td>
+        <td>Handling non-existent routes</td>
+    </tr>
+
+    <tr>
+        <td>Error Handler</td>
+        <td>Global error handling</td>
+    </tr>
+
+    <tr>
+        <td>module.exports</td>
+        <td>Exporting the Express application</td>
+    </tr>
+
+</table>
+``````html
+<div class="success">
+
+    <strong>Result:</strong>
+
+    <br><br>
+
+    The <code>app.js</code> file centralizes the configuration
+    of the Solar Energy Backend. It connects the different routes,
+    middlewares, authentication, Stripe and controllers
+    to build an organized and maintainable REST API.
+
+</div>
+
+
+<section class="chapter">
+
+<h2>
+    # 31 — .env File Configuration
+</h2>
+
+<p>
+    The <code>.env</code> file contains the environment variables
+    used by the Solar Energy Backend.
+</p>
+
+<p>
+    It allows the server configuration and the sensitive information
+    required by the different services used by the application
+    to be centralized: MongoDB, JWT, Stripe, Cloudinary
+    and email delivery.
+</p>
+
+<div class="important">
+
+    <strong>⚠️ Warning:</strong>
+
+    <br><br>
+
+    The <code>.env</code> file may contain sensitive information.
+    It must never be published on GitHub or directly included
+    in the React frontend.
+
+</div>
+
+
+<!-- ==================================================
+     EXEMPLE .ENV
+================================================== -->
+
+<h3>
+    Example of .env File Configuration
+</h3>
+
+<pre><code>PORT=3000
+
+MONGO_URI=mongodb://127.0.0.1:27017/solar_db
+
+JWT_SECRET=YOUR_JWT_SECRET
+
+STRIPE_SECRET_KEY=YOUR_STRIPE_SECRET_KEY
+
+CLOUDINARY_CLOUD_NAME=YOUR_CLOUDINARY_CLOUD_NAME
+
+CLOUDINARY_API_KEY=YOUR_CLOUDINARY_API_KEY
+
+CLOUDINARY_API_SECRET=YOUR_CLOUDINARY_API_SECRET
+
+EMAIL_USER=YOUR_EMAIL
+
+EMAIL_PASS=YOUR_EMAIL_APP_PASSWORD</code></pre>
+
+<p>
+    These values are automatically loaded by
+    <code>dotenv</code> when the Backend starts.
+</p>
+
+
+<!-- ==================================================
+     DOTENV
+================================================== -->
+
+<h3>
+    Loading the .env File with dotenv
+</h3>
+
+<pre><code>require("dotenv").config();</code></pre>
+
+<p>
+    This statement loads the variables defined in the
+    <code>.env</code> file and makes them accessible
+    in Node.js through <code>process.env</code>.
+</p>
+
+<div class="info">
+
+    <strong>How it works:</strong>
+
+    <br><br>
+
+    <code>.env</code>
+
+    →
+
+    <code>dotenv.config()</code>
+
+    →
+
+    <code>process.env</code>
+
+</div>
+
+<p>
+    For example, if the <code>.env</code> file contains:
+</p>
+
+<pre><code>PORT=3000</code></pre>
+
+<p>
+    the JavaScript code can retrieve this value using:
+</p>
+
+<pre><code>process.env.PORT</code></pre>
+
+
+<!-- ==================================================
+     PORT
+================================================== -->
+
+<h3>
+    PORT Variable
+</h3>
+
+<pre><code>PORT=3000</code></pre>
+
+<p>
+    The <code>PORT</code> variable defines the port on which
+    the Express server listens for HTTP requests.
+</p>
+
+<p>
+    In the <code>server.js</code> file, this variable
+    is retrieved using:
+</p>
+
+<pre><code>const PORT = process.env.PORT || 3000;</code></pre>
+
+<p>
+    If <code>PORT</code> is defined in the
+    <code>.env</code> file, its value is used.
+    Otherwise, the server uses port <code>3000</code>
+    as the default value.
+</p>
+
+<div class="success">
+
+    <strong>Current Configuration:</strong>
+
+    <br><br>
+
+    <code>PORT=3000</code>
+
+    <br><br>
+
+    The Backend is therefore accessible at:
+
+    <br><br>
+
+    <code>http://localhost:3000</code>
+
+</div>
+
+
+<!-- ==================================================
+     MONGODB
+================================================== -->
+
+<h3>
+    MONGO_URI Variable
+</h3>
+
+<pre><code>MONGO_URI=mongodb://127.0.0.1:27017/solar_db</code></pre>
+
+<p>
+    The <code>MONGO_URI</code> variable contains the address
+    used by Mongoose to connect to MongoDB.
+</p>
+
+<p>
+    In this project, the MongoDB database used
+    is called <code>solar_db</code>.
+</p>
+
+<p>
+    In <code>server.js</code>, the connection is established
+    using:
+</p>
+
+<pre><code>mongoose
+.connect(process.env.MONGO_URI)</code></pre>
+
+<div class="info">
+
+    <strong>Connection Flow:</strong>
+
+    <br><br>
+
+    <code>.env</code>
+
+    →
+
+    <code>MONGO_URI</code>
+
+    →
+
+    <code>mongoose.connect()</code>
+
+    →
+
+    <strong>MongoDB</strong>
+
+    →
+
+    <code>solar_db</code>
+
+</div>
+
+
+<!-- ==================================================
+     JWT
+================================================== -->
+
+<h3>
+    JWT_SECRET Variable
+</h3>
+
+<pre><code>JWT_SECRET=YOUR_JWT_SECRET</code></pre>
+
+<p>
+    The <code>JWT_SECRET</code> variable contains a secret key
+    used by the Backend to secure JWT tokens.
+</p>
+
+<p>
+    It is mainly involved in the user authentication process.
+</p>
+
+<p>
+    The Backend can retrieve this value using:
+</p>
+
+<pre><code>process.env.JWT_SECRET</code></pre>
+
+<div class="important">
+
+    <strong>🔐 Security:</strong>
+
+    <br><br>
+
+    The actual value of <code>JWT_SECRET</code> must remain
+    confidential. It must not be published on GitHub
+    or in public documentation.
+
+</div>
+
+
+<!-- ==================================================
+     STRIPE
+================================================== -->
+
+<h3>
+    STRIPE_SECRET_KEY Variable
+</h3>
+
+<pre><code>STRIPE_SECRET_KEY=YOUR_STRIPE_SECRET_KEY</code></pre>
+
+<p>
+    This variable contains the secret key that allows the
+    Backend to communicate with Stripe.
+</p>
+
+<p>
+    It is used on the server side to perform payment-related
+    operations, including the creation of Stripe Checkout sessions.
+</p>
+
+<p>
+    The Backend can retrieve the key using:
+</p>
+
+<pre><code>process.env.STRIPE_SECRET_KEY</code></pre>
+
+<div class="important">
+
+    <strong>⚠️ Important:</strong>
+
+    <br><br>
+
+    A Stripe secret key must never be placed in the
+    React frontend.
+
+    <br><br>
+
+    It must only be used on the Backend and stored
+    in a secure environment variable.
+
+</div>
+
+
+<!-- ==================================================
+     CLOUDINARY
+================================================== -->
+
+<h3>
+    Cloudinary Variables
+</h3>
+
+<pre><code>CLOUDINARY_CLOUD_NAME=YOUR_CLOUDINARY_CLOUD_NAME
+
+CLOUDINARY_API_KEY=YOUR_CLOUDINARY_API_KEY
+
+CLOUDINARY_API_SECRET=YOUR_CLOUDINARY_API_SECRET</code></pre>
+
+<p>
+    These three variables allow the Backend to connect
+    to the Cloudinary service to manage images and files
+    used by the application.
+</p>
+
+<table>
+
+    <tr>
+        <th>Variable</th>
+        <th>Role</th>
+    </tr>
+
+    <tr>
+        <td>
+            CLOUDINARY_CLOUD_NAME
+        </td>
+        <td>
+            Identifies the Cloudinary account being used.
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            CLOUDINARY_API_KEY
+        </td>
+        <td>
+            Identifies the API key used by the application.
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            CLOUDINARY_API_SECRET
+        </td>
+        <td>
+            Allows secure authentication with Cloudinary.
+        </td>
+    </tr>
+
+</table>
+
+<p>
+    The variables can be retrieved in the Backend using:
+</p>
+
+<pre><code>process.env.CLOUDINARY_CLOUD_NAME
+
+process.env.CLOUDINARY_API_KEY
+
+process.env.CLOUDINARY_API_SECRET</code></pre>
+
+<div class="important">
+
+    <strong>🔐 Security:</strong>
+
+    <br><br>
+
+    The <code>CLOUDINARY_API_SECRET</code> variable must
+    remain secret and must never be exposed in the frontend
+    or in a public repository.
+
+</div>
+
+
+<!-- ==================================================
+     EMAIL
+================================================== -->
+
+<h3>
+    Email Delivery Variables
+</h3>
+
+<pre><code>EMAIL_USER=YOUR_EMAIL
+
+EMAIL_PASS=YOUR_EMAIL_APP_PASSWORD</code></pre>
+
+<p>
+    These variables allow the Backend to authenticate
+    with the email service used to send messages.
+</p>
+
+<table>
+
+    <tr>
+        <th>Variable</th>
+        <th>Role</th>
+    </tr>
+
+    <tr>
+        <td>
+            EMAIL_USER
+        </td>
+        <td>
+            Email address used by the Backend
+            to send messages.
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            EMAIL_PASS
+        </td>
+        <td>
+            Application password used to authenticate
+            with the email service.
+        </td>
+    </tr>
+
+</table>
+
+<p>
+    The Backend can access this information using:
+</p>
+
+<pre><code>process.env.EMAIL_USER
+
+process.env.EMAIL_PASS</code></pre>
+
+<div class="important">
+
+    <strong>⚠️ Warning:</strong>
+
+    <br><br>
+
+    <code>EMAIL_PASS</code> is sensitive information.
+    It must never be published in the source code,
+    GitHub or public documentation.
+
+</div>
+
+
+<!-- ==================================================
+     UTILISATION SERVER.JS
+================================================== -->
+
+<h3>
+    Using the Variables in server.js
+</h3>
+
+<p>
+    The <code>server.js</code> file mainly uses the
+    <code>PORT</code> and <code>MONGO_URI</code> variables
+    to start the Backend.
+</p>
+
+<pre><code>require("dotenv").config();
+
+const mongoose = require("mongoose");
+const app = require("./app");
+
+const PORT = process.env.PORT || 3000;
+
+mongoose
+.connect(process.env.MONGO_URI)
+.then(() => {
+
+console.log("✅ MongoDB connecté");
+
+app.listen(PORT, () =&gt; {
+
+  console.log(
+    `🚀 Serveur lancé sur http://localhost:${PORT}`
+  );
+
+});
+
+})
+.catch((error) => {
+
+console.error(
+  "❌ Erreur MongoDB :",
+  error.message
+);
+
+process.exit(1);
+
+});</code></pre>
+
+<p>
+    Thanks to <code>dotenv</code>, the values from the
+    <code>.env</code> file become available through
+    <code>process.env</code>.
+</p>
+
+
+<!-- ==================================================
+     TOUTES LES VARIABLES
+================================================== -->
+
+<h3>
+    Accessing Environment Variables
+</h3>
+
+<pre><code>process.env.PORT
+
+process.env.MONGO_URI
+
+process.env.JWT_SECRET
+
+process.env.STRIPE_SECRET_KEY
+
+process.env.CLOUDINARY_CLOUD_NAME
+
+process.env.CLOUDINARY_API_KEY
+
+process.env.CLOUDINARY_API_SECRET
+
+process.env.EMAIL_USER
+
+process.env.EMAIL_PASS</code></pre>
+
+<p>
+    Each variable can therefore be used by the Backend file
+    or service that requires it.
+</p>
+
+
+<!-- ==================================================
+     GITIGNORE
+================================================== -->
+
+<h3>
+    Protecting the .env File with .gitignore
+</h3>
+
+<p>
+    To prevent sensitive variables from being accidentally
+    published on GitHub, the <code>.env</code> file must
+    be added to the <code>.gitignore</code> file.
+</p>
+
+<pre><code># Environment variables
+
+.env</code></pre>
+
+<div class="important">
+
+    <strong>Security Rule:</strong>
+
+    <br><br>
+
+    Never publish:
+
+    <br><br>
+
+    • <code>JWT_SECRET</code>
+
+    <br>
+
+    • <code>STRIPE_SECRET_KEY</code>
+
+    <br>
+
+    • <code>CLOUDINARY_API_SECRET</code>
+
+    <br>
+
+    • <code>EMAIL_PASS</code>
+
+    <br>
+
+    • Any MongoDB passwords
+
+    <br>
+
+    • Other private API keys
+
+</div>
+
+
+<!-- ==================================================
+     VARIABLES PUBLIABLES
+================================================== -->
+
+<h3>
+    Sensitive and Non-sensitive Variables
+</h3>
+
+<table>
+
+    <tr>
+        <th>Variable</th>
+        <th>Usage</th>
+        <th>Protection</th>
+    </tr>
+
+    <tr>
+        <td>PORT</td>
+        <td>
+            Express server port
+        </td>
+        <td>
+            Non-sensitive
+        </td>
+    </tr>
+
+    <tr>
+        <td>MONGO_URI</td>
+        <td>
+            MongoDB connection
+        </td>
+        <td>
+            Must be protected if it contains credentials
+        </td>
+    </tr>
+
+    <tr>
+        <td>JWT_SECRET</td>
+        <td>
+            Signing and verification of JWT tokens
+        </td>
+        <td>
+            Sensitive
+        </td>
+    </tr>
+
+    <tr>
+        <td>STRIPE_SECRET_KEY</td>
+        <td>
+            Communication with Stripe
+        </td>
+        <td>
+            Highly sensitive
+        </td>
+    </tr>
+
+    <tr>
+        <td>CLOUDINARY_CLOUD_NAME</td>
+        <td>
+            Identification of the Cloudinary account
+        </td>
+        <td>
+            Generally non-secret
+        </td>
+    </tr>
+
+    <tr>
+        <td>CLOUDINARY_API_KEY</td>
+        <td>
+            Cloudinary API identification
+        </td>
+        <td>
+            Should be protected
+        </td>
+    </tr>
+
+    <tr>
+        <td>CLOUDINARY_API_SECRET</td>
+        <td>
+            Cloudinary authentication
+        </td>
+        <td>
+            Sensitive
+        </td>
+    </tr>
+
+    <tr>
+        <td>EMAIL_USER</td>
+        <td>
+            Address used for sending emails
+        </td>
+        <td>
+            Depends on the context
+        </td>
+    </tr>
+
+    <tr>
+        <td>EMAIL_PASS</td>
+        <td>
+            Email service authentication
+        </td>
+        <td>
+            Highly sensitive
+        </td>
+    </tr>
+
+</table>
+
+
+<!-- ==================================================
+     RELATION ENV SERVER APP
+================================================== -->
+
+<h3>
+    Relationship Between .env, server.js and app.js
+</h3>
+
+<div class="info">
+
+    <strong>Backend Configuration:</strong>
+
+    <br><br>
+
+    <code>.env</code>
+
+    <br>
+
+    ↓
+
+    <br>
+
+    <code>dotenv.config()</code>
+
+    <br>
+
+    ↓
+
+    <br>
+
+    <code>process.env</code>
+
+    <br>
+
+    ↓
+
+    <br>
+
+    <code>server.js</code>
+
+    <br>
+
+    ↓
+
+    <br>
+
+    <code>MONGO_URI</code>
+
+    →
+
+    <strong>MongoDB</strong>
+
+    <br><br>
+
+    and
+
+    <br><br>
+
+    <code>PORT</code>
+
+    →
+
+    <strong>Express</strong>
+
+    <br><br>
+
+    <code>server.js</code>
+
+    →
+
+    <code>app.js</code>
+
+    →
+
+    <strong>REST API</strong>
+
+</div>
+
+
+<!-- ==================================================
+     ARCHITECTURE
+================================================== -->
+
+<h3>
+    Complete Configuration Architecture
+</h3>
+
+<div class="success">
+
+    <strong>Overall Flow:</strong>
+
+    <br><br>
+
+    <code>.env</code>
+
+    →
+
+    <code>dotenv</code>
+
+    →
+
+    <code>process.env</code>
+
+    <br><br>
+
+    ↓
+
+    <br><br>
+
+    <code>server.js</code>
+
+    <br><br>
+
+    ↓
+
+    <br>
+
+    <code>mongoose.connect(MONGO_URI)</code>
+
+    →
+
+    <strong>MongoDB</strong>
+
+    <br><br>
+
+    ↓
+
+    <br>
+
+    Successful connection
+
+    <br><br>
+
+    ↓
+
+    <br>
+
+    <code>app.listen(PORT)</code>
+
+    <br><br>
+
+    ↓
+
+    <br>
+
+    <strong>Express Server Started</strong>
+
+    <br><br>
+
+    ↓
+
+    <br>
+
+    <code>app.js</code>
+
+    →
+
+    Routes
+
+    →
+
+    Controllers
+
+    →
+
+    Services
+
+    →
+
+    MongoDB / Stripe / Cloudinary / Email
+
+</div>
+
+
+<!-- ==================================================
+     DÉMARRAGE
+================================================== -->
+
+<h3>
+    Backend Startup Example
+</h3>
+
+<pre><code>✅ MongoDB connecté
+
+🚀 Serveur lancé sur http://localhost:3000</code></pre>
+
+<p>
+    The first message confirms that Mongoose successfully
+    established the connection with MongoDB.
+</p>
+
+<p>
+    The second message confirms that the Express server
+    is listening on port <code>3000</code>.
+</p>
+
+
+<!-- ==================================================
+     ERREUR
+================================================== -->
+
+<h3>
+    Example in Case of a MongoDB Error
+</h3>
+
+<pre><code>❌ Erreur MongoDB : ...</code></pre>
+
+<p>
+    If the <code>MONGO_URI</code> variable is incorrect,
+    if MongoDB is not running, or if the database
+    is inaccessible, the connection fails.
+</p>
+
+<p>
+    In this case, <code>server.js</code> displays the error
+    and stops the process using:
+</p>
+
+<pre><code>process.exit(1);</code></pre>
+
+
+<!-- ==================================================
+     RÉSUMÉ
+================================================== -->
+
+<h3>
+    Summary of the .env File
+</h3>
+
+<table>
+
+    <tr>
+        <th>Variable</th>
+        <th>Service</th>
+        <th>Function</th>
+    </tr>
+
+    <tr>
+        <td>PORT</td>
+        <td>Express</td>
+        <td>
+            Defines the server port
+        </td>
+    </tr>
+
+    <tr>
+        <td>MONGO_URI</td>
+        <td>MongoDB</td>
+        <td>
+            Defines the MongoDB connection URL
+        </td>
+    </tr>
+
+    <tr>
+        <td>JWT_SECRET</td>
+        <td>JWT</td>
+        <td>
+            Secures authentication tokens
+        </td>
+    </tr>
+
+    <tr>
+        <td>STRIPE_SECRET_KEY</td>
+        <td>Stripe</td>
+        <td>
+            Enables server-side payment operations
+        </td>
+    </tr>
+
+    <tr>
+        <td>CLOUDINARY_CLOUD_NAME</td>
+        <td>Cloudinary</td>
+        <td>
+            Identifies the Cloudinary account
+        </td>
+    </tr>
+
+    <tr>
+        <td>CLOUDINARY_API_KEY</td>
+        <td>Cloudinary</td>
+        <td>
+            Identifies the Cloudinary API
+        </td>
+    </tr>
+
+    <tr>
+        <td>CLOUDINARY_API_SECRET</td>
+        <td>Cloudinary</td>
+        <td>
+            Authenticates the Backend with Cloudinary
+        </td>
+    </tr>
+
+    <tr>
+        <td>EMAIL_USER</td>
+        <td>Email</td>
+        <td>
+            Address used to send emails
+        </td>
+    </tr>
+
+    <tr>
+        <td>EMAIL_PASS</td>
+        <td>Email</td>
+        <td>
+            Email account authentication
+        </td>
+    </tr>
+
+</table>
+
+
+<!-- ==================================================
+     RÉSULTAT FINAL
+================================================== -->
+
+<div class="success">
+
+    <strong>Result:</strong>
+
+    <br><br>
+
+    The <code>.env</code> file centralizes the configuration
+    of the Solar Energy Backend. It allows
+    <code>server.js</code> to retrieve the server port
+    and MongoDB URL, while the other variables are used
+    by the different Backend services.
+
+    <br><br>
+
+    This organization makes it possible to separate
+    configuration and sensitive information from the
+    application's source code.
+
+</div>
+
+</section>
+
+</section>
+</body>
+</html>
+```
+
+

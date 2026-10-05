@@ -1,0 +1,2497 @@
+```html
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Documentación Backend - Solar Energy</title>
+
+</head>
+
+
+<body
+    style="
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #eef2f5;
+        color: #222;
+        line-height: 1.7;
+    "
+>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header
+    style="
+        background: #1f2937;
+        color: white;
+        padding: 45px 20px;
+        text-align: center;
+    "
+>
+
+<h1
+    style="
+        margin: 0 0 10px;
+        font-size: 34px;
+    "
+>
+    ☀️ Solar Energy — Documentación Backend
+</h1>
+
+<p
+    style="
+        margin: 0;
+        font-size: 17px;
+        color: #d1d5db;
+    "
+>
+    Explicación completa del funcionamiento de la API Node.js,
+    Express y MongoDB
+</p>
+
+</header>
+
+
+<!-- ==================================================
+     CONTENEDOR
+================================================== -->
+
+<div
+    style="
+        width: 90%;
+        max-width: 1200px;
+        margin: 30px auto;
+    "
+>
+
+
+<!-- ==================================================
+     1. INTRODUCCIÓN
+================================================== -->
+
+<section
+    style="
+        background: #ffffff;
+        margin-bottom: 30px;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    "
+>
+
+<h2
+    style="
+        margin-top: 0;
+        color: #1f2937;
+        border-bottom: 2px solid #dbe2e8;
+        padding-bottom: 10px;
+    "
+>
+    # 1 — Arquitectura general del Backend
+</h2>
+
+<p>
+    El backend constituye la parte del servidor de la aplicación
+    Solar Energy.
+</p>
+
+<p>
+    Permite que el frontend React se comunique con la base
+    de datos MongoDB mediante una API REST desarrollada con
+    Node.js y Express.
+</p>
+
+<h3
+    style="
+        color: #374151;
+        margin-top: 25px;
+    "
+>
+    Tecnologías utilizadas
+</h3>
+
+<ul
+    style="
+        padding-left: 25px;
+    "
+>
+
+<li style="margin-bottom: 8px;">
+    <strong>Node.js:</strong>
+    entorno de ejecución de JavaScript del lado del servidor.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>Express:</strong>
+    framework que permite crear la API REST.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>MongoDB:</strong>
+    base de datos NoSQL.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>Mongoose:</strong>
+    biblioteca que permite manipular MongoDB.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>JWT:</strong>
+    sistema utilizado para la autenticación.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>bcryptjs:</strong>
+    biblioteca utilizada para proteger las contraseñas.
+</li>
+
+<li style="margin-bottom: 8px;">
+    <strong>Multer:</strong>
+    middleware que permite gestionar archivos.
+</li>
+
+</ul>
+
+
+<div
+    style="
+        background: #eff6ff;
+        border-left: 5px solid #3b82f6;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 6px;
+    "
+>
+
+<strong>Arquitectura:</strong>
+
+<br><br>
+
+React Frontend
+→
+Axios
+→
+Express API
+→
+Controllers
+→
+Models Mongoose
+→
+MongoDB
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     2. APP.JS
+================================================== -->
+
+<section
+    style="
+        background: #ffffff;
+        margin-bottom: 30px;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    "
+>
+
+<h2
+    style="
+        margin-top: 0;
+        color: #1f2937;
+        border-bottom: 2px solid #dbe2e8;
+        padding-bottom: 10px;
+    "
+>
+    # 2 — Configuración principal de la API
+</h2>
+
+<h3 style="color: #374151; margin-top: 25px;">
+    Importación de Express y CORS
+</h3>
+
+<pre
+    style="
+        background: #111827;
+        color: #f9fafb;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.6;
+    "
+><code>const express = require("express");
+const cors = require("cors");
+
+const app = express();</code></pre>
+
+<p>
+    <code
+        style="
+            background: #e8edf2;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+        "
+    >express</code>
+    permite crear el servidor API.
+</p>
+
+<p>
+    <code
+        style="
+            background: #e8edf2;
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+        "
+    >cors</code>
+    permite autorizar al frontend React
+    a comunicarse con el backend.
+</p>
+
+
+<h3 style="color: #374151; margin-top: 25px;">
+    Importación de las rutas
+</h3>
+
+<pre
+    style="
+        background: #111827;
+        color: #f9fafb;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.6;
+    "
+><code>const appointmentRoutes =
+    require("./routes/appointmentRoutes");
+
+const batteryRoutes =
+    require("./routes/batteryRoutes");
+
+const contactRoutes =
+    require("./routes/contactRoutes");
+
+const dashboardRoutes =
+    require("./routes/dashboardRoutes");
+
+const inverterRoutes =
+    require("./routes/inverterRoutes");
+
+const panelRoutes =
+    require("./routes/panelRoutes");
+
+const paymentRoutes =
+    require("./routes/paymentRoutes");
+
+const quoteRoutes =
+    require("./routes/quoteRoutes");
+
+const reviewRoutes =
+    require("./routes/reviewRoutes");
+
+const authRoutes =
+    require("./routes/authRoutes");</code></pre>
+
+<p>
+    Cada archivo contiene las rutas correspondientes a
+    una funcionalidad de la aplicación.
+</p>
+
+
+<h3 style="color: #374151; margin-top: 25px;">
+    Configuración de CORS
+</h3>
+
+<pre
+    style="
+        background: #111827;
+        color: #f9fafb;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.6;
+    "
+><code>app.use(
+    cors({
+        origin: "http://localhost:5173", 
+        methods: [ 
+            "GET", 
+            "POST", 
+            "PUT", 
+            "DELETE", 
+            "PATCH" 
+        ], 
+        credentials: true, 
+    }) 
+);</code></pre> 
+ 
+<p> 
+    Esta configuración permite que el frontend React 
+    que funciona en el puerto <code>5173</code> pueda enviar 
+    solicitudes al backend. 
+</p> 
+ 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Webhook de Stripe
+</h3> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>app.post( 
+    "/api/payments/webhook", 
+    express.raw({ 
+        type: "application/json", 
+    }), 
+    require("./controllers/paymentController") 
+        .stripeWebhook 
+);</code></pre> 
+ 
+ 
+<div 
+    style=" 
+        background: #fff7ed; 
+        border-left: 5px solid #f97316; 
+        padding: 15px; 
+        margin: 20px 0; 
+        border-radius: 6px; 
+    " 
+> 
+ 
+<strong>Importante:</strong> 
+ 
+<br><br> 
+ 
+El webhook de Stripe utiliza 
+<code 
+    style=" 
+        background: #e8edf2; 
+        padding: 3px 6px; 
+        border-radius: 5px; 
+        font-family: Consolas, monospace; 
+    " 
+>express.raw()</code>. 
+ 
+<br><br> 
+ 
+Esta ruta debe colocarse antes de 
+<code 
+    style=" 
+        background: #e8edf2; 
+        padding: 3px 6px; 
+        border-radius: 5px; 
+        font-family: Consolas, monospace; 
+    " 
+>express.json()</code> 
+para permitir que Stripe 
+verifique correctamente la firma de la solicitud. 
+ 
+</div> 
+ 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Middleware JSON
+</h3> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>app.use(express.json()); 
+ 
+app.use( 
+    express.urlencoded({ 
+        extended: true, 
+    }) 
+);</code></pre> 
+ 
+<p> 
+    <code 
+        style=" 
+            background: #e8edf2; 
+            padding: 3px 6px; 
+            border-radius: 5px; 
+            font-family: Consolas, monospace; 
+        " 
+    >express.json()</code> 
+    permite al servidor leer los datos JSON enviados por React. 
+</p> 
+ 
+<p> 
+    <code 
+        style=" 
+            background: #e8edf2; 
+            padding: 3px 6px; 
+            border-radius: 5px; 
+            font-family: Consolas, monospace; 
+        " 
+    >express.urlencoded()</code> 
+    permite procesar los datos procedentes de formularios. 
+</p> 
+ 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Ruta de prueba
+</h3> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>app.get("/", (req, res) => { 
+ 
+    res.status(200).json({ 
+ 
+        success: true, 
+ 
+        message: 
+            "☀️ Solar API is running...", 
+ 
+    }); 
+ 
+});</code></pre> 
+ 
+<p> 
+    Esta ruta permite comprobar rápidamente que el servidor 
+    funciona correctamente. 
+</p> 
+ 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Declaración de las rutas
+</h3> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>app.use( 
+    "/api/appointments", 
+    appointmentRoutes 
+); 
+ 
+app.use( 
+    "/api/batteries", 
+    batteryRoutes 
+); 
+ 
+app.use( 
+    "/api/contacts", 
+    contactRoutes 
+); 
+ 
+app.use( 
+    "/api/dashboard", 
+    dashboardRoutes 
+); 
+ 
+app.use( 
+    "/api/inverters", 
+    inverterRoutes 
+); 
+ 
+app.use( 
+    "/api/panels", 
+    panelRoutes 
+); 
+ 
+app.use( 
+    "/api/payments", 
+    paymentRoutes 
+); 
+ 
+app.use( 
+    "/api/quotes", 
+    quoteRoutes 
+); 
+ 
+app.use( 
+    "/api/reviews", 
+    reviewRoutes 
+); 
+ 
+app.use( 
+    "/api/users", 
+    authRoutes 
+);</code></pre> 
+ 
+<p> 
+    Cada ruta tiene una URL principal. 
+</p> 
+ 
+ 
+<table 
+    style=" 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin: 20px 0; 
+    " 
+> 
+ 
+<tr> 
+ 
+<th 
+    style=" 
+        border: 1px solid #d5dbe1; 
+        padding: 12px; 
+        text-align: left; 
+        background: #1f2937; 
+        color: white; 
+    " 
+> 
+    Funcionalidad
+</th> 
+ 
+<th 
+    style=" 
+        border: 1px solid #d5dbe1; 
+        padding: 12px; 
+        text-align: left; 
+        background: #1f2937; 
+        color: white; 
+    " 
+> 
+    URL principal
+</th> 
+ 
+</tr>
+```
+```html
+<tr> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Citas
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/appointments 
+</td> 
+</tr> 
+ 
+<tr style="background: #f1f5f9;"> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Baterías
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/batteries 
+</td> 
+</tr> 
+ 
+<tr> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Contactos
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/contacts 
+</td> 
+</tr> 
+ 
+<tr style="background: #f1f5f9;"> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Panel de control
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/dashboard 
+</td> 
+</tr> 
+ 
+<tr> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Inversores
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/inverters 
+</td> 
+</tr> 
+ 
+<tr style="background: #f1f5f9;"> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Paneles
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/panels 
+</td> 
+</tr> 
+ 
+<tr> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Pagos
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/payments 
+</td> 
+</tr> 
+ 
+<tr style="background: #f1f5f9;"> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Cotizaciones
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/quotes 
+</td> 
+</tr> 
+ 
+<tr> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Reseñas
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/reviews 
+</td> 
+</tr> 
+ 
+<tr style="background: #f1f5f9;"> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Usuarios
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    /api/users 
+</td> 
+</tr> 
+ 
+</table> 
+ 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Gestión de rutas inexistentes
+</h3> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>app.use((req, res) => { 
+ 
+    res.status(404).json({ 
+ 
+        success: false, 
+ 
+        message: 
+            `Route introuvable : 
+             ${req.method} 
+             ${req.originalUrl}`, 
+ 
+    }); 
+ 
+});</code></pre> 
+ 
+<p> 
+    Si una URL no existe en la API, 
+    el servidor devuelve un error HTTP 404. 
+</p> 
+ 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Gestión global de errores
+</h3> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>app.use((err, req, res, next) => { 
+ 
+    console.error( 
+        "❌ Erreur serveur :", 
+        err 
+    ); 
+ 
+    res.status(err.status || 500).json({ 
+ 
+        success: false, 
+ 
+        message: 
+            err.message || 
+            "Erreur interne du serveur", 
+ 
+    }); 
+ 
+});</code></pre> 
+ 
+<p> 
+    Este middleware permite centralizar la gestión 
+    de los errores del servidor. 
+</p> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     3. JWT 
+================================================== --> 
+ 
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+ 
+<h2 
+    style=" 
+        margin-top: 0; 
+        color: #1f2937; 
+        border-bottom: 2px solid #dbe2e8; 
+        padding-bottom: 10px; 
+    " 
+> 
+    # 3 — Middleware de autenticación JWT
+</h2> 
+ 
+<p> 
+    El middleware <code>verifyToken</code> permite comprobar 
+    si el usuario posee un token JWT válido. 
+</p> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>const jwt = 
+    require("jsonwebtoken"); 
+ 
+const verifyToken = 
+    (req, res, next) => { 
+ 
+    try { 
+ 
+        console.log( 
+            "Authorization :", 
+            req.headers.authorization 
+        ); 
+ 
+        const token = 
+            req.headers.authorization 
+                ?.split(" ")[1]; 
+ 
+        if (!token) { 
+ 
+            return res.status(401).json({ 
+ 
+                success: false, 
+ 
+                message: 
+                    "Accès refusé, token manquant", 
+ 
+            }); 
+ 
+        } 
+ 
+        const decoded = 
+            jwt.verify( 
+                token, 
+                process.env.JWT_SECRET 
+            ); 
+ 
+        req.user = decoded; 
+ 
+        next(); 
+ 
+    } catch (error) { 
+ 
+        return res.status(401).json({ 
+ 
+            success: false, 
+ 
+            message: 
+                "Token invalide", 
+ 
+        }); 
+ 
+    } 
+ 
+}; 
+ 
+module.exports = { 
+    verifyToken 
+};</code></pre> 
+ 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Funcionamiento
+</h3> 
+ 
+<ol 
+    style=" 
+        padding-left: 25px; 
+    " 
+> 
+ 
+<li style="margin-bottom: 8px;"> 
+    El frontend envía el token en el header 
+    <code>Authorization</code>. 
+</li> 
+ 
+<li style="margin-bottom: 8px;"> 
+    El middleware recupera el token. 
+</li> 
+ 
+<li style="margin-bottom: 8px;"> 
+    JWT verifica el token utilizando 
+    <code>JWT_SECRET</code>. 
+</li> 
+ 
+<li style="margin-bottom: 8px;"> 
+    La información decodificada se almacena en 
+    <code>req.user</code>. 
+</li> 
+ 
+<li style="margin-bottom: 8px;"> 
+    <code>next()</code> autoriza el acceso a la ruta. 
+</li> 
+ 
+</ol> 
+ 
+ 
+<div 
+    style=" 
+        background: #ecfdf5; 
+        border-left: 5px solid #10b981; 
+        padding: 15px; 
+        margin: 20px 0; 
+        border-radius: 6px; 
+    " 
+> 
+ 
+<strong>Resultado:</strong> 
+ 
+<br><br> 
+ 
+Las rutas protegidas pueden verificar 
+la identidad del usuario mediante 
+<code>req.user</code>. 
+ 
+</div> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     4. MULTER 
+================================================== --> 
+ 
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+ 
+<h2 
+    style=" 
+        margin-top: 0; 
+        color: #1f2937; 
+        border-bottom: 2px solid #dbe2e8; 
+        padding-bottom: 10px; 
+    " 
+> 
+    # 4 — Gestión de archivos con Multer
+</h2> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>const multer = 
+    require("multer"); 
+ 
+const storage = 
+    multer.memoryStorage(); 
+ 
+const upload = 
+    multer({ 
+ 
+        storage, 
+ 
+        limits: { 
+ 
+            fileSize: 
+                5 * 1024 * 1024, 
+ 
+        }, 
+ 
+    }); 
+ 
+module.exports = upload;</code></pre> 
+ 
+<p> 
+    Multer permite recibir archivos enviados 
+    desde el frontend. 
+</p> 
+ 
+<p> 
+    <code>memoryStorage()</code> conserva temporalmente 
+    el archivo en la memoria. 
+</p> 
+ 
+<p> 
+    El tamaño máximo permitido es de 
+    <strong>5 MB</strong>. 
+</p> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     5. PANEL CONTROLLER 
+================================================== --> 
+ 
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+ 
+<h2 
+    style=" 
+        margin-top: 0; 
+        color: #1f2937; 
+        border-bottom: 2px solid #dbe2e8; 
+        padding-bottom: 10px; 
+    " 
+> 
+    # 5 — Controller de los paneles solares
+</h2> 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Importación del modelo
+</h3> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>const Panel = 
+    require("../models/Panel");</code></pre> 
+ 
+<p> 
+    El controller utiliza el modelo 
+    <code>Panel</code> para comunicarse con MongoDB. 
+</p> 
+ 
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Crear un panel
+</h3> 
+ 
+<pre 
+    style=" 
+        background: #111827; 
+        color: #f9fafb; 
+        padding: 20px; 
+        border-radius: 10px; 
+        overflow-x: auto; 
+        font-size: 14px; 
+        line-height: 1.6; 
+    " 
+><code>exports.createPanel = 
+async (req, res) => { 
+ 
+    try { 
+ 
+        const panel = 
+            await Panel.create(req.body); 
+ 
+        res.status(201).json({ 
+ 
+            success: true, 
+ 
+            data: panel, 
+ 
+        }); 
+ 
+    } catch (error) { 
+ 
+        re
+```
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Recuperar los contactos
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contacts = 
+    await Contact.find() 
+        .sort({ 
+            createdAt: -1 
+        });</code></pre> 
+
+<p> 
+    Los mensajes se ordenan del más reciente al más antiguo. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Modificar un contacto
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contact = 
+    await Contact.findByIdAndUpdate( 
+ 
+        req.params.id, 
+ 
+        req.body, 
+ 
+        { 
+            new: true, 
+            runValidators: true 
+        } 
+ 
+    );</code></pre> 
+
+
+    <h3 style="color: #374151; margin-top: 25px;"> 
+    Recuperar los contactos
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contacts = 
+    await Contact.find() 
+        .sort({ 
+            createdAt: -1 
+        });</code></pre> 
+
+<p> 
+    Los mensajes se ordenan del más reciente al más antiguo. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Modificar un contacto
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contact = 
+    await Contact.findByIdAndUpdate( 
+ 
+        req.params.id, 
+ 
+        req.body, 
+ 
+        { 
+            new: true, 
+            runValidators: true 
+        } 
+ 
+    );</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Eliminar un contacto
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const contact = 
+    await Contact.findByIdAndDelete( 
+        req.params.id 
+    );</code></pre> 
+
+</section> 
+
+<!-- ================================================== 
+     9. CONTROLADOR DE COTIZACIONES
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 9 — Controlador de solicitudes de cotización
+</h2> 
+
+<p> 
+    El controlador de cotizaciones permite a los clientes solicitar 
+    una estimación para una instalación solar. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Creación de la cotización
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const quote = 
+    await Quote.create( 
+        req.body 
+    );</code></pre> 
+
+<p> 
+    Los datos enviados incluyen principalmente: 
+</p> 
+
+<ul style="padding-left: 25px;"> 
+
+<li style="margin-bottom: 8px;">Nombre del cliente</li> 
+<li style="margin-bottom: 8px;">Correo electrónico</li> 
+<li style="margin-bottom: 8px;">Teléfono</li> 
+<li style="margin-bottom: 8px;">Dirección</li> 
+<li style="margin-bottom: 8px;">Tipo de instalación</li> 
+<li style="margin-bottom: 8px;">Consumo estimado</li> 
+<li style="margin-bottom: 8px;">Presupuesto</li> 
+<li style="margin-bottom: 8px;">Mensaje</li> 
+
+</ul> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Confirmación por correo electrónico
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await sendEmail({ 
+ 
+    to: quote.email, 
+ 
+    subject: 
+        "Confirmation de votre demande de devis solaire", 
+ 
+    html: `...` 
+ 
+});</code></pre> 
+
+<p> 
+    El cliente recibe automáticamente una confirmación 
+    después de enviar su solicitud. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Recuperar las cotizaciones
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const quotes = 
+    await Quote.find() 
+        .sort({ 
+            createdAt: -1 
+        });</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Modificar una cotización
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await Quote.findByIdAndUpdate( 
+ 
+    req.params.id, 
+ 
+    req.body, 
+ 
+    { 
+        new: true, 
+        runValidators: true 
+    } 
+ 
+);</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Eliminar una cotización
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await Quote.findByIdAndDelete( 
+    req.params.id 
+);</code></pre> 
+
+</section> 
+
+<!-- ================================================== 
+     10. CONTROLADOR DE RESEÑAS
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 10 — Controlador de reseñas de clientes
+</h2> 
+
+<p> 
+    El controlador Review permite a los clientes dejar 
+    una calificación y un comentario. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Crear una reseña
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const review = 
+    await Review.create( 
+        req.body 
+    );</code></pre> 
+
+<p> 
+    La reseña contiene principalmente: 
+</p> 
+
+<ul style="padding-left: 25px;"> 
+
+<li style="margin-bottom: 8px;">Nombre del cliente</li> 
+<li style="margin-bottom: 8px;">Correo electrónico</li> 
+<li style="margin-bottom: 8px;">Calificación de 1 a 5</li> 
+<li style="margin-bottom: 8px;">Comentario</li> 
+<li style="margin-bottom: 8px;">Tipo de producto</li> 
+<li style="margin-bottom: 8px;">Nombre del producto</li> 
+<li style="margin-bottom: 8px;">Estado</li> 
+
+</ul> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Recuperar las reseñas
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const reviews = 
+    await Review.find() 
+        .sort({ 
+            createdAt: -1 
+        });</code></pre> 
+
+<p> 
+    Las reseñas más recientes aparecen primero. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Modificar una reseña
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await Review.findByIdAndUpdate( 
+ 
+    req.params.id, 
+ 
+    req.body, 
+ 
+    { 
+        new: true, 
+        runValidators: true 
+    } 
+ 
+);</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Eliminar una reseña
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await Review.findByIdAndDelete( 
+    req.params.id 
+);</code></pre> 
+
+</section> 
+
+<!-- ================================================== 
+     11. CITA
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 11 — Controlador de citas
+</h2> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Crear una cita
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const appointment = 
+    await Appointment.create( 
+        req.body 
+    );</code></pre> 
+
+<p> 
+    La información de la cita se guarda 
+    en MongoDB. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Correo electrónico de confirmación
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await sendEmail( 
+ 
+    appointment.email, 
+ 
+    "Confirmation de votre rendez-vous", 
+ 
+    "Votre rendez-vous a été enregistré avec succès.", 
+ 
+    ` 
+ 
+        &lt;h2&gt; 
+            Bonjour ${appointment.customerName}, 
+        &lt;/h2&gt; 
+ 
+        &lt;p&gt; 
+            Votre rendez-vous a bien été enregistré. 
+        &lt;/p&gt; 
+ 
+    ` 
+ 
+);</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Recuperar las citas
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const appointments = 
+    await Appointment.find() 
+        .sort({ 
+            createdAt: -1 
+        });</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Modificar una cita
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await Appointment.findByIdAndUpdate( 
+ 
+    req.params.id, 
+ 
+    req.body, 
+ 
+    { 
+        new: true, 
+        runValidators: true 
+    } 
+ 
+);</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Eliminar una cita
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await Appointment.findByIdAndDelete( 
+    req.params.id 
+);</code></pre> 
+
+</section> 
+
+<!-- ================================================== 
+     12. AUTENTICACIÓN
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 12 — Autenticación y gestión de usuarios
+</h2> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Creación de una cuenta
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const hashedPassword = 
+    await bcrypt.hash( 
+        password, 
+        10 
+    );</code></pre> 
+
+<p> 
+    La contraseña no se guarda directamente. 
+    Se transforma en un hash mediante bcrypt. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Creación del usuario
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const user = 
+    await User.create({ 
+ 
+        name, 
+ 
+        email, 
+ 
+        password: 
+            hashedPassword, 
+ 
+        phone, 
+ 
+        role: "client" 
+ 
+    });</code></pre> 
+
+<div 
+    style=" 
+        background: #fff7ed; 
+        border-left: 5px solid #f97316; 
+        padding: 15px; 
+        margin: 20px 0; 
+        border-radius: 6px; 
+    " 
+> 
+
+<strong>Atención:</strong>
+
+<br><br>
+
+En el modelo User proporcionado anteriormente,
+los roles autorizados son <code>admin</code> y <code>customer</code>.
+
+<br><br>
+
+Actualmente, tu controlador utiliza <code>role: "client"</code>.
+
+<br><br>
+
+Por lo tanto, es necesario armonizar estos valores.
+
+</div> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Inicio de sesión
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const user = 
+    await User.findOne({ 
+        email 
+    });</code></pre> 
+
+<p> 
+    El servidor busca al usuario correspondiente 
+    a la dirección de correo electrónico. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Verificación de la contraseña
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const isMatch = 
+    await bcrypt.compare( 
+ 
+        password, 
+ 
+        user.password 
+ 
+    );</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Generación del token JWT
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const token = 
+    jwt.sign( 
+ 
+        { 
+            id: user._id, 
+            role: user.role 
+        }, 
+ 
+        process.env.JWT_SECRET, 
+ 
+        { 
+            expiresIn: "7d" 
+        } 
+ 
+    );</code></pre> 
+
+<p> 
+    El token contiene el identificador del usuario 
+    y su rol. 
+</p> 
+
+<p> 
+    El token caduca después de 7 días. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Cambiar la contraseña
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const hashedPassword = 
+    await bcrypt.hash( 
+        password, 
+        10 
+    ); 
+ 
+user.password = 
+    hashedPassword; 
+ 
+await user.save();</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Recuperar los usuarios
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const users = 
+    await User.find() 
+ 
+        .select("-password") 
+ 
+        .sort({ 
+            createdAt: -1 
+        });</code></pre> 
+
+<p> 
+    <code>.select("-password")</code> evita que el servidor 
+    devuelva la contraseña en la respuesta. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Eliminar un usuario
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>await User.findByIdAndDelete( 
+    req.params.id 
+);</code></pre> 
+
+</section> 
+
+<!-- ================================================== 
+     13. DASHBOARD
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 13 — Controlador del Dashboard
+</h2> 
+
+<p> 
+    El Dashboard recupera las principales estadísticas 
+    de la aplicación. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Importación de los modelos
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const User = 
+    require("../models/User"); 
+ 
+const Panel = 
+    require("../models/Panel"); 
+ 
+const Battery = 
+    require("../models/Battery"); 
+ 
+const Inverter = 
+    require("../models/Inverter"); 
+ 
+const Appointment = 
+    require("../models/Appointment"); 
+ 
+const Quote = 
+    require("../models/Quote"); 
+ 
+const Payment = 
+    require("../models/Payment"); 
+ 
+const Contact = 
+    require("../models/Contact"); 
+ 
+const Review = 
+    require("../models/Review");</code></pre> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Recuperación de las estadísticas
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>const [ 
+ 
+    users, 
+ 
+    panels, 
+ 
+    batteries, 
+ 
+    inverters, 
+ 
+    appointments, 
+ 
+    quotes, 
+ 
+    payments, 
+ 
+    contacts, 
+ 
+    reviews, 
+ 
+] = await Promise.all([ 
+ 
+    User.countDocuments(), 
+ 
+    Panel.countDocuments(), 
+ 
+    Battery.countDocuments(), 
+ 
+    Inverter.countDocuments(), 
+ 
+    Appointment.countDocuments(), 
+ 
+    Quote.countDocuments(), 
+ 
+    Payment.countDocuments(), 
+ 
+    Contact.countDocuments(), 
+ 
+    Review.countDocuments(), 
+ 
+]);</code></pre> 
+
+<p> 
+    <code>countDocuments()</code> cuenta el número 
+    de documentos presentes en cada colección de MongoDB. 
+</p> 
+
+<p> 
+    <code>Promise.all()</code> permite realizar 
+    las diferentes operaciones en paralelo. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Respuesta del Dashboard
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>res.status(200).json({ 
+ 
+    success: true, 
+ 
+    data: { 
+ 
+        users, 
+ 
+        panels, 
+ 
+        batteries, 
+ 
+        inverters, 
+ 
+        appointments, 
+ 
+        quotes, 
+ 
+        payments, 
+ 
+        contacts, 
+ 
+        reviews, 
+ 
+    }, 
+ 
+});</code></pre> 
+
+<div 
+    style=" 
+        background: #ecfdf5; 
+        border-left: 5px solid #10b981; 
+        padding: 15px; 
+        margin: 20px 0; 
+        border-radius: 6px; 
+    " 
+> 
+
+El frontend puede utilizar posteriormente estos datos
+para mostrar las estadísticas del Dashboard.
+
+</div> 
+
+</section> 
+
+<!-- ================================================== 
+     14. CRUD 
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 14 — Funcionamiento CRUD
+</h2> 
+
+<p> 
+    La mayoría de los controladores utilizan las cuatro 
+    operaciones CRUD. 
+</p> 
+
+<table style=" 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin: 20px 0; 
+"> 
+
+<tr> 
+
+<th style=" 
+    border: 1px solid #d5dbe1; 
+    padding: 12px; 
+    text-align: left; 
+    background: #1f2937; 
+    color: white; 
+"> 
+    Operación
+</th> 
+
+<th style=" 
+    border: 1px solid #d5dbe1; 
+    padding: 12px; 
+    text-align: left; 
+    background: #1f2937; 
+    color: white; 
+"> 
+    Método HTTP
+</th> 
+
+<th style=" 
+    border: 1px solid #d5dbe1; 
+    padding: 12px; 
+    text-align: left; 
+    background: #1f2937; 
+    color: white; 
+"> 
+    Ejemplo
+</th> 
+
+</tr> 
+
+<tr> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Create
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    POST
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Crear un dato
+</td> 
+</tr> 
+
+<tr style="background: #f1f5f9;"> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Read
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    GET
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Recuperar un dato
+</td> 
+</tr> 
+
+<tr> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Update
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    PUT / PATCH
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Modificar un dato
+</td> 
+</tr> 
+
+<tr style="background: #f1f5f9;"> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Delete
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    DELETE
+</td> 
+<td style="border: 1px solid #d5dbe1; padding: 12px;"> 
+    Eliminar un dato
+</td> 
+</tr> 
+
+</table> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Ejemplo
+</h3> 
+
+<pre style=" 
+    background: #111827; 
+    color: #f9fafb; 
+    padding: 20px; 
+    border-radius: 10px; 
+    overflow-x: auto; 
+    font-size: 14px; 
+    line-height: 1.6; 
+"><code>POST 
+/api/panels 
+ 
+GET 
+/api/panels 
+ 
+GET 
+/api/panels/:id 
+ 
+PUT 
+/api/panels/:id 
+ 
+DELETE 
+/api/panels/:id</code></pre> 
+
+</section> 
+
+<!-- ================================================== 
+     15. FLUJO COMPLETO
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 15 — Flujo completo de una solicitud
+</h2> 
+
+<p> 
+    Cuando un usuario utiliza la aplicación, 
+    varios componentes se comunican entre sí. 
+</p> 
+
+<h3 style="color: #374151; margin-top: 25px;"> 
+    Ejemplo: solicitar una cotización
+</h3> 
+
+<ol style="padding-left: 25px;"> 
+
+<li style="margin-bottom: 8px;"> 
+    El cliente completa el formulario React. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    React utiliza Axios para enviar los datos. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    La solicitud llega a Express. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    Express dirige la solicitud a la ruta de cotizaciones. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    El controlador recibe los datos. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    Mongoose crea el documento en MongoDB. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    Se envía un correo electrónico de confirmación al cliente. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    El backend devuelve una respuesta JSON. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    React muestra el resultado al usuario. 
+</li> 
+
+</ol> 
+
+<div 
+    style=" 
+        background: #eff6ff; 
+        border-left: 5px solid #3b82f6; 
+        padding: 15px; 
+        margin: 20px 0; 
+        border-radius: 6px; 
+    " 
+> 
+
+<strong>Flujo:</strong>
+
+<br><br>
+
+Cliente
+→
+React
+→
+Axios
+→
+Express
+→
+Ruta
+→
+Controlador
+→
+Mongoose
+→
+MongoDB
+
+<br><br>
+
+Luego:
+
+<br><br>
+
+MongoDB
+→
+Controlador
+→
+JSON
+→
+Axios
+→
+React
+→
+Cliente
+
+</div> 
+
+</section> 
+
+<!-- ================================================== 
+     16. CONCLUSIÓN 
+================================================== --> 
+
+<section 
+    style=" 
+        background: #ffffff; 
+        margin-bottom: 30px; 
+        padding: 30px; 
+        border-radius: 12px; 
+        border: 1px solid #e2e8f0; 
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); 
+    " 
+> 
+
+<h2 style=" 
+    margin-top: 0; 
+    color: #1f2937; 
+    border-bottom: 2px solid #dbe2e8; 
+    padding-bottom: 10px; 
+"> 
+    # 16 — Conclusión
+</h2> 
+
+<p> 
+    El backend de Solar Energy está organizado según una arquitectura 
+    modular. 
+</p> 
+
+<p> 
+    Cada funcionalidad tiene su propio modelo, 
+    su controlador y sus rutas. 
+</p> 
+
+<ul style="padding-left: 25px;"> 
+
+<li style="margin-bottom: 8px;"> 
+    Los <strong>Models</strong> definen la estructura 
+    de los datos de MongoDB. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    Los <strong>Controllers</strong> contienen 
+    la lógica de negocio. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    Las <strong>Routes</strong> definen los 
+    endpoints de la API. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    Los <strong>Middleware</strong> controlan 
+    determinadas solicitudes, especialmente la autenticación. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    <strong>JWT</strong> protege el acceso a las 
+    funcionalidades protegidas. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    <strong>bcrypt</strong> protege las contraseñas. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    <strong>MongoDB + Mongoose</strong> garantizan 
+    la gestión de los datos. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    <strong>Stripe</strong> permite gestionar los pagos. 
+</li> 
+
+<li style="margin-bottom: 8px;"> 
+    Los correos electrónicos permiten confirmar las acciones 
+    realizadas por los clientes. 
+</li> 
+
+</ul> 
+
+<div 
+    style=" 
+        background: #ecfdf5; 
+        border-left: 5px solid #10b981; 
+        padding: 15px; 
+        margin: 20px 0; 
+        border-radius: 6px; 
+    " 
+> 
+
+<strong>Arquitectura final:</strong>
+
+<br><br>
+
+Frontend React
+
+→
+
+Axios
+
+→
+
+API Express
+
+→
+
+Routes
+
+→
+
+Controllers
+
+→
+
+Mongoose
+
+→
+
+MongoDB
+
+</div> 
+
+</section> 
+
+</div> 
+
+<!-- ================================================== 
+     PIE DE PÁGINA 
+================================================== --> 
+
+<footer 
+    style=" 
+        text-align: center; 
+        padding: 30px; 
+        background: #1f2937; 
+        color: white; 
+        margin-top: 40px; 
+    " 
+> 
+
+☀️ Solar Energy
+
+<br> 
+
+Documentación técnica del Backend
+
+<br> 
+
+Node.js • Express • MongoDB • Mongoose • JWT • Stripe
+
+</footer> 
+
+</body> 
+
+</html>
+
+

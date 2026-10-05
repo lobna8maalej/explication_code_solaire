@@ -1,0 +1,254 @@
+```html
+<!DOCTYPE html> 
+ 
+<html lang="en"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+ 
+```
+
+<title>Frontend Documentation — Solar Energy</title> 
+
+<style> 
+ 
+    * { 
+        box-sizing: border-box; 
+    } 
+ 
+    body { 
+        margin: 0; 
+        padding: 0; 
+ 
+        font-family: 
+            Arial, 
+            Helvetica, 
+            sans-serif; 
+ 
+        background: #f4f6f8; 
+        color: #222; 
+ 
+        line-height: 1.7; 
+    } 
+ 
+    .documentation { 
+        width: 90%; 
+        max-width: 1100px; 
+ 
+        margin: 40px auto; 
+        padding: 40px; 
+ 
+        background: #ffffff; 
+ 
+        border-radius: 12px; 
+ 
+        box-shadow: 
+            0 4px 20px rgba(0, 0, 0, 0.08); 
+    } 
+ 
+    .documentation-header { 
+        margin-bottom: 45px; 
+        padding-bottom: 25px; 
+ 
+        border-bottom: 3px solid #f5c542; 
+    } 
+ 
+    .documentation-header h1 { 
+        margin: 0 0 10px; 
+ 
+        color: #1f2937; 
+ 
+        font-size: 32px; 
+    } 
+ 
+    .documentation-header p { 
+        margin: 0; 
+ 
+        color: #666; 
+ 
+        font-size: 16px; 
+    } 
+ 
+    section { 
+        margin-bottom: 45px; 
+    } 
+ 
+    h2 { 
+        margin-top: 45px; 
+        margin-bottom: 18px; 
+ 
+        padding-bottom: 10px; 
+ 
+        color: #1f2937; 
+ 
+        font-size: 26px; 
+ 
+        border-bottom: 2px solid #f5c542; 
+    } 
+ 
+    h3 { 
+        margin-top: 28px; 
+        margin-bottom: 10px; 
+ 
+        color: #374151; 
+ 
+        font-size: 19px; 
+    } 
+ 
+    p { 
+        margin: 0 0 18px; 
+ 
+        color: #4b5563; 
+ 
+        font-size: 16px; 
+ 
+        text-align: justify; 
+    } 
+ 
+    code { 
+        padding: 3px 7px; 
+ 
+        background: #f1f3f5; 
+ 
+        border-radius: 5px; 
+ 
+        color: #c2410c; 
+ 
+        font-family: 
+            Consolas, 
+            "Courier New", 
+            monospace; 
+ 
+        font-size: 14px; 
+    } 
+ 
+    .architecture { 
+        margin-top: 25px; 
+        padding: 25px; 
+ 
+        background: #f8fafc; 
+ 
+        border-left: 5px solid #f5c542; 
+ 
+        border-radius: 8px; 
+    } 
+ 
+    .important { 
+        margin: 20px 0; 
+        padding: 18px; 
+ 
+        background: #fff8df; 
+ 
+        border-left: 5px solid #f5c542; 
+ 
+        border-radius: 6px; 
+ 
+        color: #5f4b00; 
+    } 
+ 
+    .footer { 
+        margin-top: 50px; 
+        padding-top: 25px; 
+ 
+        border-top: 1px solid #ddd; 
+ 
+        text-align: center; 
+ 
+        color: #777; 
+ 
+        font-size: 14px; 
+    } 
+ 
+    @media (max-width: 768px) { 
+ 
+        .documentation { 
+            width: 95%; 
+            padding: 25px; 
+        } 
+ 
+        .documentation-header h1 { 
+            font-size: 26px; 
+        } 
+ 
+        h2 { 
+            font-size: 23px; 
+        } 
+ 
+        h3 { 
+            font-size: 18px; 
+        } 
+ 
+        p { 
+            font-size: 15px; 
+            text-align: left; 
+        } 
+ 
+    } 
+ 
+</style> 
+
+```
+ 
+</head> 
+ 
+<body> 
+ 
+<main class="documentation"> 
+ 
+```
+
+<header class="documentation-header"> 
+
+```
+<h1> 
+    ☀️ Frontend Documentation — Solar Energy 
+</h1> 
+
+<p> 
+    Technical documentation of React components, navigation, 
+    authentication, quote management, appointments, 
+    and Stripe payments. 
+</p> 
+```
+
+</header> 
+
+<!-- ===================================================== --> 
+
+<!-- APPOINTMENTS DASHBOARD --> 
+
+<!-- ===================================================== --> 
+
+<section> 
+
+```
+<h2> 
+    📅 Appointments Dashboard 
+</h2> 
+
+<p> 
+    <code>DashboardAppointments.jsx</code> is the React component used 
+    by the administration to view appointments booked by 
+    customers. It retrieves appointments from the backend using 
+    Axios, stores them in local state with <code>useState</code>, 
+    and then displays them as cards. 
+</p> 
+
+<p> 
+    The component allows the administrator to view the main 
+    information associated with each appointment, including 
+    the customer's name, email address, phone number, 
+    requested date, address, message, and appointment status. 
+</p> 
+
+
+<h3> 
+    State Management 
+</h3> 
+
+<p> 
+    The component uses <code>useState</code> to create two states. 
+    The <code>appointments</code> variable contains the list of 
+    appointments retrieved from the API and is initiali
+```

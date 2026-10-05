@@ -1,0 +1,645 @@
+```html
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+
+```html
+</head>
+
+<body>
+
+<main class="documentation">
+```
+
+```html
+<h1>
+    ☀️ Documentação Frontend — Solar Energy
+</h1>
+
+<p>
+    Documentação técnica dos componentes React, navegação,
+    autenticação, gerenciamento de orçamentos, agendamentos
+    e pagamentos com Stripe.
+</p>
+```
+
+```html
+<h2>
+    📅 Dashboard de agendamentos
+</h2>
+
+<p>
+    <code>DashboardAppointments.jsx</code> é o componente React utilizado
+    pela administração para consultar os agendamentos realizados pelos
+    clientes. Ele recupera os agendamentos do backend usando Axios,
+    armazena-os no estado local com <code>useState</code>
+    e depois os exibe em forma de cartões.
+</p>
+
+<p>
+    O componente permite que o administrador consulte as principais
+    informações associadas a cada agendamento, incluindo o nome do cliente,
+    endereço de e-mail, número de telefone, data desejada, endereço,
+    mensagem e status do agendamento.
+</p>
+
+<h3>
+    Gerenciamento do estado
+</h3>
+
+<p>
+    O componente utiliza <code>useState</code> para criar dois estados.
+    A variável <code>appointments</code> contém a lista de agendamentos
+    recuperados da API e é inicializada com um array vazio.
+    A variável <code>loading</code> indica se os dados ainda
+    estão sendo carregados.
+</p>
+
+<p>
+    Esses estados permitem que o React atualize automaticamente
+    a interface quando os agendamentos são recuperados ou quando ocorre
+    um erro durante a comunicação com o backend.
+</p>
+
+<h3>
+    Recuperação dos agendamentos
+</h3>
+
+<p>
+    O hook <code>useEffect</code> é executado automaticamente quando
+    o componente é carregado. Ele chama a função
+    <code>fetchAppointments()</code>, que envia uma requisição HTTP
+    <code>GET</code> para o endpoint
+    <code>/api/appointments</code>.
+</p>
+
+<p>
+    Essa requisição permite recuperar os agendamentos armazenados
+    no banco de dados e exibi-los no dashboard administrativo.
+</p>
+
+<h3>
+    Autenticação do administrador
+</h3>
+
+<p>
+    Antes de enviar a requisição, o componente recupera o
+    token de autenticação do <code>localStorage</code> usando
+    <code>localStorage.getItem("token")</code>.
+</p>
+
+<p>
+    O token é então enviado ao backend no cabeçalho
+    <code>Authorization</code> usando o formato
+    <code>Bearer token</code>. Isso permite que o backend
+    verifique a identidade do usuário antes de retornar os dados.
+</p>
+
+<h3>
+    Processamento da resposta da API
+</h3>
+
+<p>
+    Após receber a resposta, o componente verifica várias
+    estruturas possíveis de dados. Ele pode recuperar um array
+    diretamente de <code>response.data</code>, de
+    <code>response.data.data</code> ou de
+    <code>response.data.appointments</code>.
+</p>
+
+<p>
+    Essa verificação permite que o componente permaneça compatível
+    com diferentes estruturas de resposta do backend.
+</p>
+
+<h3>
+    Tratamento de erros
+</h3>
+
+<p>
+    Os erros são capturados usando um bloco <code>try...catch</code>.
+    Quando ocorre um erro, ele é exibido no console usando
+    <code>console.error()</code>, e a lista de agendamentos
+    é redefinida para um array vazio.
+</p>
+
+<h3>
+    Exibição do status
+</h3>
+
+<p>
+    A função <code>getAppointmentStatusLabel()</code> transforma
+    os status técnicos recebidos do backend em rótulos mais
+    compreensíveis para o administrador.
+</p>
+
+<p>
+    Por exemplo, <code>Pending</code> se torna "Pendente",
+    <code>Confirmed</code> se torna "Confirmado",
+    <code>Rejected</code> se torna "Recusado" e
+    <code>Cancelled</code> se torna "Cancelado".
+</p>
+
+<h3>
+    Exibição dos agendamentos
+</h3>
+
+<p>
+    Os agendamentos são percorridos usando o método
+    <code>.map()</code>. Para cada agendamento, o componente
+    cria um cartão contendo as informações do cliente.
+</p>
+
+<p>
+    A propriedade <code>appointment._id</code> é utilizada como
+    uma chave única para permitir que o React identifique cada elemento.
+    A data é convertida usando <code>new Date()</code> e depois exibida
+    no formato francês usando
+    <code>toLocaleDateString("fr-FR")</code>.
+</p>
+```
+
+```html
+<h2>
+    💳 Dashboard de pagamentos
+</h2>
+
+<p>
+    <code>DashboardPayments.jsx</code> é o componente React
+    que permite à administração consultar e gerenciar
+    os pagamentos registrados no sistema.
+</p>
+
+<p>
+    Ele recupera os pagamentos do backend, exibe informações
+    relacionadas ao cliente e à transação e fornece várias ações
+    para modificar ou excluir um pagamento.
+</p>
+
+<h3>
+    Gerenciamento do estado
+</h3>
+
+<p>
+    O componente utiliza dois estados principais. A variável
+    <code>payments</code> contém a lista de pagamentos recuperados
+    da API, enquanto <code>loading</code> indica se os pagamentos
+    ainda estão sendo recuperados.
+</p>
+
+<h3>
+    Recuperação dos pagamentos
+</h3>
+
+<p>
+    O hook <code>useEffect</code> chama a função
+    <code>fetchPayments()</code> quando o componente é carregado.
+    Essa função envia uma requisição HTTP <code>GET</code>
+    para <code>/api/payments</code>.
+</p>
+
+<p>
+    Quando os dados são recebidos, eles são armazenados no estado
+    <code>payments</code>. O React atualiza automaticamente
+    a interface para exibir os pagamentos.
+</p>
+
+<h3>
+    Contador de pagamentos
+</h3>
+
+<p>
+    O número de pagamentos é calculado usando
+    <code>payments.length</code>. Dessa forma, o componente
+    exibe dinamicamente o número total de pagamentos recebidos.
+</p>
+
+<p>
+    O texto também é adaptado automaticamente entre
+    "pagamento" e "pagamentos" de acordo com o número registrado.
+</p>
+
+<h3>
+    Alteração do status
+</h3>
+
+<p>
+    A função <code>updateStatus()</code> permite que o administrador
+    altere o status de um pagamento. Ela envia uma requisição HTTP
+    <code>PUT</code> para
+    <code>/api/payments/:id</code> com o novo status.
+</p>
+
+<p>
+    Essa funcionalidade permite confirmar um pagamento com o status
+    <code>Paid</code> ou marcá-lo como falho com o status
+    <code>Failed</code>.
+</p>
+
+<h3>
+    Exclusão de um pagamento
+</h3>
+
+<p>
+    A função <code>deletePayment()</code> permite excluir
+    um pagamento. Antes da exclusão, <code>window.confirm()</code>
+    exibe uma solicitação de confirmação para evitar uma exclusão acidental.
+</p>
+
+<p>
+    Se o administrador confirmar a exclusão, uma requisição HTTP
+    <code>DELETE</code> é enviada para
+    <code>/api/payments/:id</code>. Após a exclusão,
+    a lista de pagamentos é atualizada usando
+    <code>fetchPayments()</code>.
+</p>
+
+<h3>
+    Exibição dos status
+</h3>
+
+<p>
+    O componente utiliza várias condições para exibir um rótulo
+    diferente de acordo com o status armazenado no banco de dados.
+    O status <code>Paid</code> representa um pagamento confirmado,
+    <code>Pending</code> representa um pagamento pendente,
+    <code>Failed</code> representa um pagamento com falha e
+    <code>Refunded</code> representa um pagamento reembolsado.
+</p>
+
+<h3>
+    Ações administrativas
+</h3>
+
+<p>
+    Os botões de ação são exibidos dinamicamente. O botão
+    "Confirmar pagamento" aparece quando o pagamento ainda não está
+    marcado como <code>Paid</code>. O botão "Recusar" aparece
+    quando o pagamento ainda não está marcado como <code>Failed</code>.
+</p>
+
+<p>
+    Um botão "Excluir" permanece disponível para permitir que
+    o administrador exclua o pagamento após a confirmação.
+</p>
+```
+
+```html
+<h2>
+    🏠 Página inicial
+</h2>
+
+<p>
+    <code>Home.jsx</code> representa a página inicial principal da
+    aplicação Solar Energy. Este componente permanece intencionalmente
+    simples porque combina vários componentes React existentes
+    para construir a interface inicial.
+</p>
+
+<p>
+    Ele exibe principalmente o componente <code>Auth</code> assim como
+    o componente <code>Testimonials</code>.
+</p>
+
+<h3>
+    Componente Auth
+</h3>
+
+<p>
+    O componente <code>Auth</code> é integrado diretamente à
+    página usando <code>&lt;Auth /&gt;</code>. Ele permite gerenciar
+    a autenticação dos usuários, incluindo login e cadastro,
+    dependendo da implementação do componente.
+</p>
+
+<h3>
+    Componente Testimonials
+</h3>
+
+<p>
+    O componente <code>Testimonials</code> permite exibir os
+    depoimentos ou avaliações dos clientes. Ele é colocado após
+    o sistema de autenticação para apresentar aos visitantes
+    os comentários sobre os serviços oferecidos pela Solar Energy.
+</p>
+```
+
+```html
+<h2>
+    📋 Página "Meus orçamentos"
+</h2>
+
+<p>
+    <code>MyQuotes.jsx</code> permite que um cliente conectado
+    consulte suas solicitações de orçamento. O componente recupera
+    os orçamentos do backend usando Axios e utiliza o token
+    de autenticação armazenado no <code>localStorage</code>.
+</p>
+
+<p>
+    Cada orçamento é exibido com suas principais informações
+    e seu status atual.
+</p>
+
+<h3>
+    Verificação da autenticação
+</h3>
+
+<p>
+    Antes de recuperar os orçamentos, o componente verifica a
+    presença do token no <code>localStorage</code>. Se nenhum token
+    for encontrado, uma mensagem informa ao usuário que ele deve
+    fazer login e o usuário é redirecionado para <code>/auth</code>.
+</p>
+
+<p>
+    Essa verificação impede que um usuário não conectado tente
+    acessar seus dados pessoais.
+</p>
+
+<h3>
+    Recuperação dos orçamentos
+</h3>
+
+<p>
+    A função <code>fetchQuotes()</code> envia uma requisição HTTP
+    <code>GET</code> para <code>/api/quotes</code>.
+    O token é transmitido no cabeçalho <code>Authorization</code>.
+</p>
+
+<p>
+    O backend pode, portanto, identificar o usuário autenticado
+    e retornar as informações correspondentes às suas solicitações
+    de orçamento.
+</p>
+
+<h3>
+    Exibição das informações do orçamento
+</h3>
+
+<p>
+    Cada orçamento contém várias informações: nome do cliente,
+    e-mail, telefone, endereço, tipo de instalação, consumo
+    estimado, orçamento, mensagem e status.
+</p>
+
+<p>
+    Essas informações permitem que o cliente acompanhe a evolução
+    de sua solicitação desde o envio até a aprovação.
+</p>
+
+<h3>
+    Gerenciamento do status do orçamento
+</h3>
+
+<p>
+    O componente adapta sua exibição de acordo com o status do orçamento.
+    Quando o status é <code>Pending</code>, o cliente é informado
+    de que sua solicitação ainda está aguardando validação.
+</p>
+
+<p>
+    Quando o status é <code>Reviewed</code>, o cliente é informado
+    de que a administração analisou sua solicitação. Quando o status é
+    <code>Rejected</code>, o cliente é informado de que a solicitação
+    foi recusada.
+</p>
+
+<p>
+    Por fim, quando o status é <code>Approved</code>, o cliente
+    pode prosseguir com o pagamento do valor indicado no orçamento.
+</p>
+
+<h3>
+    Pagamento com Stripe a partir de um orçamento aprovado
+</h3>
+
+<p>
+    Quando o orçamento possui o status <code>Approved</code>, o
+    componente exibe um botão que permite ao cliente pagar
+    usando Stripe.
+</p>
+
+<p>
+    A função <code>handleStripePayment()</code> verifica primeiro
+    o ID do orçamento, o nome do cliente, seu endereço de e-mail
+    e o valor antes de enviar as informações ao backend.
+</p>
+
+<h3>
+    Criação da sessão do Stripe
+</h3>
+
+<p>
+    As informações do orçamento são enviadas ao backend usando
+    uma requisição HTTP <code>POST</code>. O backend é responsável
+    por criar a sessão de pagamento do Stripe e retornar uma URL
+    que permite acessar a página de pagamento.
+</p>
+
+<p>
+    Quando a URL do Stripe é recebida corretamente,
+    <code>window.location.href</code> redireciona automaticamente
+    o navegador do cliente para a página de pagamento.
+</p>
+```
+
+```html
+<h2>
+    💳 Página de pagamento
+</h2>
+
+<p>
+    <code>Payment.jsx</code> é uma página dedicada ao pagamento
+    de um orçamento específico. O ID do orçamento é recuperado
+    diretamente da URL usando <code>useParams()</code>.
+</p>
+
+<p>
+    O componente então recupera as informações do orçamento do
+    backend e exibe as informações necessárias antes de permitir
+    que o cliente prossiga com o pagamento.
+</p>
+
+<h3>
+    Recuperação de quoteId
+</h3>
+
+<p>
+    A linha <code>const &#123; quoteId &#125; = useParams()</code>
+    recupera o identificador presente na rota
+    <code>/payment/:quoteId</code>.
+</p>
+
+<p>
+    Esse identificador é então utilizado para solicitar ao backend
+    as informações correspondentes ao orçamento.
+</p>
+
+<h3>
+    Recuperação do orçamento
+</h3>
+
+<p>
+    A função <code>fetchQuote()</code> envia uma requisição HTTP
+    <code>GET</code> para
+    <code>/api/quotes/${quoteId}</code>.
+</p>
+
+<p>
+    O token do usuário é transmitido no cabeçalho
+    <code>Authorization</code>. O backend então retorna
+    as informações solicitadas do orçamento.
+</p>
+
+<h3>
+    Verificação do status
+</h3>
+
+<p>
+    Antes de iniciar o pagamento, o componente verifica se o
+    orçamento possui o status <code>Approved</code>.
+</p>
+
+<p>
+    Se o orçamento ainda não tiver sido aprovado, o pagamento é bloqueado
+    e uma mensagem informa ao cliente que ele deve aguardar a aprovação
+    do seu orçamento.
+</p>
+
+<h3>
+    Preparação do pagamento
+</h3>
+
+<p>
+    A função <code>handleStripePayment()</code> recupera o nome
+    do cliente, seu e-mail e o orçamento.
+</p>
+
+<p>
+    O valor é convertido para um número usando
+    <code>Number(quote.budget)</code> para que possa ser transmitido
+    corretamente ao backend.
+</p>
+
+<h3>
+    Redirecionamento para o Stripe
+</h3>
+
+<p>
+    Após chamar a API
+    <code>/api/payments/create-checkout-session</code>,
+    o componente verifica se o backend retornou uma resposta
+    contendo <code>success</code> e uma <code>url</code>.
+</p>
+
+<p>
+    Se essas duas informações estiverem presentes, o navegador
+    será redirecionado para a página de pagamento do Stripe usando
+    <code>window.location.href</code>.
+</p>
+```
+
+```html
+<h2>
+    ☀️ Página de produtos solares
+</h2>
+
+<p>
+    <code>Products.jsx</code> exibe os produtos solares
+    disponíveis na aplicação. Ele recupera três categorias
+    de produtos do backend: painéis solares, baterias
+    e inversores.
+</p>
+
+<p>
+    Os dados das três categorias são então combinados em
+    um único array para que possam ser exibidos por meio
+    de uma interface comum.
+</p>
+
+<h3>
+    Recuperação dos produtos
+</h3>
+
+<p>
+    O componente utiliza <code>Promise.all()</code> para enviar
+    simultaneamente três requisições HTTP para
+    <code>/api/panels</code>,
+    <code>/api/batteries</code> e
+    <code>/api/inverters</code>.
+</p>
+
+<p>
+    Esse método permite recuperar as três categorias em paralelo,
+    em vez de esperar que cada requisição termine separadamente.
+</p>
+
+<h3>
+    Combinação dos produtos
+</h3>
+
+<p>
+    Após receber as três respostas, os dados são combinados
+    usando o operador spread <code>...</code>.
+</p>
+
+<p>
+    Cada produto também recebe uma propriedade <code>category</code>
+    que identifica seu tipo. Os painéis recebem a categoria
+    "Painel solar", as baterias recebem "Bateria solar" e os inversores
+    recebem "Inversor solar".
+</p>
+
+<h3>
+    Pesquisa de produtos
+</h3>
+
+<p>
+    A variável <code>search</code> contém o texto digitado
+    pelo usuário na barra de pesquisa.
+</p>
+
+<p>
+    O método <code>.filter()</code> é utilizado para manter apenas
+    os produtos correspondentes à pesquisa. O sistema pesquisa
+    principalmente no nome, marca, categoria, tecnologia
+    e tipo.
+</p>
+
+<h3>
+    Exibição dos produtos
+</h3>
+
+<p>
+    Cada produto é exibido como um cartão contendo sua imagem,
+    nome, categoria, marca, especificações técnicas, descrição
+    e preço.
+</p>
+
+<p>
+    Algumas informações são exibidas apenas quando existem,
+    usando condições como <code>product.power &amp;&amp;</code>.
+</p>
+
+<h3>
+    Gerenciamento do estoque
+</h3>
+
+<p>
+    A propriedade <code>inStock</code> permite determinar se o
+    produto está disponível.
+</p>
+
+<p>
+    Quando o produto está disponível, a interface exibe
+    "Em estoque". Quando não está disponível, exibe
+    "Fora de estoque" e o botão de solicitação de orçamento
+    fica desativado.
+</p>
+```

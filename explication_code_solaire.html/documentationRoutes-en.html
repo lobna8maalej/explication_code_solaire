@@ -1,0 +1,153 @@
+```html
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Document</title> 
+<link rel="stylesheet" href="documentationRoutes.css"> 
+ 
+</head> 
+<body> 
+    <section class="chapter"> 
+ 
+    <h2> 
+        # 17 — Backend API Routes 
+    </h2> 
+ 
+    <p> 
+        The files located in the 
+        <code>routes</code> folder define the different 
+        URLs of the Solar Energy Backend API. 
+    </p> 
+ 
+    <p> 
+        Each route receives an HTTP request from the 
+        React frontend and forwards it to the corresponding 
+        controller. 
+    </p> 
+ 
+    <h3> 
+        General route structure 
+    </h3> 
+ 
+    <pre><code>const express = require("express"); 
+ 
+const router = express.Router(); 
+ 
+router.get("/", controller); 
+ 
+module.exports = router;</code></pre> 
+ 
+    <ul> 
+ 
+        <li> 
+            <code>express</code> imports the Express framework. 
+        </li> 
+ 
+        <li> 
+            <code>express.Router()</code> allows you to create 
+            an independent router. 
+        </li> 
+ 
+        <li> 
+            The <code>GET</code>, <code>POST</code>, 
+            <code>PUT</code> and <code>DELETE</code> 
+            methods define the API operations. 
+        </li> 
+ 
+        <li> 
+            The controller contains the logic executed 
+            when the route is called. 
+        </li> 
+ 
+        <li> 
+            <code>module.exports</code> allows the router 
+            to be used in <code>app.js</code>. 
+        </li> 
+ 
+    </ul> 
+ 
+</section> 
+ 
+ 
+<!-- ================================================== 
+     18. APPOINTMENT ROUTES 
+================================================== --> 
+ 
+<section class="chapter"> 
+ 
+    <h2> 
+        # 18 — Appointment Routes 
+    </h2> 
+ 
+    <p> 
+        The file <code>appointmentRoutes.js</code> 
+        is used to manage customer appointments. 
+    </p> 
+ 
+    <pre><code>const express = require("express"); 
+ 
+const router = express.Router(); 
+ 
+const { 
+    createAppointment, 
+    getAppointments, 
+    getAppointmentById, 
+    updateAppointment, 
+    deleteAppointment, 
+} = require("../controllers/appointmentController");</code></pre> 
+ 
+    <p> 
+        The controller functions are imported in order 
+        to be used by the different routes. 
+    </p> 
+ 
+    <h3> 
+        Create an appointment 
+    </h3> 
+ 
+    <pre><code>router.post( 
+    "/", 
+    createAppointment 
+);</code></pre> 
+ 
+    <p> 
+        This route uses the 
+        <code>POST</code> method to create a new appointment. 
+    </p> 
+ 
+    <h3> 
+        Get all appointments 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/", 
+    getAppointments 
+);</code></pre> 
+ 
+    <p> 
+        This route returns the list of appointments 
+        stored in MongoDB. 
+    </p> 
+ 
+    <h3> 
+        Get an appointment by ID 
+    </h3> 
+ 
+    <pre><code>router.get( 
+    "/:id", 
+    getAppointmentById 
+);</code></pre> 
+ 
+    <p> 
+        <code>:id</code> represents the identifier of the 
+        appointment present in the URL. 
+    </p> 
+ 
+    <h3> 
+        Update an appointment 
+    </h3> 
+ 
+    <pre><code>router.put( 
+```

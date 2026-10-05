@@ -1,0 +1,327 @@
+```html
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+
+```html
+</head>
+
+<body>
+
+<main class="documentation">
+```
+
+```html
+<h1>
+    ☀️ Documentación Frontend — Solar Energy
+</h1>
+
+<p>
+    Documentación técnica de los componentes React, la navegación,
+    la autenticación, la gestión de presupuestos, las citas
+    y los pagos con Stripe.
+</p>
+```
+
+```html
+<h2>
+    📅 Panel de citas
+</h2>
+
+<p>
+    <code>DashboardAppointments.jsx</code> es el componente React utilizado
+    por la administración para consultar las citas reservadas por
+    los clientes. Recupera las citas desde el backend mediante Axios,
+    las almacena en el estado local con <code>useState</code>
+    y luego las muestra en forma de tarjetas.
+</p>
+
+<p>
+    El componente permite al administrador consultar la información principal
+    asociada a cada cita, incluyendo el nombre del cliente, su dirección de
+    correo electrónico, número de teléfono, fecha solicitada, dirección,
+    mensaje y estado de la cita.
+</p>
+
+<h3>
+    Gestión del estado
+</h3>
+
+<p>
+    El componente utiliza <code>useState</code> para crear dos estados.
+    La variable <code>appointments</code> contiene la lista de
+    citas recuperadas desde la API y se inicializa con un
+    array vacío. La variable <code>loading</code> indica
+    si los datos todavía se están cargando.
+</p>
+
+<p>
+    Estos estados permiten que React actualice automáticamente la interfaz
+    cuando se recuperan las citas o cuando ocurre un error
+    durante la comunicación con el backend.
+</p>
+
+<h3>
+    Recuperación de citas
+</h3>
+
+<p>
+    El hook <code>useEffect</code> se ejecuta automáticamente cuando
+    se carga el componente. Llama a la función
+    <code>fetchAppointments()</code>, que envía una solicitud HTTP
+    <code>GET</code> al endpoint
+    <code>/api/appointments</code>.
+</p>
+
+<p>
+    Esta solicitud permite recuperar las citas almacenadas
+    en la base de datos y mostrarlas en el panel de administración.
+</p>
+
+<h3>
+    Autenticación del administrador
+</h3>
+
+<p>
+    Antes de enviar la solicitud, el componente recupera el
+    token de autenticación desde <code>localStorage</code> mediante
+    <code>localStorage.getItem("token")</code>.
+</p>
+
+<p>
+    El token se envía posteriormente al backend en la cabecera
+    <code>Authorization</code> utilizando el formato
+    <code>Bearer token</code>. Esto permite que el backend
+    verifique la identidad del usuario antes de devolver los datos.
+</p>
+
+<h3>
+    Procesamiento de la respuesta de la API
+</h3>
+
+<p>
+    Después de recibir la respuesta, el componente comprueba varias
+    posibles estructuras de datos. Puede recuperar directamente
+    un array desde <code>response.data</code>, desde
+    <code>response.data.data</code> o desde
+    <code>response.data.appointments</code>.
+</p>
+
+<p>
+    Esta verificación permite que el componente siga siendo compatible
+    con diferentes estructuras de respuesta del backend.
+</p>
+
+<h3>
+    Gestión de errores
+</h3>
+
+<p>
+    Los errores se capturan mediante un bloque <code>try...catch</code>.
+    Cuando ocurre un error, se muestra en la consola mediante
+    <code>console.error()</code> y la lista de citas
+    se restablece a un array vacío.
+</p>
+
+<h3>
+    Visualización del estado
+</h3>
+
+<p>
+    La función <code>getAppointmentStatusLabel()</code> transforma
+    los estados técnicos recibidos desde el backend en etiquetas más
+    comprensibles para el administrador.
+</p>
+
+<p>
+    Por ejemplo, <code>Pending</code> se convierte en "Pendiente",
+    <code>Confirmed</code> en "Confirmada",
+    <code>Rejected</code> en "Rechazada" y
+    <code>Cancelled</code> en "Cancelada".
+</p>
+
+<h3>
+    Visualización de las citas
+</h3>
+
+<p>
+    Las citas se recorren mediante el método
+    <code>.map()</code>. Para cada cita, el componente crea
+    una tarjeta que contiene la información del cliente.
+</p>
+
+<p>
+    La propiedad <code>appointment._id</code> se utiliza como
+    clave única para permitir que React identifique cada elemento.
+    La fecha se convierte mediante <code>new Date()</code> y luego
+    se muestra en formato francés mediante
+    <code>toLocaleDateString("fr-FR")</code>.
+</p>
+```
+
+```html
+<h2>
+    💳 Panel de pagos
+</h2>
+
+<p>
+    <code>DashboardPayments.jsx</code> es el componente React
+    que permite a la administración consultar y gestionar
+    los pagos registrados en el sistema.
+</p>
+
+<p>
+    Recupera los pagos desde el backend, muestra información
+    relacionada con el cliente y la transacción y proporciona
+    varias acciones para modificar o eliminar un pago.
+</p>
+
+<h3>
+    Gestión del estado
+</h3>
+
+<p>
+    El componente utiliza dos estados principales. La variable
+    <code>payments</code> contiene la lista de pagos recuperados
+    desde la API, mientras que <code>loading</code> indica
+    si los pagos todavía se están recuperando.
+</p>
+
+<h3>
+    Recuperación de pagos
+</h3>
+
+<p>
+    El hook <code>useEffect</code> llama a la función
+    <code>fetchPayments()</code> cuando se carga el componente.
+    Esta función envía una solicitud HTTP <code>GET</code>
+    a <code>/api/payments</code>.
+</p>
+
+<p>
+    Cuando se reciben los datos, se almacenan en el estado
+    <code>payments</code>. React actualiza automáticamente
+    la interfaz para mostrar los pagos.
+</p>
+
+<h3>
+    Contador de pagos
+</h3>
+
+<p>
+    El número de pagos se calcula mediante
+    <code>payments.length</code>. De esta manera, el componente
+    muestra dinámicamente el número total de pagos recibidos.
+</p>
+
+<p>
+    El texto también se adapta automáticamente entre
+    "pago" y "pagos" según el número registrado.
+</p>
+
+<h3>
+    Modificación del estado
+</h3>
+
+<p>
+    La función <code>updateStatus()</code> permite al administrador
+    modificar el estado de un pago. Envía una solicitud HTTP
+    <code>PUT</code> a
+    <code>/api/payments/:id</code> con el nuevo estado.
+</p>
+
+<p>
+    Esta funcionalidad permite confirmar un pago con el estado
+    <code>Paid</code> o marcarlo como fallido con el estado
+    <code>Failed</code>.
+</p>
+
+<h3>
+    Eliminación de un pago
+</h3>
+
+<p>
+    La función <code>deletePayment()</code> permite eliminar
+    un pago. Antes de eliminarlo, <code>window.confirm()</code>
+    muestra una solicitud de confirmación para evitar una eliminación accidental.
+</p>
+
+<p>
+    Si el administrador confirma la eliminación, se envía una solicitud HTTP
+    <code>DELETE</code> a
+    <code>/api/payments/:id</code>. Después de la eliminación,
+    la lista de pagos se actualiza mediante
+    <code>fetchPayments()</code>.
+</p>
+
+<h3>
+    Visualización de los estados
+</h3>
+
+<p>
+    El componente utiliza varias condiciones para mostrar una
+    etiqueta diferente según el estado almacenado en la base de
+    datos. El estado <code>Paid</code> representa un pago confirmado,
+    <code>Pending</code> un pago pendiente,
+    <code>Failed</code> un pago fallido y
+    <code>Refunded</code> un pago reembolsado.
+</p>
+
+<h3>
+    Acciones administrativas
+</h3>
+
+<p>
+    Los botones de acción se muestran dinámicamente. El botón
+    "Confirmar pago" aparece cuando el pago todavía no está
+    marcado como <code>Paid</code>. El botón "Rechazar" aparece
+    cuando el pago todavía no está marcado como <code>Failed</code>.
+</p>
+
+<p>
+    El botón "Eliminar" permanece disponible para permitir al
+    administrador eliminar el pago después de la confirmación.
+</p>
+```
+
+```html
+<h2>
+    🏠 Página de inicio
+</h2>
+
+<p>
+    <code>Home.jsx</code> representa la página de inicio principal de la
+    aplicación Solar Energy. Este componente se mantiene intencionadamente
+    simple porque combina varios componentes React existentes
+    para construir la interfaz de inicio.
+</p>
+
+<p>
+    Principalmente muestra el componente <code>Auth</code> así como
+    el componente <code>Testimonials</code>.
+</p>
+
+<h3>
+    Componente Auth
+</h3>
+
+<p>
+    El componente <code>Auth</code> se integra directamente en
+    la página mediante <code>&lt;Auth /&gt;</code>. Permite gestionar
+    la autenticación de los usuarios, incluyendo el inicio de sesión
+    y el registro según la implementación del componente.
+</p>
+
+<h3>
+    Componente Testimonials
+</h3>
+
+<p>
+    El componente <code>Testimonials</code> permite mostrar los
+    testimonios o reseñas de
+```
